@@ -14,3 +14,6 @@ autom4te.cache/
 *.cfg
 *log.txt
 *.dmp
+/emscripten_assets/
+/emscripten_out/
+roms.txt
