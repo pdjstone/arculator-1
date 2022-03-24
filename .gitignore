@@ -1,0 +1,15 @@
+*.Po
+*.o
+roms/
+*.log
+*.Plo
+*.Pl
+.dirstamp
+autom4te.cache/
+.deps/
+*.wasm
+*.js
+*.html
+*.bin
+*.cfg
+*log.txt
