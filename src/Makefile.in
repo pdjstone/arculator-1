@@ -91,8 +91,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@EMSCRIPTEN_FALSE@bin_PROGRAMS = arculator$(EXEEXT) \
-@EMSCRIPTEN_FALSE@	arculatorweb$(EXEEXT)
+@EMSCRIPTEN_FALSE@bin_PROGRAMS = arculator$(EXEEXT)
 @EMSCRIPTEN_TRUE@bin_PROGRAMS = arculatorweb$(EXEEXT)
 @OS_WINDOWS_FALSE@am__append_1 = $(noinst_SCRIPTS)
 @EMSCRIPTEN_FALSE@@OS_WINDOWS_FALSE@am__append_2 = ../arculator
@@ -577,8 +576,6 @@ arculator_SOURCES = 82c711.c 82c711_fdc.c arm.c bmu.c cmos.c \
 arculator_CFLAGS = $(subst -fpermissive,,$(shell $(WX_CONFIG_PATH) --cxxflags) $(shell sdl2-config --cflags))
 arculator_CXXFLAGS = $(shell $(WX_CONFIG_PATH) --cxxflags) $(shell sdl2-config --cflags)
 arculator_LDADD = @LIBS@ $(am__append_5)
-
-#hello_SOURCES = hello.c
 arculatorweb_SOURCES = 82c711.c 82c711_fdc.c arm.c bmu.c cmos.c \
 	colourcard.c config.c cp15.c ddnoise.c disc.c disc_adf.c \
 	disc_apd.c disc_fdi.c disc_hfe.c disc_jfd.c disc_mfm_common.c \
@@ -2999,7 +2996,7 @@ uninstall-am: uninstall-binPROGRAMS
 .PRECIOUS: Makefile
 
 @EMSCRIPTEN_FALSE@@OS_WINDOWS_FALSE@../arculator: arculator
-@EMSCRIPTEN_FALSE@@OS_WINDOWS_FALSE@	cp arculator ...
+@EMSCRIPTEN_FALSE@@OS_WINDOWS_FALSE@	cp arculator ..
 @EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@../arculatorweb: arculatorweb
 @EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	if [ -d ../emscripten_assets ]; then rm -rf ../emscripten_assets; fi
 @EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	mkdir ../emscripten_assets
