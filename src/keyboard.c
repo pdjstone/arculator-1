@@ -77,13 +77,13 @@ void keyboard_send_double(uint8_t val1, uint8_t val2)
 	timer_set_delay_u64(&keyboard_rx_timer, 1000 * TIMER_USEC);
 }
 
-void key_do_rx_callback()
+void key_do_rx_callback(void *p)
 {
 	LOG_KB_MOUSE("RX interrupt\n");
 	ioc_irqb(IOC_IRQB_KEYBOARD_RX);
 }
 
-void key_do_tx_callback()
+void key_do_tx_callback(void *p)
 {
 	LOG_KB_MOUSE("TX interrupt\n");
 	ioc_irqb(IOC_IRQB_KEYBOARD_TX);
