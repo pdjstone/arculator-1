@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# Makefile.am for Ultimate CD-ROM
+# Makefile.am for AKA10
 
 
 VPATH = @srcdir@
@@ -92,13 +92,13 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_1 = $(noinst_SCRIPTS)
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_2 = ../ultimatecdrom.so
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_2 = ../aka10.so
 @BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_3 = $(noinst_SCRIPTS)
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_4 = ../ultimatecdrom.dylib
-@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@am__append_5 = ../../common/cdrom/cdrom-windows-ioctl.c 
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_6 = ../../common/cdrom/cdrom-linux-ioctl.c 
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_7 = ../../common/cdrom/cdrom-osx-ioctl.c 
-subdir = podules/ultimatecdrom/src
+@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_4 = ../aka10.dylib
+@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@am__append_5 = ../../common/midi/midi_win.c
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_6 = ../../common/midi/midi_alsa.c
+@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_7 = ../../common/midi/midi_null.c
+subdir = podules/aka10/src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -136,32 +136,29 @@ am__uninstall_files_from_dir = { \
   }
 am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libultimatecdrom_la_DEPENDENCIES =
-am__libultimatecdrom_la_SOURCES_DIST = mitsumi.c ultimatecdrom.c \
-	../../common/sound/sound_openal.c \
-	../../common/cdrom/cdrom-windows-ioctl.c \
-	../../common/cdrom/cdrom-linux-ioctl.c \
-	../../common/cdrom/cdrom-osx-ioctl.c
+libaka10_la_DEPENDENCIES =
+am__libaka10_la_SOURCES_DIST = ../../common/uart/6850.c aka10.c \
+	../../common/joystick/joystick_sdl2.o \
+	../../common/adc/d7002c.o ../../common/misc/6522.o \
+	../../common/midi/midi_win.c ../../common/midi/midi_alsa.c \
+	../../common/midi/midi_null.c
 am__dirstamp = $(am__leading_dot)dirstamp
-@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@am__objects_1 = ../../common/cdrom/libultimatecdrom_la-cdrom-windows-ioctl.lo
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__objects_2 = ../../common/cdrom/libultimatecdrom_la-cdrom-linux-ioctl.lo
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__objects_3 = ../../common/cdrom/libultimatecdrom_la-cdrom-osx-ioctl.lo
-@BUILD_PODULES_TRUE@am_libultimatecdrom_la_OBJECTS =  \
-@BUILD_PODULES_TRUE@	libultimatecdrom_la-mitsumi.lo \
-@BUILD_PODULES_TRUE@	libultimatecdrom_la-ultimatecdrom.lo \
-@BUILD_PODULES_TRUE@	../../common/sound/libultimatecdrom_la-sound_openal.lo \
-@BUILD_PODULES_TRUE@	$(am__objects_1) $(am__objects_2) \
-@BUILD_PODULES_TRUE@	$(am__objects_3)
-libultimatecdrom_la_OBJECTS = $(am_libultimatecdrom_la_OBJECTS)
+@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@am__objects_1 = ../../common/midi/libaka10_la-midi_win.lo
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__objects_2 = ../../common/midi/libaka10_la-midi_alsa.lo
+@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__objects_3 = ../../common/midi/libaka10_la-midi_null.lo
+@BUILD_PODULES_TRUE@am_libaka10_la_OBJECTS =  \
+@BUILD_PODULES_TRUE@	../../common/uart/libaka10_la-6850.lo \
+@BUILD_PODULES_TRUE@	libaka10_la-aka10.lo $(am__objects_1) \
+@BUILD_PODULES_TRUE@	$(am__objects_2) $(am__objects_3)
+libaka10_la_OBJECTS = $(am_libaka10_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libultimatecdrom_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
-	$(libultimatecdrom_la_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
-@BUILD_PODULES_TRUE@am_libultimatecdrom_la_rpath = -rpath $(libdir)
+libaka10_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libaka10_la_CFLAGS) \
+	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+@BUILD_PODULES_TRUE@am_libaka10_la_rpath = -rpath $(libdir)
 SCRIPTS = $(noinst_SCRIPTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -178,12 +175,12 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-linux-ioctl.Plo \
-	../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-osx-ioctl.Plo \
-	../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-windows-ioctl.Plo \
-	../../common/sound/$(DEPDIR)/libultimatecdrom_la-sound_openal.Plo \
-	./$(DEPDIR)/libultimatecdrom_la-mitsumi.Plo \
-	./$(DEPDIR)/libultimatecdrom_la-ultimatecdrom.Plo
+am__depfiles_remade =  \
+	../../common/midi/$(DEPDIR)/libaka10_la-midi_alsa.Plo \
+	../../common/midi/$(DEPDIR)/libaka10_la-midi_null.Plo \
+	../../common/midi/$(DEPDIR)/libaka10_la-midi_win.Plo \
+	../../common/uart/$(DEPDIR)/libaka10_la-6850.Plo \
+	./$(DEPDIR)/libaka10_la-aka10.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -203,8 +200,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libultimatecdrom_la_SOURCES)
-DIST_SOURCES = $(am__libultimatecdrom_la_SOURCES_DIST)
+SOURCES = $(libaka10_la_SOURCES)
+DIST_SOURCES = $(am__libaka10_la_SOURCES_DIST)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -374,16 +371,17 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = subdir-objects
-@BUILD_PODULES_TRUE@lib_LTLIBRARIES = libultimatecdrom.la
+@BUILD_PODULES_TRUE@lib_LTLIBRARIES = libaka10.la
 @BUILD_PODULES_TRUE@noinst_SCRIPTS = $(am__append_2) $(am__append_4)
 @BUILD_PODULES_TRUE@CLEANFILES = $(am__append_1) $(am__append_3)
-@BUILD_PODULES_TRUE@libultimatecdrom_la_SOURCES = mitsumi.c \
-@BUILD_PODULES_TRUE@	ultimatecdrom.c \
-@BUILD_PODULES_TRUE@	../../common/sound/sound_openal.c \
-@BUILD_PODULES_TRUE@	$(am__append_5) $(am__append_6) \
-@BUILD_PODULES_TRUE@	$(am__append_7)
-@BUILD_PODULES_TRUE@libultimatecdrom_la_CFLAGS = -I../../../src -I../../common/cdrom -I../../common/sound
-@BUILD_PODULES_TRUE@libultimatecdrom_la_LIBADD = @LIBS@
+@BUILD_PODULES_TRUE@libaka10_la_SOURCES = ../../common/uart/6850.c \
+@BUILD_PODULES_TRUE@	aka10.c \
+@BUILD_PODULES_TRUE@	../../common/joystick/joystick_sdl2.o \
+@BUILD_PODULES_TRUE@	../../common/adc/d7002c.o \
+@BUILD_PODULES_TRUE@	../../common/misc/6522.o $(am__append_5) \
+@BUILD_PODULES_TRUE@	$(am__append_6) $(am__append_7)
+@BUILD_PODULES_TRUE@libaka10_la_CFLAGS = -I../../../src -I../../common/adc -I../../common/joystick -I../../common/midi -I../../common/misc -I../../common/uart $(shell sdl2-config --cflags)
+@BUILD_PODULES_TRUE@libaka10_la_LIBADD = @LIBS@
 all: all-am
 
 .SUFFIXES:
@@ -397,9 +395,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu podules/ultimatecdrom/src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu podules/aka10/src/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu podules/ultimatecdrom/src/Makefile
+	  $(AUTOMAKE) --gnu podules/aka10/src/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -452,50 +450,49 @@ clean-libLTLIBRARIES:
 	  echo rm -f $${locs}; \
 	  rm -f $${locs}; \
 	}
-../../common/sound/$(am__dirstamp):
-	@$(MKDIR_P) ../../common/sound
-	@: > ../../common/sound/$(am__dirstamp)
-../../common/sound/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) ../../common/sound/$(DEPDIR)
-	@: > ../../common/sound/$(DEPDIR)/$(am__dirstamp)
-../../common/sound/libultimatecdrom_la-sound_openal.lo:  \
-	../../common/sound/$(am__dirstamp) \
-	../../common/sound/$(DEPDIR)/$(am__dirstamp)
-../../common/cdrom/$(am__dirstamp):
-	@$(MKDIR_P) ../../common/cdrom
-	@: > ../../common/cdrom/$(am__dirstamp)
-../../common/cdrom/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) ../../common/cdrom/$(DEPDIR)
-	@: > ../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
-../../common/cdrom/libultimatecdrom_la-cdrom-windows-ioctl.lo:  \
-	../../common/cdrom/$(am__dirstamp) \
-	../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
-../../common/cdrom/libultimatecdrom_la-cdrom-linux-ioctl.lo:  \
-	../../common/cdrom/$(am__dirstamp) \
-	../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
-../../common/cdrom/libultimatecdrom_la-cdrom-osx-ioctl.lo:  \
-	../../common/cdrom/$(am__dirstamp) \
-	../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
+../../common/uart/$(am__dirstamp):
+	@$(MKDIR_P) ../../common/uart
+	@: > ../../common/uart/$(am__dirstamp)
+../../common/uart/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) ../../common/uart/$(DEPDIR)
+	@: > ../../common/uart/$(DEPDIR)/$(am__dirstamp)
+../../common/uart/libaka10_la-6850.lo:  \
+	../../common/uart/$(am__dirstamp) \
+	../../common/uart/$(DEPDIR)/$(am__dirstamp)
+../../common/midi/$(am__dirstamp):
+	@$(MKDIR_P) ../../common/midi
+	@: > ../../common/midi/$(am__dirstamp)
+../../common/midi/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) ../../common/midi/$(DEPDIR)
+	@: > ../../common/midi/$(DEPDIR)/$(am__dirstamp)
+../../common/midi/libaka10_la-midi_win.lo:  \
+	../../common/midi/$(am__dirstamp) \
+	../../common/midi/$(DEPDIR)/$(am__dirstamp)
+../../common/midi/libaka10_la-midi_alsa.lo:  \
+	../../common/midi/$(am__dirstamp) \
+	../../common/midi/$(DEPDIR)/$(am__dirstamp)
+../../common/midi/libaka10_la-midi_null.lo:  \
+	../../common/midi/$(am__dirstamp) \
+	../../common/midi/$(DEPDIR)/$(am__dirstamp)
 
-libultimatecdrom.la: $(libultimatecdrom_la_OBJECTS) $(libultimatecdrom_la_DEPENDENCIES) $(EXTRA_libultimatecdrom_la_DEPENDENCIES) 
-	$(AM_V_CCLD)$(libultimatecdrom_la_LINK) $(am_libultimatecdrom_la_rpath) $(libultimatecdrom_la_OBJECTS) $(libultimatecdrom_la_LIBADD) $(LIBS)
+libaka10.la: $(libaka10_la_OBJECTS) $(libaka10_la_DEPENDENCIES) $(EXTRA_libaka10_la_DEPENDENCIES) 
+	$(AM_V_CCLD)$(libaka10_la_LINK) $(am_libaka10_la_rpath) $(libaka10_la_OBJECTS) $(libaka10_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
-	-rm -f ../../common/cdrom/*.$(OBJEXT)
-	-rm -f ../../common/cdrom/*.lo
-	-rm -f ../../common/sound/*.$(OBJEXT)
-	-rm -f ../../common/sound/*.lo
+	-rm -f ../../common/midi/*.$(OBJEXT)
+	-rm -f ../../common/midi/*.lo
+	-rm -f ../../common/uart/*.$(OBJEXT)
+	-rm -f ../../common/uart/*.lo
 
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-linux-ioctl.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-osx-ioctl.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-windows-ioctl.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/sound/$(DEPDIR)/libultimatecdrom_la-sound_openal.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libultimatecdrom_la-mitsumi.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libultimatecdrom_la-ultimatecdrom.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@../../common/midi/$(DEPDIR)/libaka10_la-midi_alsa.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@../../common/midi/$(DEPDIR)/libaka10_la-midi_null.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@../../common/midi/$(DEPDIR)/libaka10_la-midi_win.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@../../common/uart/$(DEPDIR)/libaka10_la-6850.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaka10_la-aka10.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -527,55 +524,48 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
 
-libultimatecdrom_la-mitsumi.lo: mitsumi.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -MT libultimatecdrom_la-mitsumi.lo -MD -MP -MF $(DEPDIR)/libultimatecdrom_la-mitsumi.Tpo -c -o libultimatecdrom_la-mitsumi.lo `test -f 'mitsumi.c' || echo '$(srcdir)/'`mitsumi.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libultimatecdrom_la-mitsumi.Tpo $(DEPDIR)/libultimatecdrom_la-mitsumi.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='mitsumi.c' object='libultimatecdrom_la-mitsumi.lo' libtool=yes @AMDEPBACKSLASH@
+../../common/uart/libaka10_la-6850.lo: ../../common/uart/6850.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka10_la_CFLAGS) $(CFLAGS) -MT ../../common/uart/libaka10_la-6850.lo -MD -MP -MF ../../common/uart/$(DEPDIR)/libaka10_la-6850.Tpo -c -o ../../common/uart/libaka10_la-6850.lo `test -f '../../common/uart/6850.c' || echo '$(srcdir)/'`../../common/uart/6850.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/uart/$(DEPDIR)/libaka10_la-6850.Tpo ../../common/uart/$(DEPDIR)/libaka10_la-6850.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/uart/6850.c' object='../../common/uart/libaka10_la-6850.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -c -o libultimatecdrom_la-mitsumi.lo `test -f 'mitsumi.c' || echo '$(srcdir)/'`mitsumi.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka10_la_CFLAGS) $(CFLAGS) -c -o ../../common/uart/libaka10_la-6850.lo `test -f '../../common/uart/6850.c' || echo '$(srcdir)/'`../../common/uart/6850.c
 
-libultimatecdrom_la-ultimatecdrom.lo: ultimatecdrom.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -MT libultimatecdrom_la-ultimatecdrom.lo -MD -MP -MF $(DEPDIR)/libultimatecdrom_la-ultimatecdrom.Tpo -c -o libultimatecdrom_la-ultimatecdrom.lo `test -f 'ultimatecdrom.c' || echo '$(srcdir)/'`ultimatecdrom.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libultimatecdrom_la-ultimatecdrom.Tpo $(DEPDIR)/libultimatecdrom_la-ultimatecdrom.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ultimatecdrom.c' object='libultimatecdrom_la-ultimatecdrom.lo' libtool=yes @AMDEPBACKSLASH@
+libaka10_la-aka10.lo: aka10.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka10_la_CFLAGS) $(CFLAGS) -MT libaka10_la-aka10.lo -MD -MP -MF $(DEPDIR)/libaka10_la-aka10.Tpo -c -o libaka10_la-aka10.lo `test -f 'aka10.c' || echo '$(srcdir)/'`aka10.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libaka10_la-aka10.Tpo $(DEPDIR)/libaka10_la-aka10.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='aka10.c' object='libaka10_la-aka10.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -c -o libultimatecdrom_la-ultimatecdrom.lo `test -f 'ultimatecdrom.c' || echo '$(srcdir)/'`ultimatecdrom.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka10_la_CFLAGS) $(CFLAGS) -c -o libaka10_la-aka10.lo `test -f 'aka10.c' || echo '$(srcdir)/'`aka10.c
 
-../../common/sound/libultimatecdrom_la-sound_openal.lo: ../../common/sound/sound_openal.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -MT ../../common/sound/libultimatecdrom_la-sound_openal.lo -MD -MP -MF ../../common/sound/$(DEPDIR)/libultimatecdrom_la-sound_openal.Tpo -c -o ../../common/sound/libultimatecdrom_la-sound_openal.lo `test -f '../../common/sound/sound_openal.c' || echo '$(srcdir)/'`../../common/sound/sound_openal.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/sound/$(DEPDIR)/libultimatecdrom_la-sound_openal.Tpo ../../common/sound/$(DEPDIR)/libultimatecdrom_la-sound_openal.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/sound/sound_openal.c' object='../../common/sound/libultimatecdrom_la-sound_openal.lo' libtool=yes @AMDEPBACKSLASH@
+../../common/midi/libaka10_la-midi_win.lo: ../../common/midi/midi_win.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka10_la_CFLAGS) $(CFLAGS) -MT ../../common/midi/libaka10_la-midi_win.lo -MD -MP -MF ../../common/midi/$(DEPDIR)/libaka10_la-midi_win.Tpo -c -o ../../common/midi/libaka10_la-midi_win.lo `test -f '../../common/midi/midi_win.c' || echo '$(srcdir)/'`../../common/midi/midi_win.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/midi/$(DEPDIR)/libaka10_la-midi_win.Tpo ../../common/midi/$(DEPDIR)/libaka10_la-midi_win.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/midi/midi_win.c' object='../../common/midi/libaka10_la-midi_win.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -c -o ../../common/sound/libultimatecdrom_la-sound_openal.lo `test -f '../../common/sound/sound_openal.c' || echo '$(srcdir)/'`../../common/sound/sound_openal.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka10_la_CFLAGS) $(CFLAGS) -c -o ../../common/midi/libaka10_la-midi_win.lo `test -f '../../common/midi/midi_win.c' || echo '$(srcdir)/'`../../common/midi/midi_win.c
 
-../../common/cdrom/libultimatecdrom_la-cdrom-windows-ioctl.lo: ../../common/cdrom/cdrom-windows-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/libultimatecdrom_la-cdrom-windows-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-windows-ioctl.Tpo -c -o ../../common/cdrom/libultimatecdrom_la-cdrom-windows-ioctl.lo `test -f '../../common/cdrom/cdrom-windows-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-windows-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-windows-ioctl.Tpo ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-windows-ioctl.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/cdrom/cdrom-windows-ioctl.c' object='../../common/cdrom/libultimatecdrom_la-cdrom-windows-ioctl.lo' libtool=yes @AMDEPBACKSLASH@
+../../common/midi/libaka10_la-midi_alsa.lo: ../../common/midi/midi_alsa.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka10_la_CFLAGS) $(CFLAGS) -MT ../../common/midi/libaka10_la-midi_alsa.lo -MD -MP -MF ../../common/midi/$(DEPDIR)/libaka10_la-midi_alsa.Tpo -c -o ../../common/midi/libaka10_la-midi_alsa.lo `test -f '../../common/midi/midi_alsa.c' || echo '$(srcdir)/'`../../common/midi/midi_alsa.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/midi/$(DEPDIR)/libaka10_la-midi_alsa.Tpo ../../common/midi/$(DEPDIR)/libaka10_la-midi_alsa.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/midi/midi_alsa.c' object='../../common/midi/libaka10_la-midi_alsa.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/libultimatecdrom_la-cdrom-windows-ioctl.lo `test -f '../../common/cdrom/cdrom-windows-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-windows-ioctl.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka10_la_CFLAGS) $(CFLAGS) -c -o ../../common/midi/libaka10_la-midi_alsa.lo `test -f '../../common/midi/midi_alsa.c' || echo '$(srcdir)/'`../../common/midi/midi_alsa.c
 
-../../common/cdrom/libultimatecdrom_la-cdrom-linux-ioctl.lo: ../../common/cdrom/cdrom-linux-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/libultimatecdrom_la-cdrom-linux-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-linux-ioctl.Tpo -c -o ../../common/cdrom/libultimatecdrom_la-cdrom-linux-ioctl.lo `test -f '../../common/cdrom/cdrom-linux-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-linux-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-linux-ioctl.Tpo ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-linux-ioctl.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/cdrom/cdrom-linux-ioctl.c' object='../../common/cdrom/libultimatecdrom_la-cdrom-linux-ioctl.lo' libtool=yes @AMDEPBACKSLASH@
+../../common/midi/libaka10_la-midi_null.lo: ../../common/midi/midi_null.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka10_la_CFLAGS) $(CFLAGS) -MT ../../common/midi/libaka10_la-midi_null.lo -MD -MP -MF ../../common/midi/$(DEPDIR)/libaka10_la-midi_null.Tpo -c -o ../../common/midi/libaka10_la-midi_null.lo `test -f '../../common/midi/midi_null.c' || echo '$(srcdir)/'`../../common/midi/midi_null.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/midi/$(DEPDIR)/libaka10_la-midi_null.Tpo ../../common/midi/$(DEPDIR)/libaka10_la-midi_null.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/midi/midi_null.c' object='../../common/midi/libaka10_la-midi_null.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/libultimatecdrom_la-cdrom-linux-ioctl.lo `test -f '../../common/cdrom/cdrom-linux-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-linux-ioctl.c
-
-../../common/cdrom/libultimatecdrom_la-cdrom-osx-ioctl.lo: ../../common/cdrom/cdrom-osx-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/libultimatecdrom_la-cdrom-osx-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-osx-ioctl.Tpo -c -o ../../common/cdrom/libultimatecdrom_la-cdrom-osx-ioctl.lo `test -f '../../common/cdrom/cdrom-osx-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-osx-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-osx-ioctl.Tpo ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-osx-ioctl.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/cdrom/cdrom-osx-ioctl.c' object='../../common/cdrom/libultimatecdrom_la-cdrom-osx-ioctl.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/libultimatecdrom_la-cdrom-osx-ioctl.lo `test -f '../../common/cdrom/cdrom-osx-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-osx-ioctl.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka10_la_CFLAGS) $(CFLAGS) -c -o ../../common/midi/libaka10_la-midi_null.lo `test -f '../../common/midi/midi_null.c' || echo '$(srcdir)/'`../../common/midi/midi_null.c
 
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
-	-rm -rf ../../common/cdrom/.libs ../../common/cdrom/_libs
-	-rm -rf ../../common/sound/.libs ../../common/sound/_libs
+	-rm -rf ../../common/midi/.libs ../../common/midi/_libs
+	-rm -rf ../../common/uart/.libs ../../common/uart/_libs
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -695,10 +685,10 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
-	-rm -f ../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
-	-rm -f ../../common/cdrom/$(am__dirstamp)
-	-rm -f ../../common/sound/$(DEPDIR)/$(am__dirstamp)
-	-rm -f ../../common/sound/$(am__dirstamp)
+	-rm -f ../../common/midi/$(DEPDIR)/$(am__dirstamp)
+	-rm -f ../../common/midi/$(am__dirstamp)
+	-rm -f ../../common/uart/$(DEPDIR)/$(am__dirstamp)
+	-rm -f ../../common/uart/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -709,12 +699,11 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-linux-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-osx-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-windows-ioctl.Plo
-	-rm -f ../../common/sound/$(DEPDIR)/libultimatecdrom_la-sound_openal.Plo
-	-rm -f ./$(DEPDIR)/libultimatecdrom_la-mitsumi.Plo
-	-rm -f ./$(DEPDIR)/libultimatecdrom_la-ultimatecdrom.Plo
+		-rm -f ../../common/midi/$(DEPDIR)/libaka10_la-midi_alsa.Plo
+	-rm -f ../../common/midi/$(DEPDIR)/libaka10_la-midi_null.Plo
+	-rm -f ../../common/midi/$(DEPDIR)/libaka10_la-midi_win.Plo
+	-rm -f ../../common/uart/$(DEPDIR)/libaka10_la-6850.Plo
+	-rm -f ./$(DEPDIR)/libaka10_la-aka10.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -760,12 +749,11 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-linux-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-osx-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-windows-ioctl.Plo
-	-rm -f ../../common/sound/$(DEPDIR)/libultimatecdrom_la-sound_openal.Plo
-	-rm -f ./$(DEPDIR)/libultimatecdrom_la-mitsumi.Plo
-	-rm -f ./$(DEPDIR)/libultimatecdrom_la-ultimatecdrom.Plo
+		-rm -f ../../common/midi/$(DEPDIR)/libaka10_la-midi_alsa.Plo
+	-rm -f ../../common/midi/$(DEPDIR)/libaka10_la-midi_null.Plo
+	-rm -f ../../common/midi/$(DEPDIR)/libaka10_la-midi_win.Plo
+	-rm -f ../../common/uart/$(DEPDIR)/libaka10_la-6850.Plo
+	-rm -f ./$(DEPDIR)/libaka10_la-aka10.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -802,10 +790,10 @@ uninstall-am: uninstall-libLTLIBRARIES
 
 .PRECIOUS: Makefile
 
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@../ultimatecdrom.so: libultimatecdrom.la
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@	cp .libs/libultimatecdrom.so ../ultimatecdrom.so
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@../ultimatecdrom.dylib: libultimatecdrom.la
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@	cp .libs/libultimatecdrom.dylib ../ultimatecdrom.dylib
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@../aka10.so: libaka10.la
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@	cp .libs/libaka10.so ../aka10.so
+@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@../aka10.dylib: libaka10.la
+@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@	cp .libs/libaka10.dylib ../aka10.dylib
 
 @BUILD_PODULES_TRUE@amrefresh:	
 

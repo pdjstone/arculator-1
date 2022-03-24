@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# Makefile.am for AKA31
+# Makefile.am for Oak SCSI
 
 
 VPATH = @srcdir@
@@ -92,13 +92,13 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_1 = $(noinst_SCRIPTS)
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_2 = ../aka31.so
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_2 = ../oak_scsi.so
 @BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_3 = $(noinst_SCRIPTS)
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_4 = ../aka31.dylib
+@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_4 = ../oak_scsi.dylib
 @BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@am__append_5 = ../../common/cdrom/cdrom-windows-ioctl.c 
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_6 = ../../common/cdrom/cdrom-linux-ioctl.c 
 @BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_7 = ../../common/cdrom/cdrom-osx-ioctl.c 
-subdir = podules/aka31/src
+subdir = podules/oak_scsi/src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -136,39 +136,41 @@ am__uninstall_files_from_dir = { \
   }
 am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libaka31_la_DEPENDENCIES =
-am__libaka31_la_SOURCES_DIST = aka31.c d71071l.c \
+liboak_scsi_la_DEPENDENCIES =
+am__liboak_scsi_la_SOURCES_DIST = oak_scsi.c ncr5380.c \
 	../../common/scsi/hdd_file.c ../../common/scsi/scsi.c \
 	../../common/scsi/scsi_cd.c ../../common/scsi/scsi_config.c \
-	../../common/scsi/scsi_hd.c wd33c93a.c \
-	../../common/sound/sound_openal.c \
+	../../common/scsi/scsi_hd.c ../../common/sound/sound_openal.c \
+	../../common/eeprom/93c06.c \
 	../../common/cdrom/cdrom-windows-ioctl.c \
 	../../common/cdrom/cdrom-linux-ioctl.c \
 	../../common/cdrom/cdrom-osx-ioctl.c
 am__dirstamp = $(am__leading_dot)dirstamp
-@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@am__objects_1 = ../../common/cdrom/libaka31_la-cdrom-windows-ioctl.lo
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__objects_2 = ../../common/cdrom/libaka31_la-cdrom-linux-ioctl.lo
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__objects_3 = ../../common/cdrom/libaka31_la-cdrom-osx-ioctl.lo
-@BUILD_PODULES_TRUE@am_libaka31_la_OBJECTS = libaka31_la-aka31.lo \
-@BUILD_PODULES_TRUE@	libaka31_la-d71071l.lo \
-@BUILD_PODULES_TRUE@	../../common/scsi/libaka31_la-hdd_file.lo \
-@BUILD_PODULES_TRUE@	../../common/scsi/libaka31_la-scsi.lo \
-@BUILD_PODULES_TRUE@	../../common/scsi/libaka31_la-scsi_cd.lo \
-@BUILD_PODULES_TRUE@	../../common/scsi/libaka31_la-scsi_config.lo \
-@BUILD_PODULES_TRUE@	../../common/scsi/libaka31_la-scsi_hd.lo \
-@BUILD_PODULES_TRUE@	libaka31_la-wd33c93a.lo \
-@BUILD_PODULES_TRUE@	../../common/sound/libaka31_la-sound_openal.lo \
+@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@am__objects_1 = ../../common/cdrom/liboak_scsi_la-cdrom-windows-ioctl.lo
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__objects_2 = ../../common/cdrom/liboak_scsi_la-cdrom-linux-ioctl.lo
+@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__objects_3 = ../../common/cdrom/liboak_scsi_la-cdrom-osx-ioctl.lo
+@BUILD_PODULES_TRUE@am_liboak_scsi_la_OBJECTS =  \
+@BUILD_PODULES_TRUE@	liboak_scsi_la-oak_scsi.lo \
+@BUILD_PODULES_TRUE@	liboak_scsi_la-ncr5380.lo \
+@BUILD_PODULES_TRUE@	../../common/scsi/liboak_scsi_la-hdd_file.lo \
+@BUILD_PODULES_TRUE@	../../common/scsi/liboak_scsi_la-scsi.lo \
+@BUILD_PODULES_TRUE@	../../common/scsi/liboak_scsi_la-scsi_cd.lo \
+@BUILD_PODULES_TRUE@	../../common/scsi/liboak_scsi_la-scsi_config.lo \
+@BUILD_PODULES_TRUE@	../../common/scsi/liboak_scsi_la-scsi_hd.lo \
+@BUILD_PODULES_TRUE@	../../common/sound/liboak_scsi_la-sound_openal.lo \
+@BUILD_PODULES_TRUE@	../../common/eeprom/liboak_scsi_la-93c06.lo \
 @BUILD_PODULES_TRUE@	$(am__objects_1) $(am__objects_2) \
 @BUILD_PODULES_TRUE@	$(am__objects_3)
-libaka31_la_OBJECTS = $(am_libaka31_la_OBJECTS)
+liboak_scsi_la_OBJECTS = $(am_liboak_scsi_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libaka31_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libaka31_la_CFLAGS) \
-	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-@BUILD_PODULES_TRUE@am_libaka31_la_rpath = -rpath $(libdir)
+liboak_scsi_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
+	$(liboak_scsi_la_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o \
+	$@
+@BUILD_PODULES_TRUE@am_liboak_scsi_la_rpath = -rpath $(libdir)
 SCRIPTS = $(noinst_SCRIPTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -185,18 +187,18 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-linux-ioctl.Plo \
-	../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-osx-ioctl.Plo \
-	../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-windows-ioctl.Plo \
-	../../common/scsi/$(DEPDIR)/libaka31_la-hdd_file.Plo \
-	../../common/scsi/$(DEPDIR)/libaka31_la-scsi.Plo \
-	../../common/scsi/$(DEPDIR)/libaka31_la-scsi_cd.Plo \
-	../../common/scsi/$(DEPDIR)/libaka31_la-scsi_config.Plo \
-	../../common/scsi/$(DEPDIR)/libaka31_la-scsi_hd.Plo \
-	../../common/sound/$(DEPDIR)/libaka31_la-sound_openal.Plo \
-	./$(DEPDIR)/libaka31_la-aka31.Plo \
-	./$(DEPDIR)/libaka31_la-d71071l.Plo \
-	./$(DEPDIR)/libaka31_la-wd33c93a.Plo
+am__depfiles_remade = ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-linux-ioctl.Plo \
+	../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-osx-ioctl.Plo \
+	../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-windows-ioctl.Plo \
+	../../common/eeprom/$(DEPDIR)/liboak_scsi_la-93c06.Plo \
+	../../common/scsi/$(DEPDIR)/liboak_scsi_la-hdd_file.Plo \
+	../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi.Plo \
+	../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_cd.Plo \
+	../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_config.Plo \
+	../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_hd.Plo \
+	../../common/sound/$(DEPDIR)/liboak_scsi_la-sound_openal.Plo \
+	./$(DEPDIR)/liboak_scsi_la-ncr5380.Plo \
+	./$(DEPDIR)/liboak_scsi_la-oak_scsi.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -216,8 +218,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libaka31_la_SOURCES)
-DIST_SOURCES = $(am__libaka31_la_SOURCES_DIST)
+SOURCES = $(liboak_scsi_la_SOURCES)
+DIST_SOURCES = $(am__liboak_scsi_la_SOURCES_DIST)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -387,20 +389,21 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = subdir-objects
-@BUILD_PODULES_TRUE@lib_LTLIBRARIES = libaka31.la
+@BUILD_PODULES_TRUE@lib_LTLIBRARIES = liboak_scsi.la
 @BUILD_PODULES_TRUE@noinst_SCRIPTS = $(am__append_2) $(am__append_4)
 @BUILD_PODULES_TRUE@CLEANFILES = $(am__append_1) $(am__append_3)
-@BUILD_PODULES_TRUE@libaka31_la_SOURCES = aka31.c d71071l.c \
+@BUILD_PODULES_TRUE@liboak_scsi_la_SOURCES = oak_scsi.c ncr5380.c \
 @BUILD_PODULES_TRUE@	../../common/scsi/hdd_file.c \
 @BUILD_PODULES_TRUE@	../../common/scsi/scsi.c \
 @BUILD_PODULES_TRUE@	../../common/scsi/scsi_cd.c \
 @BUILD_PODULES_TRUE@	../../common/scsi/scsi_config.c \
-@BUILD_PODULES_TRUE@	../../common/scsi/scsi_hd.c wd33c93a.c \
+@BUILD_PODULES_TRUE@	../../common/scsi/scsi_hd.c \
 @BUILD_PODULES_TRUE@	../../common/sound/sound_openal.c \
+@BUILD_PODULES_TRUE@	../../common/eeprom/93c06.c \
 @BUILD_PODULES_TRUE@	$(am__append_5) $(am__append_6) \
 @BUILD_PODULES_TRUE@	$(am__append_7)
-@BUILD_PODULES_TRUE@libaka31_la_CFLAGS = -I../../../src -I../../common/cdrom -I../../common/sound -I../../common/scsi
-@BUILD_PODULES_TRUE@libaka31_la_LIBADD = @LIBS@
+@BUILD_PODULES_TRUE@liboak_scsi_la_CFLAGS = -I../../../src -I../../common/cdrom -I../../common/eeprom -I../../common/sound -I../../common/scsi
+@BUILD_PODULES_TRUE@liboak_scsi_la_LIBADD = @LIBS@
 all: all-am
 
 .SUFFIXES:
@@ -414,9 +417,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu podules/aka31/src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu podules/oak_scsi/src/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu podules/aka31/src/Makefile
+	  $(AUTOMAKE) --gnu podules/oak_scsi/src/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -475,19 +478,19 @@ clean-libLTLIBRARIES:
 ../../common/scsi/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) ../../common/scsi/$(DEPDIR)
 	@: > ../../common/scsi/$(DEPDIR)/$(am__dirstamp)
-../../common/scsi/libaka31_la-hdd_file.lo:  \
+../../common/scsi/liboak_scsi_la-hdd_file.lo:  \
 	../../common/scsi/$(am__dirstamp) \
 	../../common/scsi/$(DEPDIR)/$(am__dirstamp)
-../../common/scsi/libaka31_la-scsi.lo:  \
+../../common/scsi/liboak_scsi_la-scsi.lo:  \
 	../../common/scsi/$(am__dirstamp) \
 	../../common/scsi/$(DEPDIR)/$(am__dirstamp)
-../../common/scsi/libaka31_la-scsi_cd.lo:  \
+../../common/scsi/liboak_scsi_la-scsi_cd.lo:  \
 	../../common/scsi/$(am__dirstamp) \
 	../../common/scsi/$(DEPDIR)/$(am__dirstamp)
-../../common/scsi/libaka31_la-scsi_config.lo:  \
+../../common/scsi/liboak_scsi_la-scsi_config.lo:  \
 	../../common/scsi/$(am__dirstamp) \
 	../../common/scsi/$(DEPDIR)/$(am__dirstamp)
-../../common/scsi/libaka31_la-scsi_hd.lo:  \
+../../common/scsi/liboak_scsi_la-scsi_hd.lo:  \
 	../../common/scsi/$(am__dirstamp) \
 	../../common/scsi/$(DEPDIR)/$(am__dirstamp)
 ../../common/sound/$(am__dirstamp):
@@ -496,32 +499,43 @@ clean-libLTLIBRARIES:
 ../../common/sound/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) ../../common/sound/$(DEPDIR)
 	@: > ../../common/sound/$(DEPDIR)/$(am__dirstamp)
-../../common/sound/libaka31_la-sound_openal.lo:  \
+../../common/sound/liboak_scsi_la-sound_openal.lo:  \
 	../../common/sound/$(am__dirstamp) \
 	../../common/sound/$(DEPDIR)/$(am__dirstamp)
+../../common/eeprom/$(am__dirstamp):
+	@$(MKDIR_P) ../../common/eeprom
+	@: > ../../common/eeprom/$(am__dirstamp)
+../../common/eeprom/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) ../../common/eeprom/$(DEPDIR)
+	@: > ../../common/eeprom/$(DEPDIR)/$(am__dirstamp)
+../../common/eeprom/liboak_scsi_la-93c06.lo:  \
+	../../common/eeprom/$(am__dirstamp) \
+	../../common/eeprom/$(DEPDIR)/$(am__dirstamp)
 ../../common/cdrom/$(am__dirstamp):
 	@$(MKDIR_P) ../../common/cdrom
 	@: > ../../common/cdrom/$(am__dirstamp)
 ../../common/cdrom/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) ../../common/cdrom/$(DEPDIR)
 	@: > ../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
-../../common/cdrom/libaka31_la-cdrom-windows-ioctl.lo:  \
+../../common/cdrom/liboak_scsi_la-cdrom-windows-ioctl.lo:  \
 	../../common/cdrom/$(am__dirstamp) \
 	../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
-../../common/cdrom/libaka31_la-cdrom-linux-ioctl.lo:  \
+../../common/cdrom/liboak_scsi_la-cdrom-linux-ioctl.lo:  \
 	../../common/cdrom/$(am__dirstamp) \
 	../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
-../../common/cdrom/libaka31_la-cdrom-osx-ioctl.lo:  \
+../../common/cdrom/liboak_scsi_la-cdrom-osx-ioctl.lo:  \
 	../../common/cdrom/$(am__dirstamp) \
 	../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
 
-libaka31.la: $(libaka31_la_OBJECTS) $(libaka31_la_DEPENDENCIES) $(EXTRA_libaka31_la_DEPENDENCIES) 
-	$(AM_V_CCLD)$(libaka31_la_LINK) $(am_libaka31_la_rpath) $(libaka31_la_OBJECTS) $(libaka31_la_LIBADD) $(LIBS)
+liboak_scsi.la: $(liboak_scsi_la_OBJECTS) $(liboak_scsi_la_DEPENDENCIES) $(EXTRA_liboak_scsi_la_DEPENDENCIES) 
+	$(AM_V_CCLD)$(liboak_scsi_la_LINK) $(am_liboak_scsi_la_rpath) $(liboak_scsi_la_OBJECTS) $(liboak_scsi_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f ../../common/cdrom/*.$(OBJEXT)
 	-rm -f ../../common/cdrom/*.lo
+	-rm -f ../../common/eeprom/*.$(OBJEXT)
+	-rm -f ../../common/eeprom/*.lo
 	-rm -f ../../common/scsi/*.$(OBJEXT)
 	-rm -f ../../common/scsi/*.lo
 	-rm -f ../../common/sound/*.$(OBJEXT)
@@ -530,18 +544,18 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-linux-ioctl.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-osx-ioctl.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-windows-ioctl.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/scsi/$(DEPDIR)/libaka31_la-hdd_file.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/scsi/$(DEPDIR)/libaka31_la-scsi.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/scsi/$(DEPDIR)/libaka31_la-scsi_cd.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/scsi/$(DEPDIR)/libaka31_la-scsi_config.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/scsi/$(DEPDIR)/libaka31_la-scsi_hd.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/sound/$(DEPDIR)/libaka31_la-sound_openal.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaka31_la-aka31.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaka31_la-d71071l.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaka31_la-wd33c93a.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-linux-ioctl.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-osx-ioctl.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-windows-ioctl.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@../../common/eeprom/$(DEPDIR)/liboak_scsi_la-93c06.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@../../common/scsi/$(DEPDIR)/liboak_scsi_la-hdd_file.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_cd.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_config.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_hd.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@../../common/sound/$(DEPDIR)/liboak_scsi_la-sound_openal.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liboak_scsi_la-ncr5380.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liboak_scsi_la-oak_scsi.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -573,89 +587,89 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
 
-libaka31_la-aka31.lo: aka31.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -MT libaka31_la-aka31.lo -MD -MP -MF $(DEPDIR)/libaka31_la-aka31.Tpo -c -o libaka31_la-aka31.lo `test -f 'aka31.c' || echo '$(srcdir)/'`aka31.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libaka31_la-aka31.Tpo $(DEPDIR)/libaka31_la-aka31.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='aka31.c' object='libaka31_la-aka31.lo' libtool=yes @AMDEPBACKSLASH@
+liboak_scsi_la-oak_scsi.lo: oak_scsi.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -MT liboak_scsi_la-oak_scsi.lo -MD -MP -MF $(DEPDIR)/liboak_scsi_la-oak_scsi.Tpo -c -o liboak_scsi_la-oak_scsi.lo `test -f 'oak_scsi.c' || echo '$(srcdir)/'`oak_scsi.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liboak_scsi_la-oak_scsi.Tpo $(DEPDIR)/liboak_scsi_la-oak_scsi.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='oak_scsi.c' object='liboak_scsi_la-oak_scsi.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -c -o libaka31_la-aka31.lo `test -f 'aka31.c' || echo '$(srcdir)/'`aka31.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -c -o liboak_scsi_la-oak_scsi.lo `test -f 'oak_scsi.c' || echo '$(srcdir)/'`oak_scsi.c
 
-libaka31_la-d71071l.lo: d71071l.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -MT libaka31_la-d71071l.lo -MD -MP -MF $(DEPDIR)/libaka31_la-d71071l.Tpo -c -o libaka31_la-d71071l.lo `test -f 'd71071l.c' || echo '$(srcdir)/'`d71071l.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libaka31_la-d71071l.Tpo $(DEPDIR)/libaka31_la-d71071l.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='d71071l.c' object='libaka31_la-d71071l.lo' libtool=yes @AMDEPBACKSLASH@
+liboak_scsi_la-ncr5380.lo: ncr5380.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -MT liboak_scsi_la-ncr5380.lo -MD -MP -MF $(DEPDIR)/liboak_scsi_la-ncr5380.Tpo -c -o liboak_scsi_la-ncr5380.lo `test -f 'ncr5380.c' || echo '$(srcdir)/'`ncr5380.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/liboak_scsi_la-ncr5380.Tpo $(DEPDIR)/liboak_scsi_la-ncr5380.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ncr5380.c' object='liboak_scsi_la-ncr5380.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -c -o libaka31_la-d71071l.lo `test -f 'd71071l.c' || echo '$(srcdir)/'`d71071l.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -c -o liboak_scsi_la-ncr5380.lo `test -f 'ncr5380.c' || echo '$(srcdir)/'`ncr5380.c
 
-../../common/scsi/libaka31_la-hdd_file.lo: ../../common/scsi/hdd_file.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -MT ../../common/scsi/libaka31_la-hdd_file.lo -MD -MP -MF ../../common/scsi/$(DEPDIR)/libaka31_la-hdd_file.Tpo -c -o ../../common/scsi/libaka31_la-hdd_file.lo `test -f '../../common/scsi/hdd_file.c' || echo '$(srcdir)/'`../../common/scsi/hdd_file.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/scsi/$(DEPDIR)/libaka31_la-hdd_file.Tpo ../../common/scsi/$(DEPDIR)/libaka31_la-hdd_file.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/scsi/hdd_file.c' object='../../common/scsi/libaka31_la-hdd_file.lo' libtool=yes @AMDEPBACKSLASH@
+../../common/scsi/liboak_scsi_la-hdd_file.lo: ../../common/scsi/hdd_file.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -MT ../../common/scsi/liboak_scsi_la-hdd_file.lo -MD -MP -MF ../../common/scsi/$(DEPDIR)/liboak_scsi_la-hdd_file.Tpo -c -o ../../common/scsi/liboak_scsi_la-hdd_file.lo `test -f '../../common/scsi/hdd_file.c' || echo '$(srcdir)/'`../../common/scsi/hdd_file.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/scsi/$(DEPDIR)/liboak_scsi_la-hdd_file.Tpo ../../common/scsi/$(DEPDIR)/liboak_scsi_la-hdd_file.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/scsi/hdd_file.c' object='../../common/scsi/liboak_scsi_la-hdd_file.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -c -o ../../common/scsi/libaka31_la-hdd_file.lo `test -f '../../common/scsi/hdd_file.c' || echo '$(srcdir)/'`../../common/scsi/hdd_file.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -c -o ../../common/scsi/liboak_scsi_la-hdd_file.lo `test -f '../../common/scsi/hdd_file.c' || echo '$(srcdir)/'`../../common/scsi/hdd_file.c
 
-../../common/scsi/libaka31_la-scsi.lo: ../../common/scsi/scsi.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -MT ../../common/scsi/libaka31_la-scsi.lo -MD -MP -MF ../../common/scsi/$(DEPDIR)/libaka31_la-scsi.Tpo -c -o ../../common/scsi/libaka31_la-scsi.lo `test -f '../../common/scsi/scsi.c' || echo '$(srcdir)/'`../../common/scsi/scsi.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/scsi/$(DEPDIR)/libaka31_la-scsi.Tpo ../../common/scsi/$(DEPDIR)/libaka31_la-scsi.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/scsi/scsi.c' object='../../common/scsi/libaka31_la-scsi.lo' libtool=yes @AMDEPBACKSLASH@
+../../common/scsi/liboak_scsi_la-scsi.lo: ../../common/scsi/scsi.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -MT ../../common/scsi/liboak_scsi_la-scsi.lo -MD -MP -MF ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi.Tpo -c -o ../../common/scsi/liboak_scsi_la-scsi.lo `test -f '../../common/scsi/scsi.c' || echo '$(srcdir)/'`../../common/scsi/scsi.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi.Tpo ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/scsi/scsi.c' object='../../common/scsi/liboak_scsi_la-scsi.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -c -o ../../common/scsi/libaka31_la-scsi.lo `test -f '../../common/scsi/scsi.c' || echo '$(srcdir)/'`../../common/scsi/scsi.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -c -o ../../common/scsi/liboak_scsi_la-scsi.lo `test -f '../../common/scsi/scsi.c' || echo '$(srcdir)/'`../../common/scsi/scsi.c
 
-../../common/scsi/libaka31_la-scsi_cd.lo: ../../common/scsi/scsi_cd.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -MT ../../common/scsi/libaka31_la-scsi_cd.lo -MD -MP -MF ../../common/scsi/$(DEPDIR)/libaka31_la-scsi_cd.Tpo -c -o ../../common/scsi/libaka31_la-scsi_cd.lo `test -f '../../common/scsi/scsi_cd.c' || echo '$(srcdir)/'`../../common/scsi/scsi_cd.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/scsi/$(DEPDIR)/libaka31_la-scsi_cd.Tpo ../../common/scsi/$(DEPDIR)/libaka31_la-scsi_cd.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/scsi/scsi_cd.c' object='../../common/scsi/libaka31_la-scsi_cd.lo' libtool=yes @AMDEPBACKSLASH@
+../../common/scsi/liboak_scsi_la-scsi_cd.lo: ../../common/scsi/scsi_cd.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -MT ../../common/scsi/liboak_scsi_la-scsi_cd.lo -MD -MP -MF ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_cd.Tpo -c -o ../../common/scsi/liboak_scsi_la-scsi_cd.lo `test -f '../../common/scsi/scsi_cd.c' || echo '$(srcdir)/'`../../common/scsi/scsi_cd.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_cd.Tpo ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_cd.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/scsi/scsi_cd.c' object='../../common/scsi/liboak_scsi_la-scsi_cd.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -c -o ../../common/scsi/libaka31_la-scsi_cd.lo `test -f '../../common/scsi/scsi_cd.c' || echo '$(srcdir)/'`../../common/scsi/scsi_cd.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -c -o ../../common/scsi/liboak_scsi_la-scsi_cd.lo `test -f '../../common/scsi/scsi_cd.c' || echo '$(srcdir)/'`../../common/scsi/scsi_cd.c
 
-../../common/scsi/libaka31_la-scsi_config.lo: ../../common/scsi/scsi_config.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -MT ../../common/scsi/libaka31_la-scsi_config.lo -MD -MP -MF ../../common/scsi/$(DEPDIR)/libaka31_la-scsi_config.Tpo -c -o ../../common/scsi/libaka31_la-scsi_config.lo `test -f '../../common/scsi/scsi_config.c' || echo '$(srcdir)/'`../../common/scsi/scsi_config.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/scsi/$(DEPDIR)/libaka31_la-scsi_config.Tpo ../../common/scsi/$(DEPDIR)/libaka31_la-scsi_config.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/scsi/scsi_config.c' object='../../common/scsi/libaka31_la-scsi_config.lo' libtool=yes @AMDEPBACKSLASH@
+../../common/scsi/liboak_scsi_la-scsi_config.lo: ../../common/scsi/scsi_config.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -MT ../../common/scsi/liboak_scsi_la-scsi_config.lo -MD -MP -MF ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_config.Tpo -c -o ../../common/scsi/liboak_scsi_la-scsi_config.lo `test -f '../../common/scsi/scsi_config.c' || echo '$(srcdir)/'`../../common/scsi/scsi_config.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_config.Tpo ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_config.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/scsi/scsi_config.c' object='../../common/scsi/liboak_scsi_la-scsi_config.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -c -o ../../common/scsi/libaka31_la-scsi_config.lo `test -f '../../common/scsi/scsi_config.c' || echo '$(srcdir)/'`../../common/scsi/scsi_config.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -c -o ../../common/scsi/liboak_scsi_la-scsi_config.lo `test -f '../../common/scsi/scsi_config.c' || echo '$(srcdir)/'`../../common/scsi/scsi_config.c
 
-../../common/scsi/libaka31_la-scsi_hd.lo: ../../common/scsi/scsi_hd.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -MT ../../common/scsi/libaka31_la-scsi_hd.lo -MD -MP -MF ../../common/scsi/$(DEPDIR)/libaka31_la-scsi_hd.Tpo -c -o ../../common/scsi/libaka31_la-scsi_hd.lo `test -f '../../common/scsi/scsi_hd.c' || echo '$(srcdir)/'`../../common/scsi/scsi_hd.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/scsi/$(DEPDIR)/libaka31_la-scsi_hd.Tpo ../../common/scsi/$(DEPDIR)/libaka31_la-scsi_hd.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/scsi/scsi_hd.c' object='../../common/scsi/libaka31_la-scsi_hd.lo' libtool=yes @AMDEPBACKSLASH@
+../../common/scsi/liboak_scsi_la-scsi_hd.lo: ../../common/scsi/scsi_hd.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -MT ../../common/scsi/liboak_scsi_la-scsi_hd.lo -MD -MP -MF ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_hd.Tpo -c -o ../../common/scsi/liboak_scsi_la-scsi_hd.lo `test -f '../../common/scsi/scsi_hd.c' || echo '$(srcdir)/'`../../common/scsi/scsi_hd.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_hd.Tpo ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_hd.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/scsi/scsi_hd.c' object='../../common/scsi/liboak_scsi_la-scsi_hd.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -c -o ../../common/scsi/libaka31_la-scsi_hd.lo `test -f '../../common/scsi/scsi_hd.c' || echo '$(srcdir)/'`../../common/scsi/scsi_hd.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -c -o ../../common/scsi/liboak_scsi_la-scsi_hd.lo `test -f '../../common/scsi/scsi_hd.c' || echo '$(srcdir)/'`../../common/scsi/scsi_hd.c
 
-libaka31_la-wd33c93a.lo: wd33c93a.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -MT libaka31_la-wd33c93a.lo -MD -MP -MF $(DEPDIR)/libaka31_la-wd33c93a.Tpo -c -o libaka31_la-wd33c93a.lo `test -f 'wd33c93a.c' || echo '$(srcdir)/'`wd33c93a.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libaka31_la-wd33c93a.Tpo $(DEPDIR)/libaka31_la-wd33c93a.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='wd33c93a.c' object='libaka31_la-wd33c93a.lo' libtool=yes @AMDEPBACKSLASH@
+../../common/sound/liboak_scsi_la-sound_openal.lo: ../../common/sound/sound_openal.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -MT ../../common/sound/liboak_scsi_la-sound_openal.lo -MD -MP -MF ../../common/sound/$(DEPDIR)/liboak_scsi_la-sound_openal.Tpo -c -o ../../common/sound/liboak_scsi_la-sound_openal.lo `test -f '../../common/sound/sound_openal.c' || echo '$(srcdir)/'`../../common/sound/sound_openal.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/sound/$(DEPDIR)/liboak_scsi_la-sound_openal.Tpo ../../common/sound/$(DEPDIR)/liboak_scsi_la-sound_openal.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/sound/sound_openal.c' object='../../common/sound/liboak_scsi_la-sound_openal.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -c -o libaka31_la-wd33c93a.lo `test -f 'wd33c93a.c' || echo '$(srcdir)/'`wd33c93a.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -c -o ../../common/sound/liboak_scsi_la-sound_openal.lo `test -f '../../common/sound/sound_openal.c' || echo '$(srcdir)/'`../../common/sound/sound_openal.c
 
-../../common/sound/libaka31_la-sound_openal.lo: ../../common/sound/sound_openal.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -MT ../../common/sound/libaka31_la-sound_openal.lo -MD -MP -MF ../../common/sound/$(DEPDIR)/libaka31_la-sound_openal.Tpo -c -o ../../common/sound/libaka31_la-sound_openal.lo `test -f '../../common/sound/sound_openal.c' || echo '$(srcdir)/'`../../common/sound/sound_openal.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/sound/$(DEPDIR)/libaka31_la-sound_openal.Tpo ../../common/sound/$(DEPDIR)/libaka31_la-sound_openal.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/sound/sound_openal.c' object='../../common/sound/libaka31_la-sound_openal.lo' libtool=yes @AMDEPBACKSLASH@
+../../common/eeprom/liboak_scsi_la-93c06.lo: ../../common/eeprom/93c06.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -MT ../../common/eeprom/liboak_scsi_la-93c06.lo -MD -MP -MF ../../common/eeprom/$(DEPDIR)/liboak_scsi_la-93c06.Tpo -c -o ../../common/eeprom/liboak_scsi_la-93c06.lo `test -f '../../common/eeprom/93c06.c' || echo '$(srcdir)/'`../../common/eeprom/93c06.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/eeprom/$(DEPDIR)/liboak_scsi_la-93c06.Tpo ../../common/eeprom/$(DEPDIR)/liboak_scsi_la-93c06.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/eeprom/93c06.c' object='../../common/eeprom/liboak_scsi_la-93c06.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -c -o ../../common/sound/libaka31_la-sound_openal.lo `test -f '../../common/sound/sound_openal.c' || echo '$(srcdir)/'`../../common/sound/sound_openal.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -c -o ../../common/eeprom/liboak_scsi_la-93c06.lo `test -f '../../common/eeprom/93c06.c' || echo '$(srcdir)/'`../../common/eeprom/93c06.c
 
-../../common/cdrom/libaka31_la-cdrom-windows-ioctl.lo: ../../common/cdrom/cdrom-windows-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/libaka31_la-cdrom-windows-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-windows-ioctl.Tpo -c -o ../../common/cdrom/libaka31_la-cdrom-windows-ioctl.lo `test -f '../../common/cdrom/cdrom-windows-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-windows-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-windows-ioctl.Tpo ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-windows-ioctl.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/cdrom/cdrom-windows-ioctl.c' object='../../common/cdrom/libaka31_la-cdrom-windows-ioctl.lo' libtool=yes @AMDEPBACKSLASH@
+../../common/cdrom/liboak_scsi_la-cdrom-windows-ioctl.lo: ../../common/cdrom/cdrom-windows-ioctl.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/liboak_scsi_la-cdrom-windows-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-windows-ioctl.Tpo -c -o ../../common/cdrom/liboak_scsi_la-cdrom-windows-ioctl.lo `test -f '../../common/cdrom/cdrom-windows-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-windows-ioctl.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-windows-ioctl.Tpo ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-windows-ioctl.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/cdrom/cdrom-windows-ioctl.c' object='../../common/cdrom/liboak_scsi_la-cdrom-windows-ioctl.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/libaka31_la-cdrom-windows-ioctl.lo `test -f '../../common/cdrom/cdrom-windows-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-windows-ioctl.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/liboak_scsi_la-cdrom-windows-ioctl.lo `test -f '../../common/cdrom/cdrom-windows-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-windows-ioctl.c
 
-../../common/cdrom/libaka31_la-cdrom-linux-ioctl.lo: ../../common/cdrom/cdrom-linux-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/libaka31_la-cdrom-linux-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-linux-ioctl.Tpo -c -o ../../common/cdrom/libaka31_la-cdrom-linux-ioctl.lo `test -f '../../common/cdrom/cdrom-linux-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-linux-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-linux-ioctl.Tpo ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-linux-ioctl.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/cdrom/cdrom-linux-ioctl.c' object='../../common/cdrom/libaka31_la-cdrom-linux-ioctl.lo' libtool=yes @AMDEPBACKSLASH@
+../../common/cdrom/liboak_scsi_la-cdrom-linux-ioctl.lo: ../../common/cdrom/cdrom-linux-ioctl.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/liboak_scsi_la-cdrom-linux-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-linux-ioctl.Tpo -c -o ../../common/cdrom/liboak_scsi_la-cdrom-linux-ioctl.lo `test -f '../../common/cdrom/cdrom-linux-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-linux-ioctl.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-linux-ioctl.Tpo ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-linux-ioctl.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/cdrom/cdrom-linux-ioctl.c' object='../../common/cdrom/liboak_scsi_la-cdrom-linux-ioctl.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/libaka31_la-cdrom-linux-ioctl.lo `test -f '../../common/cdrom/cdrom-linux-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-linux-ioctl.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/liboak_scsi_la-cdrom-linux-ioctl.lo `test -f '../../common/cdrom/cdrom-linux-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-linux-ioctl.c
 
-../../common/cdrom/libaka31_la-cdrom-osx-ioctl.lo: ../../common/cdrom/cdrom-osx-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/libaka31_la-cdrom-osx-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-osx-ioctl.Tpo -c -o ../../common/cdrom/libaka31_la-cdrom-osx-ioctl.lo `test -f '../../common/cdrom/cdrom-osx-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-osx-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-osx-ioctl.Tpo ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-osx-ioctl.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/cdrom/cdrom-osx-ioctl.c' object='../../common/cdrom/libaka31_la-cdrom-osx-ioctl.lo' libtool=yes @AMDEPBACKSLASH@
+../../common/cdrom/liboak_scsi_la-cdrom-osx-ioctl.lo: ../../common/cdrom/cdrom-osx-ioctl.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/liboak_scsi_la-cdrom-osx-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-osx-ioctl.Tpo -c -o ../../common/cdrom/liboak_scsi_la-cdrom-osx-ioctl.lo `test -f '../../common/cdrom/cdrom-osx-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-osx-ioctl.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-osx-ioctl.Tpo ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-osx-ioctl.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/cdrom/cdrom-osx-ioctl.c' object='../../common/cdrom/liboak_scsi_la-cdrom-osx-ioctl.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/libaka31_la-cdrom-osx-ioctl.lo `test -f '../../common/cdrom/cdrom-osx-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-osx-ioctl.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/liboak_scsi_la-cdrom-osx-ioctl.lo `test -f '../../common/cdrom/cdrom-osx-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-osx-ioctl.c
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -663,6 +677,7 @@ mostlyclean-libtool:
 clean-libtool:
 	-rm -rf .libs _libs
 	-rm -rf ../../common/cdrom/.libs ../../common/cdrom/_libs
+	-rm -rf ../../common/eeprom/.libs ../../common/eeprom/_libs
 	-rm -rf ../../common/scsi/.libs ../../common/scsi/_libs
 	-rm -rf ../../common/sound/.libs ../../common/sound/_libs
 
@@ -786,6 +801,8 @@ distclean-generic:
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
 	-rm -f ../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
 	-rm -f ../../common/cdrom/$(am__dirstamp)
+	-rm -f ../../common/eeprom/$(DEPDIR)/$(am__dirstamp)
+	-rm -f ../../common/eeprom/$(am__dirstamp)
 	-rm -f ../../common/scsi/$(DEPDIR)/$(am__dirstamp)
 	-rm -f ../../common/scsi/$(am__dirstamp)
 	-rm -f ../../common/sound/$(DEPDIR)/$(am__dirstamp)
@@ -800,18 +817,18 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-linux-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-osx-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-windows-ioctl.Plo
-	-rm -f ../../common/scsi/$(DEPDIR)/libaka31_la-hdd_file.Plo
-	-rm -f ../../common/scsi/$(DEPDIR)/libaka31_la-scsi.Plo
-	-rm -f ../../common/scsi/$(DEPDIR)/libaka31_la-scsi_cd.Plo
-	-rm -f ../../common/scsi/$(DEPDIR)/libaka31_la-scsi_config.Plo
-	-rm -f ../../common/scsi/$(DEPDIR)/libaka31_la-scsi_hd.Plo
-	-rm -f ../../common/sound/$(DEPDIR)/libaka31_la-sound_openal.Plo
-	-rm -f ./$(DEPDIR)/libaka31_la-aka31.Plo
-	-rm -f ./$(DEPDIR)/libaka31_la-d71071l.Plo
-	-rm -f ./$(DEPDIR)/libaka31_la-wd33c93a.Plo
+		-rm -f ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-linux-ioctl.Plo
+	-rm -f ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-osx-ioctl.Plo
+	-rm -f ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-windows-ioctl.Plo
+	-rm -f ../../common/eeprom/$(DEPDIR)/liboak_scsi_la-93c06.Plo
+	-rm -f ../../common/scsi/$(DEPDIR)/liboak_scsi_la-hdd_file.Plo
+	-rm -f ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi.Plo
+	-rm -f ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_cd.Plo
+	-rm -f ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_config.Plo
+	-rm -f ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_hd.Plo
+	-rm -f ../../common/sound/$(DEPDIR)/liboak_scsi_la-sound_openal.Plo
+	-rm -f ./$(DEPDIR)/liboak_scsi_la-ncr5380.Plo
+	-rm -f ./$(DEPDIR)/liboak_scsi_la-oak_scsi.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -857,18 +874,18 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-linux-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-osx-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-windows-ioctl.Plo
-	-rm -f ../../common/scsi/$(DEPDIR)/libaka31_la-hdd_file.Plo
-	-rm -f ../../common/scsi/$(DEPDIR)/libaka31_la-scsi.Plo
-	-rm -f ../../common/scsi/$(DEPDIR)/libaka31_la-scsi_cd.Plo
-	-rm -f ../../common/scsi/$(DEPDIR)/libaka31_la-scsi_config.Plo
-	-rm -f ../../common/scsi/$(DEPDIR)/libaka31_la-scsi_hd.Plo
-	-rm -f ../../common/sound/$(DEPDIR)/libaka31_la-sound_openal.Plo
-	-rm -f ./$(DEPDIR)/libaka31_la-aka31.Plo
-	-rm -f ./$(DEPDIR)/libaka31_la-d71071l.Plo
-	-rm -f ./$(DEPDIR)/libaka31_la-wd33c93a.Plo
+		-rm -f ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-linux-ioctl.Plo
+	-rm -f ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-osx-ioctl.Plo
+	-rm -f ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-windows-ioctl.Plo
+	-rm -f ../../common/eeprom/$(DEPDIR)/liboak_scsi_la-93c06.Plo
+	-rm -f ../../common/scsi/$(DEPDIR)/liboak_scsi_la-hdd_file.Plo
+	-rm -f ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi.Plo
+	-rm -f ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_cd.Plo
+	-rm -f ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_config.Plo
+	-rm -f ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi_hd.Plo
+	-rm -f ../../common/sound/$(DEPDIR)/liboak_scsi_la-sound_openal.Plo
+	-rm -f ./$(DEPDIR)/liboak_scsi_la-ncr5380.Plo
+	-rm -f ./$(DEPDIR)/liboak_scsi_la-oak_scsi.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -905,10 +922,10 @@ uninstall-am: uninstall-libLTLIBRARIES
 
 .PRECIOUS: Makefile
 
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@../aka31.so: libaka31.la
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@	cp .libs/libaka31.so ../aka31.so
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@../aka31.dylib: libaka31.la
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@	cp .libs/libaka31.dylib ../aka31.dylib
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@../oak_scsi.so: liboak_scsi.la
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@	cp .libs/liboak_scsi.so ../oak_scsi.so
+@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@../oak_scsi.dylib: liboak_scsi.la
+@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@	cp .libs/liboak_scsi.dylib ../oak_scsi.dylib
 
 @BUILD_PODULES_TRUE@amrefresh:	
 
