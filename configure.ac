@@ -47,9 +47,12 @@ else
 fi
 
 AC_MSG_CHECKING([for libz])
+if test ! -z "$EMSCRIPTEN"; then
+   ZLIB_FLAGS="-s USE_ZLIB=1"
+fi
 AC_CHECK_LIB(z, inflateEnd, [], \
           [echo "You need to install the Zlib library."
-           exit -1])
+           exit -1], [$ZLIB_FLAGS])
 
 SDL_VERSION=2.0.1
 AM_PATH_SDL2($SDL_VERSION,

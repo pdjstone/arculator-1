@@ -6,7 +6,7 @@ noinst_SCRIPTS =
 CLEANFILES =
 
 if !EMSCRIPTEN
-bin_PROGRAMS = arculator arculatorweb
+bin_PROGRAMS = arculator
 else
 bin_PROGRAMS = arculatorweb
 endif
@@ -16,7 +16,7 @@ CLEANFILES += $(noinst_SCRIPTS)
 if !EMSCRIPTEN
 noinst_SCRIPTS += ../arculator
 ../arculator: arculator
-	cp arculator ...
+	cp arculator ..
 else
 noinst_SCRIPTS += ../arculatorweb
 ../arculatorweb: arculatorweb
@@ -64,7 +64,6 @@ if OS_MACOSX
 arculator_SOURCES += hostfs-unix.c podules-macosx.c
 endif
 
-#hello_SOURCES = hello.c
 arculatorweb_SOURCES = 82c711.c 82c711_fdc.c arm.c bmu.c cmos.c colourcard.c config.c cp15.c ddnoise.c \
  disc.c disc_adf.c disc_apd.c disc_fdi.c disc_hfe.c disc_jfd.c disc_mfm_common.c ds2401.c eterna.c \
  fdi2raw.c fpa.c g16.c g332.c hostfs.c ide.c ide_a3in.c ide_config.c ide_idea.c ide_riscdev.c ide_zidefs.c \
