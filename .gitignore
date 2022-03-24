@@ -13,3 +13,4 @@ autom4te.cache/
 *.bin
 *.cfg
 *log.txt
+*.dmp

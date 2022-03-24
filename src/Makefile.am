@@ -1,15 +1,27 @@
 # Makefile.am for Arculator
 
 AUTOMAKE_OPTIONS = subdir-objects
-bin_PROGRAMS = arculator
+
 noinst_SCRIPTS =
 CLEANFILES =
 
+if !EMSCRIPTEN
+bin_PROGRAMS = arculator arcemtest
+else
+bin_PROGRAMS = arcemtest
+endif
+
 if !OS_WINDOWS
 CLEANFILES += $(noinst_SCRIPTS)
+if !EMSCRIPTEN
 noinst_SCRIPTS += ../arculator
 ../arculator: arculator
-	cp arculator ..
+	cp arculator ...
+else
+noinst_SCRIPTS += ../arcemtest
+../arcemtest: arcemtest
+	emcc -sUSE_ZLIB=1 -sUSE_SDL=2  -sALLOW_MEMORY_GROWTH=1 *.o -o ../arcemtest.html
+endif
 endif
 
 amrefresh:	
@@ -37,10 +49,26 @@ arculator_LDADD = @LIBS@
 
 if OS_LINUX
 arculator_SOURCES += hostfs-unix.c podules-linux.c
-arculator_LDADD += -ldl -lX11
+arculator_LDADD += -ldl -lX11 
 endif
 
 if OS_MACOSX
 arculator_SOURCES += hostfs-unix.c podules-macosx.c
 endif
 
+#hello_SOURCES = hello.c
+arcemtest_SOURCES = 82c711.c 82c711_fdc.c arm.c bmu.c cmos.c colourcard.c config.c cp15.c ddnoise.c \
+ disc.c disc_adf.c disc_apd.c disc_fdi.c disc_hfe.c disc_jfd.c disc_mfm_common.c ds2401.c eterna.c \
+ fdi2raw.c fpa.c g16.c g332.c hostfs.c ide.c ide_a3in.c ide_config.c ide_idea.c ide_riscdev.c ide_zidefs.c \
+ ide_zidefs_a3k.c input_sdl2.c ioc.c ioeb.c joystick.c keyboard.c lc.c main.c mem.c memc.c podules.c printer.c riscdev_hdfc.c \
+ romload.c sound.c soundopenal.c st506.c st506_akd52.c timer.c vidc.c video_sdl2.c wd1770.c wx-sdl2-joystick.c arctest.c 
+
+arcemtest_SOURCES += hostfs-unix.c podules-linux.c
+arcemtest_CFLAGS = $(shell sdl2-config --cflags)
+#arcemtest_CXXFLAGS = $(shell sdl2-config --cflags)
+arcemtest_LDADD = @LIBS@ 
+arcemtest_LDADD += -ldl -lX11 -lm
+
+if EMSCRIPTEN
+arcemtest_CFLAGS += -sUSE_ZLIB=1 -sUSE_SDL=2 -sALLOW_MEMORY_GROWTH=1
+endif

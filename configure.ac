@@ -111,12 +111,17 @@ case "$host" in
        ;;
 esac
 
-LIBS="$LIBS $WX_LIBS $SDL_LIBS"
+LIBS="$LIBS $SDL_LIBS"
+
+if test -z "$EMSCRIPTEN"; then
+   LIBS="$LIBS $WX_LIBS $SDL_LIBS"
+fi
 
 AM_CONDITIONAL(OS_LINUX, [test "$build_linux" = "yes"])
 AM_CONDITIONAL(OS_WINDOWS, [test "$build_win" = "yes"])
 AM_CONDITIONAL(OS_OTHER, [test "$build_other" = "yes"])
 AM_CONDITIONAL(OS_MACOSX, [test "$build_macosx" = "yes"])
+AM_CONDITIONAL(EMSCRIPTEN, [test -n "$EMSCRIPTEN"])
 
 AM_CONDITIONAL(BUILD_PODULES, [test "$enable_podules" != "no"])
 
