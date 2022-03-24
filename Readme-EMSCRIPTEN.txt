@@ -1,28 +1,35 @@
-Arculator v2.1 Emscripten build
+Arculator WASM
+
+Compile Arculator to WebAssembly using Emscripten.
 
 What works:
-* Booting to the RISC OS 3 desktop
-* Mouse
-* Keyboard
+ * Booting to the RISC OS 3 desktop
+ * Mouse (difficult to control until the browser captures the cursor)
+ * Keyboard
 
 Not working:
-* Sound (it should work as Arculator uses sound API supported by emscripten)
+ * Sound (it should work as Arculator uses sound API supported by emscripten)
+ * Fullscreen / resizing 
+ * Podules
 
 TODO:
-* Machine configuration
-* Loading disks
-* Javascript integration/UI
+ * Machine configuration
+ * Loading disks
+ * Javascript integration/UI
+ * Persist CMOS/HostFS somewhere
 
 Performance:
-Currently runs < 100% speed on a fairly fast machine. Need to investigate whether this 
+Currently runs at only ~60% speed on a fairly fast machine. Need to investigate whether this 
 is due to slow performance of emulation under WASM or if there is any low-hanging fruit 
 that can be improved (e.g. how main loop or graphics are handled)
 
-Building:
+
+Build instructions:
 
 Install emscripten - see https://emscripten.org/docs/getting_started/downloads.html
+Then run these command:
 
-source /path/to/emscripten/emsdk_env.sh
+source /path/to/emsdk/emsdk_env.sh
 emconfigure ./configure --enable-debug --disable-podules
 emmake make
 
