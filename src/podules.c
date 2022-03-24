@@ -288,7 +288,7 @@ void podule_write_b(int num, uint32_t addr, uint8_t val)
 
 void podule_write_w(int num, uint32_t addr, uint32_t val)
 {
-//        rpclog("podule_write_w: addr=%08x val=%08x\n", addr, val);
+//        rpclog("podule_write_w: addr=%08x val=%08x\n", addr, val);    
         if (podule_functions[num] && podule_functions[num]->write_w)
                 podule_functions[num]->write_w(&podules[num].podule, PODULE_IO_TYPE_IOC, addr, val >> 16);
         else if (podule_functions[num] && podule_functions[num]->write_b)
@@ -303,14 +303,14 @@ void podule_memc_write_b(int num, uint32_t addr, uint8_t val)
 
 void podule_memc_write_w(int num, uint32_t addr, uint32_t val)
 {
-//        rpclog("podule_memc_write_w: addr=%08x val=%08x\n", addr, val);
+//        rpclog("podule_memc_write_w: addr=%08x val=%08x\n", addr, val);     
         if (podule_functions[num] && podule_functions[num]->write_w)
                 podule_functions[num]->write_w(&podules[num].podule, PODULE_IO_TYPE_MEMC, addr, val >> 16);
 }
 
 
 uint8_t podule_read_b(int num, uint32_t addr)
-{
+{     
         uint8_t temp = 0xff;
         
         if (podule_functions[num] && podule_functions[num]->read_b)
@@ -472,9 +472,11 @@ const podule_callbacks_t podule_callbacks_def =
         .config_get_int = podule_config_get_int,
         .config_get_string = podule_config_get_string,
         .config_set_int = podule_config_set_int,
-        .config_set_string = podule_config_set_string
-        //.config_get_current = podule_config_get_current,
-        //.config_set_current = podule_config_set_current,
-        //.config_file_selector = podule_config_file_selector,
-        //.config_open = podule_config_open
+        .config_set_string = podule_config_set_string,
+        #ifndef __EMSCRIPTEN__
+        .config_get_current = podule_config_get_current,
+        .config_set_current = podule_config_set_current,
+        .config_file_selector = podule_config_file_selector,
+        .config_open = podule_config_open
+        #endif
 };

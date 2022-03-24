@@ -91,15 +91,16 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = x86_64-pc-linux-gnu
 host_triplet = x86_64-pc-linux-gnu
-#bin_PROGRAMS = arculator$(EXEEXT) arcemtest$(EXEEXT)
-bin_PROGRAMS = arcemtest$(EXEEXT)
+#bin_PROGRAMS = arculator$(EXEEXT) \
+#	arculatorweb$(EXEEXT)
+bin_PROGRAMS = arculatorweb$(EXEEXT)
 am__append_1 = $(noinst_SCRIPTS)
 #am__append_2 = ../arculator
-am__append_3 = ../arcemtest
+am__append_3 = ../arculatorweb
 am__append_4 = hostfs-unix.c podules-linux.c
 am__append_5 = -ldl -lX11 
 #am__append_6 = hostfs-unix.c podules-macosx.c
-am__append_7 = -sUSE_ZLIB=1 -sUSE_SDL=2 -sALLOW_MEMORY_GROWTH=1
+am__append_7 = -sUSE_ZLIB=1 -sUSE_SDL=2 -sALLOW_MEMORY_GROWTH=1 -O2
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -111,45 +112,6 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_arcemtest_OBJECTS = arcemtest-82c711.$(OBJEXT) \
-	arcemtest-82c711_fdc.$(OBJEXT) arcemtest-arm.$(OBJEXT) \
-	arcemtest-bmu.$(OBJEXT) arcemtest-cmos.$(OBJEXT) \
-	arcemtest-colourcard.$(OBJEXT) arcemtest-config.$(OBJEXT) \
-	arcemtest-cp15.$(OBJEXT) arcemtest-ddnoise.$(OBJEXT) \
-	arcemtest-disc.$(OBJEXT) arcemtest-disc_adf.$(OBJEXT) \
-	arcemtest-disc_apd.$(OBJEXT) arcemtest-disc_fdi.$(OBJEXT) \
-	arcemtest-disc_hfe.$(OBJEXT) arcemtest-disc_jfd.$(OBJEXT) \
-	arcemtest-disc_mfm_common.$(OBJEXT) arcemtest-ds2401.$(OBJEXT) \
-	arcemtest-eterna.$(OBJEXT) arcemtest-fdi2raw.$(OBJEXT) \
-	arcemtest-fpa.$(OBJEXT) arcemtest-g16.$(OBJEXT) \
-	arcemtest-g332.$(OBJEXT) arcemtest-hostfs.$(OBJEXT) \
-	arcemtest-ide.$(OBJEXT) arcemtest-ide_a3in.$(OBJEXT) \
-	arcemtest-ide_config.$(OBJEXT) arcemtest-ide_idea.$(OBJEXT) \
-	arcemtest-ide_riscdev.$(OBJEXT) arcemtest-ide_zidefs.$(OBJEXT) \
-	arcemtest-ide_zidefs_a3k.$(OBJEXT) \
-	arcemtest-input_sdl2.$(OBJEXT) arcemtest-ioc.$(OBJEXT) \
-	arcemtest-ioeb.$(OBJEXT) arcemtest-joystick.$(OBJEXT) \
-	arcemtest-keyboard.$(OBJEXT) arcemtest-lc.$(OBJEXT) \
-	arcemtest-main.$(OBJEXT) arcemtest-mem.$(OBJEXT) \
-	arcemtest-memc.$(OBJEXT) arcemtest-podules.$(OBJEXT) \
-	arcemtest-printer.$(OBJEXT) arcemtest-riscdev_hdfc.$(OBJEXT) \
-	arcemtest-romload.$(OBJEXT) arcemtest-sound.$(OBJEXT) \
-	arcemtest-soundopenal.$(OBJEXT) arcemtest-st506.$(OBJEXT) \
-	arcemtest-st506_akd52.$(OBJEXT) arcemtest-timer.$(OBJEXT) \
-	arcemtest-vidc.$(OBJEXT) arcemtest-video_sdl2.$(OBJEXT) \
-	arcemtest-wd1770.$(OBJEXT) \
-	arcemtest-wx-sdl2-joystick.$(OBJEXT) \
-	arcemtest-arctest.$(OBJEXT) arcemtest-hostfs-unix.$(OBJEXT) \
-	arcemtest-podules-linux.$(OBJEXT)
-arcemtest_OBJECTS = $(am_arcemtest_OBJECTS)
-arcemtest_DEPENDENCIES =
-AM_V_lt = $(am__v_lt_$(V))
-am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
-am__v_lt_0 = --silent
-am__v_lt_1 = 
-arcemtest_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(arcemtest_CFLAGS) \
-	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 am__arculator_SOURCES_DIST = 82c711.c 82c711_fdc.c arm.c bmu.c cmos.c \
 	colourcard.c config.c cp15.c ddnoise.c disc.c disc_adf.c \
 	disc_apd.c disc_fdi.c disc_hfe.c disc_jfd.c disc_mfm_common.c \
@@ -206,9 +168,58 @@ am_arculator_OBJECTS = arculator-82c711.$(OBJEXT) \
 arculator_OBJECTS = $(am_arculator_OBJECTS)
 am__DEPENDENCIES_1 =
 arculator_DEPENDENCIES = $(am__DEPENDENCIES_1)
+AM_V_lt = $(am__v_lt_$(V))
+am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
+am__v_lt_0 = --silent
+am__v_lt_1 = 
 arculator_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(arculator_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+am_arculatorweb_OBJECTS = arculatorweb-82c711.$(OBJEXT) \
+	arculatorweb-82c711_fdc.$(OBJEXT) arculatorweb-arm.$(OBJEXT) \
+	arculatorweb-bmu.$(OBJEXT) arculatorweb-cmos.$(OBJEXT) \
+	arculatorweb-colourcard.$(OBJEXT) \
+	arculatorweb-config.$(OBJEXT) arculatorweb-cp15.$(OBJEXT) \
+	arculatorweb-ddnoise.$(OBJEXT) arculatorweb-disc.$(OBJEXT) \
+	arculatorweb-disc_adf.$(OBJEXT) \
+	arculatorweb-disc_apd.$(OBJEXT) \
+	arculatorweb-disc_fdi.$(OBJEXT) \
+	arculatorweb-disc_hfe.$(OBJEXT) \
+	arculatorweb-disc_jfd.$(OBJEXT) \
+	arculatorweb-disc_mfm_common.$(OBJEXT) \
+	arculatorweb-ds2401.$(OBJEXT) arculatorweb-eterna.$(OBJEXT) \
+	arculatorweb-fdi2raw.$(OBJEXT) arculatorweb-fpa.$(OBJEXT) \
+	arculatorweb-g16.$(OBJEXT) arculatorweb-g332.$(OBJEXT) \
+	arculatorweb-hostfs.$(OBJEXT) arculatorweb-ide.$(OBJEXT) \
+	arculatorweb-ide_a3in.$(OBJEXT) \
+	arculatorweb-ide_config.$(OBJEXT) \
+	arculatorweb-ide_idea.$(OBJEXT) \
+	arculatorweb-ide_riscdev.$(OBJEXT) \
+	arculatorweb-ide_zidefs.$(OBJEXT) \
+	arculatorweb-ide_zidefs_a3k.$(OBJEXT) \
+	arculatorweb-input_sdl2.$(OBJEXT) arculatorweb-ioc.$(OBJEXT) \
+	arculatorweb-ioeb.$(OBJEXT) arculatorweb-joystick.$(OBJEXT) \
+	arculatorweb-keyboard.$(OBJEXT) arculatorweb-lc.$(OBJEXT) \
+	arculatorweb-main.$(OBJEXT) arculatorweb-mem.$(OBJEXT) \
+	arculatorweb-memc.$(OBJEXT) arculatorweb-podules.$(OBJEXT) \
+	arculatorweb-printer.$(OBJEXT) \
+	arculatorweb-riscdev_hdfc.$(OBJEXT) \
+	arculatorweb-romload.$(OBJEXT) arculatorweb-sound.$(OBJEXT) \
+	arculatorweb-soundopenal.$(OBJEXT) \
+	arculatorweb-st506.$(OBJEXT) \
+	arculatorweb-st506_akd52.$(OBJEXT) \
+	arculatorweb-timer.$(OBJEXT) arculatorweb-vidc.$(OBJEXT) \
+	arculatorweb-video_sdl2.$(OBJEXT) \
+	arculatorweb-wd1770.$(OBJEXT) \
+	arculatorweb-wx-sdl2-joystick.$(OBJEXT) \
+	arculatorweb-hostfs-unix.$(OBJEXT) \
+	arculatorweb-podules-linux.$(OBJEXT) \
+	arculatorweb-emscripten_main.$(OBJEXT)
+arculatorweb_OBJECTS = $(am_arculatorweb_OBJECTS)
+arculatorweb_DEPENDENCIES =
+arculatorweb_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(arculatorweb_CFLAGS) \
+	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SCRIPTS = $(noinst_SCRIPTS)
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
@@ -225,51 +236,7 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/arcemtest-82c711.Po \
-	./$(DEPDIR)/arcemtest-82c711_fdc.Po \
-	./$(DEPDIR)/arcemtest-arctest.Po ./$(DEPDIR)/arcemtest-arm.Po \
-	./$(DEPDIR)/arcemtest-bmu.Po ./$(DEPDIR)/arcemtest-cmos.Po \
-	./$(DEPDIR)/arcemtest-colourcard.Po \
-	./$(DEPDIR)/arcemtest-config.Po ./$(DEPDIR)/arcemtest-cp15.Po \
-	./$(DEPDIR)/arcemtest-ddnoise.Po ./$(DEPDIR)/arcemtest-disc.Po \
-	./$(DEPDIR)/arcemtest-disc_adf.Po \
-	./$(DEPDIR)/arcemtest-disc_apd.Po \
-	./$(DEPDIR)/arcemtest-disc_fdi.Po \
-	./$(DEPDIR)/arcemtest-disc_hfe.Po \
-	./$(DEPDIR)/arcemtest-disc_jfd.Po \
-	./$(DEPDIR)/arcemtest-disc_mfm_common.Po \
-	./$(DEPDIR)/arcemtest-ds2401.Po \
-	./$(DEPDIR)/arcemtest-eterna.Po \
-	./$(DEPDIR)/arcemtest-fdi2raw.Po ./$(DEPDIR)/arcemtest-fpa.Po \
-	./$(DEPDIR)/arcemtest-g16.Po ./$(DEPDIR)/arcemtest-g332.Po \
-	./$(DEPDIR)/arcemtest-hostfs-unix.Po \
-	./$(DEPDIR)/arcemtest-hostfs.Po ./$(DEPDIR)/arcemtest-ide.Po \
-	./$(DEPDIR)/arcemtest-ide_a3in.Po \
-	./$(DEPDIR)/arcemtest-ide_config.Po \
-	./$(DEPDIR)/arcemtest-ide_idea.Po \
-	./$(DEPDIR)/arcemtest-ide_riscdev.Po \
-	./$(DEPDIR)/arcemtest-ide_zidefs.Po \
-	./$(DEPDIR)/arcemtest-ide_zidefs_a3k.Po \
-	./$(DEPDIR)/arcemtest-input_sdl2.Po \
-	./$(DEPDIR)/arcemtest-ioc.Po ./$(DEPDIR)/arcemtest-ioeb.Po \
-	./$(DEPDIR)/arcemtest-joystick.Po \
-	./$(DEPDIR)/arcemtest-keyboard.Po ./$(DEPDIR)/arcemtest-lc.Po \
-	./$(DEPDIR)/arcemtest-main.Po ./$(DEPDIR)/arcemtest-mem.Po \
-	./$(DEPDIR)/arcemtest-memc.Po \
-	./$(DEPDIR)/arcemtest-podules-linux.Po \
-	./$(DEPDIR)/arcemtest-podules.Po \
-	./$(DEPDIR)/arcemtest-printer.Po \
-	./$(DEPDIR)/arcemtest-riscdev_hdfc.Po \
-	./$(DEPDIR)/arcemtest-romload.Po \
-	./$(DEPDIR)/arcemtest-sound.Po \
-	./$(DEPDIR)/arcemtest-soundopenal.Po \
-	./$(DEPDIR)/arcemtest-st506.Po \
-	./$(DEPDIR)/arcemtest-st506_akd52.Po \
-	./$(DEPDIR)/arcemtest-timer.Po ./$(DEPDIR)/arcemtest-vidc.Po \
-	./$(DEPDIR)/arcemtest-video_sdl2.Po \
-	./$(DEPDIR)/arcemtest-wd1770.Po \
-	./$(DEPDIR)/arcemtest-wx-sdl2-joystick.Po \
-	./$(DEPDIR)/arculator-82c711.Po \
+am__depfiles_remade = ./$(DEPDIR)/arculator-82c711.Po \
 	./$(DEPDIR)/arculator-82c711_fdc.Po \
 	./$(DEPDIR)/arculator-arm.Po ./$(DEPDIR)/arculator-bmu.Po \
 	./$(DEPDIR)/arculator-cmos.Po \
@@ -323,7 +290,62 @@ am__depfiles_remade = ./$(DEPDIR)/arcemtest-82c711.Po \
 	./$(DEPDIR)/arculator-wx-podule-config.Po \
 	./$(DEPDIR)/arculator-wx-resources.Po \
 	./$(DEPDIR)/arculator-wx-sdl2-joystick.Po \
-	./$(DEPDIR)/arculator-wx-sdl2.Po
+	./$(DEPDIR)/arculator-wx-sdl2.Po \
+	./$(DEPDIR)/arculatorweb-82c711.Po \
+	./$(DEPDIR)/arculatorweb-82c711_fdc.Po \
+	./$(DEPDIR)/arculatorweb-arm.Po \
+	./$(DEPDIR)/arculatorweb-bmu.Po \
+	./$(DEPDIR)/arculatorweb-cmos.Po \
+	./$(DEPDIR)/arculatorweb-colourcard.Po \
+	./$(DEPDIR)/arculatorweb-config.Po \
+	./$(DEPDIR)/arculatorweb-cp15.Po \
+	./$(DEPDIR)/arculatorweb-ddnoise.Po \
+	./$(DEPDIR)/arculatorweb-disc.Po \
+	./$(DEPDIR)/arculatorweb-disc_adf.Po \
+	./$(DEPDIR)/arculatorweb-disc_apd.Po \
+	./$(DEPDIR)/arculatorweb-disc_fdi.Po \
+	./$(DEPDIR)/arculatorweb-disc_hfe.Po \
+	./$(DEPDIR)/arculatorweb-disc_jfd.Po \
+	./$(DEPDIR)/arculatorweb-disc_mfm_common.Po \
+	./$(DEPDIR)/arculatorweb-ds2401.Po \
+	./$(DEPDIR)/arculatorweb-emscripten_main.Po \
+	./$(DEPDIR)/arculatorweb-eterna.Po \
+	./$(DEPDIR)/arculatorweb-fdi2raw.Po \
+	./$(DEPDIR)/arculatorweb-fpa.Po \
+	./$(DEPDIR)/arculatorweb-g16.Po \
+	./$(DEPDIR)/arculatorweb-g332.Po \
+	./$(DEPDIR)/arculatorweb-hostfs-unix.Po \
+	./$(DEPDIR)/arculatorweb-hostfs.Po \
+	./$(DEPDIR)/arculatorweb-ide.Po \
+	./$(DEPDIR)/arculatorweb-ide_a3in.Po \
+	./$(DEPDIR)/arculatorweb-ide_config.Po \
+	./$(DEPDIR)/arculatorweb-ide_idea.Po \
+	./$(DEPDIR)/arculatorweb-ide_riscdev.Po \
+	./$(DEPDIR)/arculatorweb-ide_zidefs.Po \
+	./$(DEPDIR)/arculatorweb-ide_zidefs_a3k.Po \
+	./$(DEPDIR)/arculatorweb-input_sdl2.Po \
+	./$(DEPDIR)/arculatorweb-ioc.Po \
+	./$(DEPDIR)/arculatorweb-ioeb.Po \
+	./$(DEPDIR)/arculatorweb-joystick.Po \
+	./$(DEPDIR)/arculatorweb-keyboard.Po \
+	./$(DEPDIR)/arculatorweb-lc.Po \
+	./$(DEPDIR)/arculatorweb-main.Po \
+	./$(DEPDIR)/arculatorweb-mem.Po \
+	./$(DEPDIR)/arculatorweb-memc.Po \
+	./$(DEPDIR)/arculatorweb-podules-linux.Po \
+	./$(DEPDIR)/arculatorweb-podules.Po \
+	./$(DEPDIR)/arculatorweb-printer.Po \
+	./$(DEPDIR)/arculatorweb-riscdev_hdfc.Po \
+	./$(DEPDIR)/arculatorweb-romload.Po \
+	./$(DEPDIR)/arculatorweb-sound.Po \
+	./$(DEPDIR)/arculatorweb-soundopenal.Po \
+	./$(DEPDIR)/arculatorweb-st506.Po \
+	./$(DEPDIR)/arculatorweb-st506_akd52.Po \
+	./$(DEPDIR)/arculatorweb-timer.Po \
+	./$(DEPDIR)/arculatorweb-vidc.Po \
+	./$(DEPDIR)/arculatorweb-video_sdl2.Po \
+	./$(DEPDIR)/arculatorweb-wd1770.Po \
+	./$(DEPDIR)/arculatorweb-wx-sdl2-joystick.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -361,8 +383,8 @@ AM_V_CXXLD = $(am__v_CXXLD_$(V))
 am__v_CXXLD_ = $(am__v_CXXLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(arcemtest_SOURCES) $(arculator_SOURCES)
-DIST_SOURCES = $(arcemtest_SOURCES) $(am__arculator_SOURCES_DIST)
+SOURCES = $(arculator_SOURCES) $(arculatorweb_SOURCES)
+DIST_SOURCES = $(am__arculator_SOURCES_DIST) $(arculatorweb_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -557,7 +579,7 @@ arculator_CXXFLAGS = $(shell $(WX_CONFIG_PATH) --cxxflags) $(shell sdl2-config -
 arculator_LDADD = -lopenal -lpthread -lz  -s USE_SDL=2 $(am__append_5)
 
 #hello_SOURCES = hello.c
-arcemtest_SOURCES = 82c711.c 82c711_fdc.c arm.c bmu.c cmos.c \
+arculatorweb_SOURCES = 82c711.c 82c711_fdc.c arm.c bmu.c cmos.c \
 	colourcard.c config.c cp15.c ddnoise.c disc.c disc_adf.c \
 	disc_apd.c disc_fdi.c disc_hfe.c disc_jfd.c disc_mfm_common.c \
 	ds2401.c eterna.c fdi2raw.c fpa.c g16.c g332.c hostfs.c ide.c \
@@ -566,10 +588,10 @@ arcemtest_SOURCES = 82c711.c 82c711_fdc.c arm.c bmu.c cmos.c \
 	keyboard.c lc.c main.c mem.c memc.c podules.c printer.c \
 	riscdev_hdfc.c romload.c sound.c soundopenal.c st506.c \
 	st506_akd52.c timer.c vidc.c video_sdl2.c wd1770.c \
-	wx-sdl2-joystick.c arctest.c hostfs-unix.c podules-linux.c
-arcemtest_CFLAGS = $(shell sdl2-config --cflags) $(am__append_7)
-#arcemtest_CXXFLAGS = $(shell sdl2-config --cflags)
-arcemtest_LDADD = -lopenal -lpthread -lz  -s USE_SDL=2 -ldl -lX11 -lm
+	wx-sdl2-joystick.c hostfs-unix.c podules-linux.c \
+	emscripten_main.c
+arculatorweb_CFLAGS = $(shell sdl2-config --cflags) $(am__append_7)
+arculatorweb_LDADD = -lopenal -lpthread -lz  -s USE_SDL=2 -ldl -lX11 -lm
 all: all-am
 
 .SUFFIXES:
@@ -653,13 +675,13 @@ clean-binPROGRAMS:
 	echo " rm -f" $$list; \
 	rm -f $$list
 
-arcemtest$(EXEEXT): $(arcemtest_OBJECTS) $(arcemtest_DEPENDENCIES) $(EXTRA_arcemtest_DEPENDENCIES) 
-	@rm -f arcemtest$(EXEEXT)
-	$(AM_V_CCLD)$(arcemtest_LINK) $(arcemtest_OBJECTS) $(arcemtest_LDADD) $(LIBS)
-
 arculator$(EXEEXT): $(arculator_OBJECTS) $(arculator_DEPENDENCIES) $(EXTRA_arculator_DEPENDENCIES) 
 	@rm -f arculator$(EXEEXT)
 	$(AM_V_CXXLD)$(arculator_LINK) $(arculator_OBJECTS) $(arculator_LDADD) $(LIBS)
+
+arculatorweb$(EXEEXT): $(arculatorweb_OBJECTS) $(arculatorweb_DEPENDENCIES) $(EXTRA_arculatorweb_DEPENDENCIES) 
+	@rm -f arculatorweb$(EXEEXT)
+	$(AM_V_CCLD)$(arculatorweb_LINK) $(arculatorweb_OBJECTS) $(arculatorweb_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -667,61 +689,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/arcemtest-82c711.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-82c711_fdc.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-arctest.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-arm.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-bmu.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-cmos.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-colourcard.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-config.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-cp15.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-ddnoise.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-disc.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-disc_adf.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-disc_apd.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-disc_fdi.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-disc_hfe.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-disc_jfd.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-disc_mfm_common.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-ds2401.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-eterna.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-fdi2raw.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-fpa.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-g16.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-g332.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-hostfs-unix.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-hostfs.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-ide.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-ide_a3in.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-ide_config.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-ide_idea.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-ide_riscdev.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-ide_zidefs.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-ide_zidefs_a3k.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-input_sdl2.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-ioc.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-ioeb.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-joystick.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-keyboard.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-lc.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-main.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-mem.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-memc.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-podules-linux.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-podules.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-printer.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-riscdev_hdfc.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-romload.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-sound.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-soundopenal.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-st506.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-st506_akd52.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-timer.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-vidc.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-video_sdl2.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-wd1770.Po # am--include-marker
-include ./$(DEPDIR)/arcemtest-wx-sdl2-joystick.Po # am--include-marker
 include ./$(DEPDIR)/arculator-82c711.Po # am--include-marker
 include ./$(DEPDIR)/arculator-82c711_fdc.Po # am--include-marker
 include ./$(DEPDIR)/arculator-arm.Po # am--include-marker
@@ -787,6 +754,61 @@ include ./$(DEPDIR)/arculator-wx-podule-config.Po # am--include-marker
 include ./$(DEPDIR)/arculator-wx-resources.Po # am--include-marker
 include ./$(DEPDIR)/arculator-wx-sdl2-joystick.Po # am--include-marker
 include ./$(DEPDIR)/arculator-wx-sdl2.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-82c711.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-82c711_fdc.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-arm.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-bmu.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-cmos.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-colourcard.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-config.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-cp15.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-ddnoise.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-disc.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-disc_adf.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-disc_apd.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-disc_fdi.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-disc_hfe.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-disc_jfd.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-disc_mfm_common.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-ds2401.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-emscripten_main.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-eterna.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-fdi2raw.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-fpa.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-g16.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-g332.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-hostfs-unix.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-hostfs.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-ide.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-ide_a3in.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-ide_config.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-ide_idea.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-ide_riscdev.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-ide_zidefs.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-ide_zidefs_a3k.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-input_sdl2.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-ioc.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-ioeb.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-joystick.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-keyboard.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-lc.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-main.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-mem.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-memc.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-podules-linux.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-podules.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-printer.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-riscdev_hdfc.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-romload.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-sound.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-soundopenal.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-st506.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-st506_akd52.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-timer.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-vidc.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-video_sdl2.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-wd1770.Po # am--include-marker
+include ./$(DEPDIR)/arculatorweb-wx-sdl2-joystick.Po # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -817,776 +839,6 @@ am--depfiles: $(am__depfiles_remade)
 #	$(AM_V_CC)source='$<' object='$@' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
 #	$(AM_V_CC_no)$(LTCOMPILE) -c -o $@ $<
-
-arcemtest-82c711.o: 82c711.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-82c711.o -MD -MP -MF $(DEPDIR)/arcemtest-82c711.Tpo -c -o arcemtest-82c711.o `test -f '82c711.c' || echo '$(srcdir)/'`82c711.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-82c711.Tpo $(DEPDIR)/arcemtest-82c711.Po
-#	$(AM_V_CC)source='82c711.c' object='arcemtest-82c711.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-82c711.o `test -f '82c711.c' || echo '$(srcdir)/'`82c711.c
-
-arcemtest-82c711.obj: 82c711.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-82c711.obj -MD -MP -MF $(DEPDIR)/arcemtest-82c711.Tpo -c -o arcemtest-82c711.obj `if test -f '82c711.c'; then $(CYGPATH_W) '82c711.c'; else $(CYGPATH_W) '$(srcdir)/82c711.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-82c711.Tpo $(DEPDIR)/arcemtest-82c711.Po
-#	$(AM_V_CC)source='82c711.c' object='arcemtest-82c711.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-82c711.obj `if test -f '82c711.c'; then $(CYGPATH_W) '82c711.c'; else $(CYGPATH_W) '$(srcdir)/82c711.c'; fi`
-
-arcemtest-82c711_fdc.o: 82c711_fdc.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-82c711_fdc.o -MD -MP -MF $(DEPDIR)/arcemtest-82c711_fdc.Tpo -c -o arcemtest-82c711_fdc.o `test -f '82c711_fdc.c' || echo '$(srcdir)/'`82c711_fdc.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-82c711_fdc.Tpo $(DEPDIR)/arcemtest-82c711_fdc.Po
-#	$(AM_V_CC)source='82c711_fdc.c' object='arcemtest-82c711_fdc.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-82c711_fdc.o `test -f '82c711_fdc.c' || echo '$(srcdir)/'`82c711_fdc.c
-
-arcemtest-82c711_fdc.obj: 82c711_fdc.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-82c711_fdc.obj -MD -MP -MF $(DEPDIR)/arcemtest-82c711_fdc.Tpo -c -o arcemtest-82c711_fdc.obj `if test -f '82c711_fdc.c'; then $(CYGPATH_W) '82c711_fdc.c'; else $(CYGPATH_W) '$(srcdir)/82c711_fdc.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-82c711_fdc.Tpo $(DEPDIR)/arcemtest-82c711_fdc.Po
-#	$(AM_V_CC)source='82c711_fdc.c' object='arcemtest-82c711_fdc.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-82c711_fdc.obj `if test -f '82c711_fdc.c'; then $(CYGPATH_W) '82c711_fdc.c'; else $(CYGPATH_W) '$(srcdir)/82c711_fdc.c'; fi`
-
-arcemtest-arm.o: arm.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-arm.o -MD -MP -MF $(DEPDIR)/arcemtest-arm.Tpo -c -o arcemtest-arm.o `test -f 'arm.c' || echo '$(srcdir)/'`arm.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-arm.Tpo $(DEPDIR)/arcemtest-arm.Po
-#	$(AM_V_CC)source='arm.c' object='arcemtest-arm.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-arm.o `test -f 'arm.c' || echo '$(srcdir)/'`arm.c
-
-arcemtest-arm.obj: arm.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-arm.obj -MD -MP -MF $(DEPDIR)/arcemtest-arm.Tpo -c -o arcemtest-arm.obj `if test -f 'arm.c'; then $(CYGPATH_W) 'arm.c'; else $(CYGPATH_W) '$(srcdir)/arm.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-arm.Tpo $(DEPDIR)/arcemtest-arm.Po
-#	$(AM_V_CC)source='arm.c' object='arcemtest-arm.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-arm.obj `if test -f 'arm.c'; then $(CYGPATH_W) 'arm.c'; else $(CYGPATH_W) '$(srcdir)/arm.c'; fi`
-
-arcemtest-bmu.o: bmu.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-bmu.o -MD -MP -MF $(DEPDIR)/arcemtest-bmu.Tpo -c -o arcemtest-bmu.o `test -f 'bmu.c' || echo '$(srcdir)/'`bmu.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-bmu.Tpo $(DEPDIR)/arcemtest-bmu.Po
-#	$(AM_V_CC)source='bmu.c' object='arcemtest-bmu.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-bmu.o `test -f 'bmu.c' || echo '$(srcdir)/'`bmu.c
-
-arcemtest-bmu.obj: bmu.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-bmu.obj -MD -MP -MF $(DEPDIR)/arcemtest-bmu.Tpo -c -o arcemtest-bmu.obj `if test -f 'bmu.c'; then $(CYGPATH_W) 'bmu.c'; else $(CYGPATH_W) '$(srcdir)/bmu.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-bmu.Tpo $(DEPDIR)/arcemtest-bmu.Po
-#	$(AM_V_CC)source='bmu.c' object='arcemtest-bmu.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-bmu.obj `if test -f 'bmu.c'; then $(CYGPATH_W) 'bmu.c'; else $(CYGPATH_W) '$(srcdir)/bmu.c'; fi`
-
-arcemtest-cmos.o: cmos.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-cmos.o -MD -MP -MF $(DEPDIR)/arcemtest-cmos.Tpo -c -o arcemtest-cmos.o `test -f 'cmos.c' || echo '$(srcdir)/'`cmos.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-cmos.Tpo $(DEPDIR)/arcemtest-cmos.Po
-#	$(AM_V_CC)source='cmos.c' object='arcemtest-cmos.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-cmos.o `test -f 'cmos.c' || echo '$(srcdir)/'`cmos.c
-
-arcemtest-cmos.obj: cmos.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-cmos.obj -MD -MP -MF $(DEPDIR)/arcemtest-cmos.Tpo -c -o arcemtest-cmos.obj `if test -f 'cmos.c'; then $(CYGPATH_W) 'cmos.c'; else $(CYGPATH_W) '$(srcdir)/cmos.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-cmos.Tpo $(DEPDIR)/arcemtest-cmos.Po
-#	$(AM_V_CC)source='cmos.c' object='arcemtest-cmos.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-cmos.obj `if test -f 'cmos.c'; then $(CYGPATH_W) 'cmos.c'; else $(CYGPATH_W) '$(srcdir)/cmos.c'; fi`
-
-arcemtest-colourcard.o: colourcard.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-colourcard.o -MD -MP -MF $(DEPDIR)/arcemtest-colourcard.Tpo -c -o arcemtest-colourcard.o `test -f 'colourcard.c' || echo '$(srcdir)/'`colourcard.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-colourcard.Tpo $(DEPDIR)/arcemtest-colourcard.Po
-#	$(AM_V_CC)source='colourcard.c' object='arcemtest-colourcard.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-colourcard.o `test -f 'colourcard.c' || echo '$(srcdir)/'`colourcard.c
-
-arcemtest-colourcard.obj: colourcard.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-colourcard.obj -MD -MP -MF $(DEPDIR)/arcemtest-colourcard.Tpo -c -o arcemtest-colourcard.obj `if test -f 'colourcard.c'; then $(CYGPATH_W) 'colourcard.c'; else $(CYGPATH_W) '$(srcdir)/colourcard.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-colourcard.Tpo $(DEPDIR)/arcemtest-colourcard.Po
-#	$(AM_V_CC)source='colourcard.c' object='arcemtest-colourcard.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-colourcard.obj `if test -f 'colourcard.c'; then $(CYGPATH_W) 'colourcard.c'; else $(CYGPATH_W) '$(srcdir)/colourcard.c'; fi`
-
-arcemtest-config.o: config.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-config.o -MD -MP -MF $(DEPDIR)/arcemtest-config.Tpo -c -o arcemtest-config.o `test -f 'config.c' || echo '$(srcdir)/'`config.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-config.Tpo $(DEPDIR)/arcemtest-config.Po
-#	$(AM_V_CC)source='config.c' object='arcemtest-config.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-config.o `test -f 'config.c' || echo '$(srcdir)/'`config.c
-
-arcemtest-config.obj: config.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-config.obj -MD -MP -MF $(DEPDIR)/arcemtest-config.Tpo -c -o arcemtest-config.obj `if test -f 'config.c'; then $(CYGPATH_W) 'config.c'; else $(CYGPATH_W) '$(srcdir)/config.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-config.Tpo $(DEPDIR)/arcemtest-config.Po
-#	$(AM_V_CC)source='config.c' object='arcemtest-config.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-config.obj `if test -f 'config.c'; then $(CYGPATH_W) 'config.c'; else $(CYGPATH_W) '$(srcdir)/config.c'; fi`
-
-arcemtest-cp15.o: cp15.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-cp15.o -MD -MP -MF $(DEPDIR)/arcemtest-cp15.Tpo -c -o arcemtest-cp15.o `test -f 'cp15.c' || echo '$(srcdir)/'`cp15.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-cp15.Tpo $(DEPDIR)/arcemtest-cp15.Po
-#	$(AM_V_CC)source='cp15.c' object='arcemtest-cp15.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-cp15.o `test -f 'cp15.c' || echo '$(srcdir)/'`cp15.c
-
-arcemtest-cp15.obj: cp15.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-cp15.obj -MD -MP -MF $(DEPDIR)/arcemtest-cp15.Tpo -c -o arcemtest-cp15.obj `if test -f 'cp15.c'; then $(CYGPATH_W) 'cp15.c'; else $(CYGPATH_W) '$(srcdir)/cp15.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-cp15.Tpo $(DEPDIR)/arcemtest-cp15.Po
-#	$(AM_V_CC)source='cp15.c' object='arcemtest-cp15.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-cp15.obj `if test -f 'cp15.c'; then $(CYGPATH_W) 'cp15.c'; else $(CYGPATH_W) '$(srcdir)/cp15.c'; fi`
-
-arcemtest-ddnoise.o: ddnoise.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ddnoise.o -MD -MP -MF $(DEPDIR)/arcemtest-ddnoise.Tpo -c -o arcemtest-ddnoise.o `test -f 'ddnoise.c' || echo '$(srcdir)/'`ddnoise.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ddnoise.Tpo $(DEPDIR)/arcemtest-ddnoise.Po
-#	$(AM_V_CC)source='ddnoise.c' object='arcemtest-ddnoise.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ddnoise.o `test -f 'ddnoise.c' || echo '$(srcdir)/'`ddnoise.c
-
-arcemtest-ddnoise.obj: ddnoise.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ddnoise.obj -MD -MP -MF $(DEPDIR)/arcemtest-ddnoise.Tpo -c -o arcemtest-ddnoise.obj `if test -f 'ddnoise.c'; then $(CYGPATH_W) 'ddnoise.c'; else $(CYGPATH_W) '$(srcdir)/ddnoise.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ddnoise.Tpo $(DEPDIR)/arcemtest-ddnoise.Po
-#	$(AM_V_CC)source='ddnoise.c' object='arcemtest-ddnoise.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ddnoise.obj `if test -f 'ddnoise.c'; then $(CYGPATH_W) 'ddnoise.c'; else $(CYGPATH_W) '$(srcdir)/ddnoise.c'; fi`
-
-arcemtest-disc.o: disc.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-disc.o -MD -MP -MF $(DEPDIR)/arcemtest-disc.Tpo -c -o arcemtest-disc.o `test -f 'disc.c' || echo '$(srcdir)/'`disc.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-disc.Tpo $(DEPDIR)/arcemtest-disc.Po
-#	$(AM_V_CC)source='disc.c' object='arcemtest-disc.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-disc.o `test -f 'disc.c' || echo '$(srcdir)/'`disc.c
-
-arcemtest-disc.obj: disc.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-disc.obj -MD -MP -MF $(DEPDIR)/arcemtest-disc.Tpo -c -o arcemtest-disc.obj `if test -f 'disc.c'; then $(CYGPATH_W) 'disc.c'; else $(CYGPATH_W) '$(srcdir)/disc.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-disc.Tpo $(DEPDIR)/arcemtest-disc.Po
-#	$(AM_V_CC)source='disc.c' object='arcemtest-disc.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-disc.obj `if test -f 'disc.c'; then $(CYGPATH_W) 'disc.c'; else $(CYGPATH_W) '$(srcdir)/disc.c'; fi`
-
-arcemtest-disc_adf.o: disc_adf.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-disc_adf.o -MD -MP -MF $(DEPDIR)/arcemtest-disc_adf.Tpo -c -o arcemtest-disc_adf.o `test -f 'disc_adf.c' || echo '$(srcdir)/'`disc_adf.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-disc_adf.Tpo $(DEPDIR)/arcemtest-disc_adf.Po
-#	$(AM_V_CC)source='disc_adf.c' object='arcemtest-disc_adf.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-disc_adf.o `test -f 'disc_adf.c' || echo '$(srcdir)/'`disc_adf.c
-
-arcemtest-disc_adf.obj: disc_adf.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-disc_adf.obj -MD -MP -MF $(DEPDIR)/arcemtest-disc_adf.Tpo -c -o arcemtest-disc_adf.obj `if test -f 'disc_adf.c'; then $(CYGPATH_W) 'disc_adf.c'; else $(CYGPATH_W) '$(srcdir)/disc_adf.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-disc_adf.Tpo $(DEPDIR)/arcemtest-disc_adf.Po
-#	$(AM_V_CC)source='disc_adf.c' object='arcemtest-disc_adf.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-disc_adf.obj `if test -f 'disc_adf.c'; then $(CYGPATH_W) 'disc_adf.c'; else $(CYGPATH_W) '$(srcdir)/disc_adf.c'; fi`
-
-arcemtest-disc_apd.o: disc_apd.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-disc_apd.o -MD -MP -MF $(DEPDIR)/arcemtest-disc_apd.Tpo -c -o arcemtest-disc_apd.o `test -f 'disc_apd.c' || echo '$(srcdir)/'`disc_apd.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-disc_apd.Tpo $(DEPDIR)/arcemtest-disc_apd.Po
-#	$(AM_V_CC)source='disc_apd.c' object='arcemtest-disc_apd.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-disc_apd.o `test -f 'disc_apd.c' || echo '$(srcdir)/'`disc_apd.c
-
-arcemtest-disc_apd.obj: disc_apd.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-disc_apd.obj -MD -MP -MF $(DEPDIR)/arcemtest-disc_apd.Tpo -c -o arcemtest-disc_apd.obj `if test -f 'disc_apd.c'; then $(CYGPATH_W) 'disc_apd.c'; else $(CYGPATH_W) '$(srcdir)/disc_apd.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-disc_apd.Tpo $(DEPDIR)/arcemtest-disc_apd.Po
-#	$(AM_V_CC)source='disc_apd.c' object='arcemtest-disc_apd.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-disc_apd.obj `if test -f 'disc_apd.c'; then $(CYGPATH_W) 'disc_apd.c'; else $(CYGPATH_W) '$(srcdir)/disc_apd.c'; fi`
-
-arcemtest-disc_fdi.o: disc_fdi.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-disc_fdi.o -MD -MP -MF $(DEPDIR)/arcemtest-disc_fdi.Tpo -c -o arcemtest-disc_fdi.o `test -f 'disc_fdi.c' || echo '$(srcdir)/'`disc_fdi.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-disc_fdi.Tpo $(DEPDIR)/arcemtest-disc_fdi.Po
-#	$(AM_V_CC)source='disc_fdi.c' object='arcemtest-disc_fdi.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-disc_fdi.o `test -f 'disc_fdi.c' || echo '$(srcdir)/'`disc_fdi.c
-
-arcemtest-disc_fdi.obj: disc_fdi.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-disc_fdi.obj -MD -MP -MF $(DEPDIR)/arcemtest-disc_fdi.Tpo -c -o arcemtest-disc_fdi.obj `if test -f 'disc_fdi.c'; then $(CYGPATH_W) 'disc_fdi.c'; else $(CYGPATH_W) '$(srcdir)/disc_fdi.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-disc_fdi.Tpo $(DEPDIR)/arcemtest-disc_fdi.Po
-#	$(AM_V_CC)source='disc_fdi.c' object='arcemtest-disc_fdi.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-disc_fdi.obj `if test -f 'disc_fdi.c'; then $(CYGPATH_W) 'disc_fdi.c'; else $(CYGPATH_W) '$(srcdir)/disc_fdi.c'; fi`
-
-arcemtest-disc_hfe.o: disc_hfe.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-disc_hfe.o -MD -MP -MF $(DEPDIR)/arcemtest-disc_hfe.Tpo -c -o arcemtest-disc_hfe.o `test -f 'disc_hfe.c' || echo '$(srcdir)/'`disc_hfe.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-disc_hfe.Tpo $(DEPDIR)/arcemtest-disc_hfe.Po
-#	$(AM_V_CC)source='disc_hfe.c' object='arcemtest-disc_hfe.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-disc_hfe.o `test -f 'disc_hfe.c' || echo '$(srcdir)/'`disc_hfe.c
-
-arcemtest-disc_hfe.obj: disc_hfe.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-disc_hfe.obj -MD -MP -MF $(DEPDIR)/arcemtest-disc_hfe.Tpo -c -o arcemtest-disc_hfe.obj `if test -f 'disc_hfe.c'; then $(CYGPATH_W) 'disc_hfe.c'; else $(CYGPATH_W) '$(srcdir)/disc_hfe.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-disc_hfe.Tpo $(DEPDIR)/arcemtest-disc_hfe.Po
-#	$(AM_V_CC)source='disc_hfe.c' object='arcemtest-disc_hfe.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-disc_hfe.obj `if test -f 'disc_hfe.c'; then $(CYGPATH_W) 'disc_hfe.c'; else $(CYGPATH_W) '$(srcdir)/disc_hfe.c'; fi`
-
-arcemtest-disc_jfd.o: disc_jfd.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-disc_jfd.o -MD -MP -MF $(DEPDIR)/arcemtest-disc_jfd.Tpo -c -o arcemtest-disc_jfd.o `test -f 'disc_jfd.c' || echo '$(srcdir)/'`disc_jfd.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-disc_jfd.Tpo $(DEPDIR)/arcemtest-disc_jfd.Po
-#	$(AM_V_CC)source='disc_jfd.c' object='arcemtest-disc_jfd.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-disc_jfd.o `test -f 'disc_jfd.c' || echo '$(srcdir)/'`disc_jfd.c
-
-arcemtest-disc_jfd.obj: disc_jfd.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-disc_jfd.obj -MD -MP -MF $(DEPDIR)/arcemtest-disc_jfd.Tpo -c -o arcemtest-disc_jfd.obj `if test -f 'disc_jfd.c'; then $(CYGPATH_W) 'disc_jfd.c'; else $(CYGPATH_W) '$(srcdir)/disc_jfd.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-disc_jfd.Tpo $(DEPDIR)/arcemtest-disc_jfd.Po
-#	$(AM_V_CC)source='disc_jfd.c' object='arcemtest-disc_jfd.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-disc_jfd.obj `if test -f 'disc_jfd.c'; then $(CYGPATH_W) 'disc_jfd.c'; else $(CYGPATH_W) '$(srcdir)/disc_jfd.c'; fi`
-
-arcemtest-disc_mfm_common.o: disc_mfm_common.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-disc_mfm_common.o -MD -MP -MF $(DEPDIR)/arcemtest-disc_mfm_common.Tpo -c -o arcemtest-disc_mfm_common.o `test -f 'disc_mfm_common.c' || echo '$(srcdir)/'`disc_mfm_common.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-disc_mfm_common.Tpo $(DEPDIR)/arcemtest-disc_mfm_common.Po
-#	$(AM_V_CC)source='disc_mfm_common.c' object='arcemtest-disc_mfm_common.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-disc_mfm_common.o `test -f 'disc_mfm_common.c' || echo '$(srcdir)/'`disc_mfm_common.c
-
-arcemtest-disc_mfm_common.obj: disc_mfm_common.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-disc_mfm_common.obj -MD -MP -MF $(DEPDIR)/arcemtest-disc_mfm_common.Tpo -c -o arcemtest-disc_mfm_common.obj `if test -f 'disc_mfm_common.c'; then $(CYGPATH_W) 'disc_mfm_common.c'; else $(CYGPATH_W) '$(srcdir)/disc_mfm_common.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-disc_mfm_common.Tpo $(DEPDIR)/arcemtest-disc_mfm_common.Po
-#	$(AM_V_CC)source='disc_mfm_common.c' object='arcemtest-disc_mfm_common.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-disc_mfm_common.obj `if test -f 'disc_mfm_common.c'; then $(CYGPATH_W) 'disc_mfm_common.c'; else $(CYGPATH_W) '$(srcdir)/disc_mfm_common.c'; fi`
-
-arcemtest-ds2401.o: ds2401.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ds2401.o -MD -MP -MF $(DEPDIR)/arcemtest-ds2401.Tpo -c -o arcemtest-ds2401.o `test -f 'ds2401.c' || echo '$(srcdir)/'`ds2401.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ds2401.Tpo $(DEPDIR)/arcemtest-ds2401.Po
-#	$(AM_V_CC)source='ds2401.c' object='arcemtest-ds2401.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ds2401.o `test -f 'ds2401.c' || echo '$(srcdir)/'`ds2401.c
-
-arcemtest-ds2401.obj: ds2401.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ds2401.obj -MD -MP -MF $(DEPDIR)/arcemtest-ds2401.Tpo -c -o arcemtest-ds2401.obj `if test -f 'ds2401.c'; then $(CYGPATH_W) 'ds2401.c'; else $(CYGPATH_W) '$(srcdir)/ds2401.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ds2401.Tpo $(DEPDIR)/arcemtest-ds2401.Po
-#	$(AM_V_CC)source='ds2401.c' object='arcemtest-ds2401.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ds2401.obj `if test -f 'ds2401.c'; then $(CYGPATH_W) 'ds2401.c'; else $(CYGPATH_W) '$(srcdir)/ds2401.c'; fi`
-
-arcemtest-eterna.o: eterna.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-eterna.o -MD -MP -MF $(DEPDIR)/arcemtest-eterna.Tpo -c -o arcemtest-eterna.o `test -f 'eterna.c' || echo '$(srcdir)/'`eterna.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-eterna.Tpo $(DEPDIR)/arcemtest-eterna.Po
-#	$(AM_V_CC)source='eterna.c' object='arcemtest-eterna.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-eterna.o `test -f 'eterna.c' || echo '$(srcdir)/'`eterna.c
-
-arcemtest-eterna.obj: eterna.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-eterna.obj -MD -MP -MF $(DEPDIR)/arcemtest-eterna.Tpo -c -o arcemtest-eterna.obj `if test -f 'eterna.c'; then $(CYGPATH_W) 'eterna.c'; else $(CYGPATH_W) '$(srcdir)/eterna.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-eterna.Tpo $(DEPDIR)/arcemtest-eterna.Po
-#	$(AM_V_CC)source='eterna.c' object='arcemtest-eterna.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-eterna.obj `if test -f 'eterna.c'; then $(CYGPATH_W) 'eterna.c'; else $(CYGPATH_W) '$(srcdir)/eterna.c'; fi`
-
-arcemtest-fdi2raw.o: fdi2raw.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-fdi2raw.o -MD -MP -MF $(DEPDIR)/arcemtest-fdi2raw.Tpo -c -o arcemtest-fdi2raw.o `test -f 'fdi2raw.c' || echo '$(srcdir)/'`fdi2raw.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-fdi2raw.Tpo $(DEPDIR)/arcemtest-fdi2raw.Po
-#	$(AM_V_CC)source='fdi2raw.c' object='arcemtest-fdi2raw.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-fdi2raw.o `test -f 'fdi2raw.c' || echo '$(srcdir)/'`fdi2raw.c
-
-arcemtest-fdi2raw.obj: fdi2raw.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-fdi2raw.obj -MD -MP -MF $(DEPDIR)/arcemtest-fdi2raw.Tpo -c -o arcemtest-fdi2raw.obj `if test -f 'fdi2raw.c'; then $(CYGPATH_W) 'fdi2raw.c'; else $(CYGPATH_W) '$(srcdir)/fdi2raw.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-fdi2raw.Tpo $(DEPDIR)/arcemtest-fdi2raw.Po
-#	$(AM_V_CC)source='fdi2raw.c' object='arcemtest-fdi2raw.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-fdi2raw.obj `if test -f 'fdi2raw.c'; then $(CYGPATH_W) 'fdi2raw.c'; else $(CYGPATH_W) '$(srcdir)/fdi2raw.c'; fi`
-
-arcemtest-fpa.o: fpa.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-fpa.o -MD -MP -MF $(DEPDIR)/arcemtest-fpa.Tpo -c -o arcemtest-fpa.o `test -f 'fpa.c' || echo '$(srcdir)/'`fpa.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-fpa.Tpo $(DEPDIR)/arcemtest-fpa.Po
-#	$(AM_V_CC)source='fpa.c' object='arcemtest-fpa.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-fpa.o `test -f 'fpa.c' || echo '$(srcdir)/'`fpa.c
-
-arcemtest-fpa.obj: fpa.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-fpa.obj -MD -MP -MF $(DEPDIR)/arcemtest-fpa.Tpo -c -o arcemtest-fpa.obj `if test -f 'fpa.c'; then $(CYGPATH_W) 'fpa.c'; else $(CYGPATH_W) '$(srcdir)/fpa.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-fpa.Tpo $(DEPDIR)/arcemtest-fpa.Po
-#	$(AM_V_CC)source='fpa.c' object='arcemtest-fpa.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-fpa.obj `if test -f 'fpa.c'; then $(CYGPATH_W) 'fpa.c'; else $(CYGPATH_W) '$(srcdir)/fpa.c'; fi`
-
-arcemtest-g16.o: g16.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-g16.o -MD -MP -MF $(DEPDIR)/arcemtest-g16.Tpo -c -o arcemtest-g16.o `test -f 'g16.c' || echo '$(srcdir)/'`g16.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-g16.Tpo $(DEPDIR)/arcemtest-g16.Po
-#	$(AM_V_CC)source='g16.c' object='arcemtest-g16.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-g16.o `test -f 'g16.c' || echo '$(srcdir)/'`g16.c
-
-arcemtest-g16.obj: g16.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-g16.obj -MD -MP -MF $(DEPDIR)/arcemtest-g16.Tpo -c -o arcemtest-g16.obj `if test -f 'g16.c'; then $(CYGPATH_W) 'g16.c'; else $(CYGPATH_W) '$(srcdir)/g16.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-g16.Tpo $(DEPDIR)/arcemtest-g16.Po
-#	$(AM_V_CC)source='g16.c' object='arcemtest-g16.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-g16.obj `if test -f 'g16.c'; then $(CYGPATH_W) 'g16.c'; else $(CYGPATH_W) '$(srcdir)/g16.c'; fi`
-
-arcemtest-g332.o: g332.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-g332.o -MD -MP -MF $(DEPDIR)/arcemtest-g332.Tpo -c -o arcemtest-g332.o `test -f 'g332.c' || echo '$(srcdir)/'`g332.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-g332.Tpo $(DEPDIR)/arcemtest-g332.Po
-#	$(AM_V_CC)source='g332.c' object='arcemtest-g332.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-g332.o `test -f 'g332.c' || echo '$(srcdir)/'`g332.c
-
-arcemtest-g332.obj: g332.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-g332.obj -MD -MP -MF $(DEPDIR)/arcemtest-g332.Tpo -c -o arcemtest-g332.obj `if test -f 'g332.c'; then $(CYGPATH_W) 'g332.c'; else $(CYGPATH_W) '$(srcdir)/g332.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-g332.Tpo $(DEPDIR)/arcemtest-g332.Po
-#	$(AM_V_CC)source='g332.c' object='arcemtest-g332.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-g332.obj `if test -f 'g332.c'; then $(CYGPATH_W) 'g332.c'; else $(CYGPATH_W) '$(srcdir)/g332.c'; fi`
-
-arcemtest-hostfs.o: hostfs.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-hostfs.o -MD -MP -MF $(DEPDIR)/arcemtest-hostfs.Tpo -c -o arcemtest-hostfs.o `test -f 'hostfs.c' || echo '$(srcdir)/'`hostfs.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-hostfs.Tpo $(DEPDIR)/arcemtest-hostfs.Po
-#	$(AM_V_CC)source='hostfs.c' object='arcemtest-hostfs.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-hostfs.o `test -f 'hostfs.c' || echo '$(srcdir)/'`hostfs.c
-
-arcemtest-hostfs.obj: hostfs.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-hostfs.obj -MD -MP -MF $(DEPDIR)/arcemtest-hostfs.Tpo -c -o arcemtest-hostfs.obj `if test -f 'hostfs.c'; then $(CYGPATH_W) 'hostfs.c'; else $(CYGPATH_W) '$(srcdir)/hostfs.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-hostfs.Tpo $(DEPDIR)/arcemtest-hostfs.Po
-#	$(AM_V_CC)source='hostfs.c' object='arcemtest-hostfs.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-hostfs.obj `if test -f 'hostfs.c'; then $(CYGPATH_W) 'hostfs.c'; else $(CYGPATH_W) '$(srcdir)/hostfs.c'; fi`
-
-arcemtest-ide.o: ide.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ide.o -MD -MP -MF $(DEPDIR)/arcemtest-ide.Tpo -c -o arcemtest-ide.o `test -f 'ide.c' || echo '$(srcdir)/'`ide.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ide.Tpo $(DEPDIR)/arcemtest-ide.Po
-#	$(AM_V_CC)source='ide.c' object='arcemtest-ide.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ide.o `test -f 'ide.c' || echo '$(srcdir)/'`ide.c
-
-arcemtest-ide.obj: ide.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ide.obj -MD -MP -MF $(DEPDIR)/arcemtest-ide.Tpo -c -o arcemtest-ide.obj `if test -f 'ide.c'; then $(CYGPATH_W) 'ide.c'; else $(CYGPATH_W) '$(srcdir)/ide.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ide.Tpo $(DEPDIR)/arcemtest-ide.Po
-#	$(AM_V_CC)source='ide.c' object='arcemtest-ide.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ide.obj `if test -f 'ide.c'; then $(CYGPATH_W) 'ide.c'; else $(CYGPATH_W) '$(srcdir)/ide.c'; fi`
-
-arcemtest-ide_a3in.o: ide_a3in.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ide_a3in.o -MD -MP -MF $(DEPDIR)/arcemtest-ide_a3in.Tpo -c -o arcemtest-ide_a3in.o `test -f 'ide_a3in.c' || echo '$(srcdir)/'`ide_a3in.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ide_a3in.Tpo $(DEPDIR)/arcemtest-ide_a3in.Po
-#	$(AM_V_CC)source='ide_a3in.c' object='arcemtest-ide_a3in.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ide_a3in.o `test -f 'ide_a3in.c' || echo '$(srcdir)/'`ide_a3in.c
-
-arcemtest-ide_a3in.obj: ide_a3in.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ide_a3in.obj -MD -MP -MF $(DEPDIR)/arcemtest-ide_a3in.Tpo -c -o arcemtest-ide_a3in.obj `if test -f 'ide_a3in.c'; then $(CYGPATH_W) 'ide_a3in.c'; else $(CYGPATH_W) '$(srcdir)/ide_a3in.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ide_a3in.Tpo $(DEPDIR)/arcemtest-ide_a3in.Po
-#	$(AM_V_CC)source='ide_a3in.c' object='arcemtest-ide_a3in.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ide_a3in.obj `if test -f 'ide_a3in.c'; then $(CYGPATH_W) 'ide_a3in.c'; else $(CYGPATH_W) '$(srcdir)/ide_a3in.c'; fi`
-
-arcemtest-ide_config.o: ide_config.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ide_config.o -MD -MP -MF $(DEPDIR)/arcemtest-ide_config.Tpo -c -o arcemtest-ide_config.o `test -f 'ide_config.c' || echo '$(srcdir)/'`ide_config.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ide_config.Tpo $(DEPDIR)/arcemtest-ide_config.Po
-#	$(AM_V_CC)source='ide_config.c' object='arcemtest-ide_config.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ide_config.o `test -f 'ide_config.c' || echo '$(srcdir)/'`ide_config.c
-
-arcemtest-ide_config.obj: ide_config.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ide_config.obj -MD -MP -MF $(DEPDIR)/arcemtest-ide_config.Tpo -c -o arcemtest-ide_config.obj `if test -f 'ide_config.c'; then $(CYGPATH_W) 'ide_config.c'; else $(CYGPATH_W) '$(srcdir)/ide_config.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ide_config.Tpo $(DEPDIR)/arcemtest-ide_config.Po
-#	$(AM_V_CC)source='ide_config.c' object='arcemtest-ide_config.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ide_config.obj `if test -f 'ide_config.c'; then $(CYGPATH_W) 'ide_config.c'; else $(CYGPATH_W) '$(srcdir)/ide_config.c'; fi`
-
-arcemtest-ide_idea.o: ide_idea.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ide_idea.o -MD -MP -MF $(DEPDIR)/arcemtest-ide_idea.Tpo -c -o arcemtest-ide_idea.o `test -f 'ide_idea.c' || echo '$(srcdir)/'`ide_idea.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ide_idea.Tpo $(DEPDIR)/arcemtest-ide_idea.Po
-#	$(AM_V_CC)source='ide_idea.c' object='arcemtest-ide_idea.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ide_idea.o `test -f 'ide_idea.c' || echo '$(srcdir)/'`ide_idea.c
-
-arcemtest-ide_idea.obj: ide_idea.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ide_idea.obj -MD -MP -MF $(DEPDIR)/arcemtest-ide_idea.Tpo -c -o arcemtest-ide_idea.obj `if test -f 'ide_idea.c'; then $(CYGPATH_W) 'ide_idea.c'; else $(CYGPATH_W) '$(srcdir)/ide_idea.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ide_idea.Tpo $(DEPDIR)/arcemtest-ide_idea.Po
-#	$(AM_V_CC)source='ide_idea.c' object='arcemtest-ide_idea.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ide_idea.obj `if test -f 'ide_idea.c'; then $(CYGPATH_W) 'ide_idea.c'; else $(CYGPATH_W) '$(srcdir)/ide_idea.c'; fi`
-
-arcemtest-ide_riscdev.o: ide_riscdev.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ide_riscdev.o -MD -MP -MF $(DEPDIR)/arcemtest-ide_riscdev.Tpo -c -o arcemtest-ide_riscdev.o `test -f 'ide_riscdev.c' || echo '$(srcdir)/'`ide_riscdev.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ide_riscdev.Tpo $(DEPDIR)/arcemtest-ide_riscdev.Po
-#	$(AM_V_CC)source='ide_riscdev.c' object='arcemtest-ide_riscdev.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ide_riscdev.o `test -f 'ide_riscdev.c' || echo '$(srcdir)/'`ide_riscdev.c
-
-arcemtest-ide_riscdev.obj: ide_riscdev.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ide_riscdev.obj -MD -MP -MF $(DEPDIR)/arcemtest-ide_riscdev.Tpo -c -o arcemtest-ide_riscdev.obj `if test -f 'ide_riscdev.c'; then $(CYGPATH_W) 'ide_riscdev.c'; else $(CYGPATH_W) '$(srcdir)/ide_riscdev.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ide_riscdev.Tpo $(DEPDIR)/arcemtest-ide_riscdev.Po
-#	$(AM_V_CC)source='ide_riscdev.c' object='arcemtest-ide_riscdev.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ide_riscdev.obj `if test -f 'ide_riscdev.c'; then $(CYGPATH_W) 'ide_riscdev.c'; else $(CYGPATH_W) '$(srcdir)/ide_riscdev.c'; fi`
-
-arcemtest-ide_zidefs.o: ide_zidefs.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ide_zidefs.o -MD -MP -MF $(DEPDIR)/arcemtest-ide_zidefs.Tpo -c -o arcemtest-ide_zidefs.o `test -f 'ide_zidefs.c' || echo '$(srcdir)/'`ide_zidefs.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ide_zidefs.Tpo $(DEPDIR)/arcemtest-ide_zidefs.Po
-#	$(AM_V_CC)source='ide_zidefs.c' object='arcemtest-ide_zidefs.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ide_zidefs.o `test -f 'ide_zidefs.c' || echo '$(srcdir)/'`ide_zidefs.c
-
-arcemtest-ide_zidefs.obj: ide_zidefs.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ide_zidefs.obj -MD -MP -MF $(DEPDIR)/arcemtest-ide_zidefs.Tpo -c -o arcemtest-ide_zidefs.obj `if test -f 'ide_zidefs.c'; then $(CYGPATH_W) 'ide_zidefs.c'; else $(CYGPATH_W) '$(srcdir)/ide_zidefs.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ide_zidefs.Tpo $(DEPDIR)/arcemtest-ide_zidefs.Po
-#	$(AM_V_CC)source='ide_zidefs.c' object='arcemtest-ide_zidefs.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ide_zidefs.obj `if test -f 'ide_zidefs.c'; then $(CYGPATH_W) 'ide_zidefs.c'; else $(CYGPATH_W) '$(srcdir)/ide_zidefs.c'; fi`
-
-arcemtest-ide_zidefs_a3k.o: ide_zidefs_a3k.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ide_zidefs_a3k.o -MD -MP -MF $(DEPDIR)/arcemtest-ide_zidefs_a3k.Tpo -c -o arcemtest-ide_zidefs_a3k.o `test -f 'ide_zidefs_a3k.c' || echo '$(srcdir)/'`ide_zidefs_a3k.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ide_zidefs_a3k.Tpo $(DEPDIR)/arcemtest-ide_zidefs_a3k.Po
-#	$(AM_V_CC)source='ide_zidefs_a3k.c' object='arcemtest-ide_zidefs_a3k.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ide_zidefs_a3k.o `test -f 'ide_zidefs_a3k.c' || echo '$(srcdir)/'`ide_zidefs_a3k.c
-
-arcemtest-ide_zidefs_a3k.obj: ide_zidefs_a3k.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ide_zidefs_a3k.obj -MD -MP -MF $(DEPDIR)/arcemtest-ide_zidefs_a3k.Tpo -c -o arcemtest-ide_zidefs_a3k.obj `if test -f 'ide_zidefs_a3k.c'; then $(CYGPATH_W) 'ide_zidefs_a3k.c'; else $(CYGPATH_W) '$(srcdir)/ide_zidefs_a3k.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ide_zidefs_a3k.Tpo $(DEPDIR)/arcemtest-ide_zidefs_a3k.Po
-#	$(AM_V_CC)source='ide_zidefs_a3k.c' object='arcemtest-ide_zidefs_a3k.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ide_zidefs_a3k.obj `if test -f 'ide_zidefs_a3k.c'; then $(CYGPATH_W) 'ide_zidefs_a3k.c'; else $(CYGPATH_W) '$(srcdir)/ide_zidefs_a3k.c'; fi`
-
-arcemtest-input_sdl2.o: input_sdl2.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-input_sdl2.o -MD -MP -MF $(DEPDIR)/arcemtest-input_sdl2.Tpo -c -o arcemtest-input_sdl2.o `test -f 'input_sdl2.c' || echo '$(srcdir)/'`input_sdl2.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-input_sdl2.Tpo $(DEPDIR)/arcemtest-input_sdl2.Po
-#	$(AM_V_CC)source='input_sdl2.c' object='arcemtest-input_sdl2.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-input_sdl2.o `test -f 'input_sdl2.c' || echo '$(srcdir)/'`input_sdl2.c
-
-arcemtest-input_sdl2.obj: input_sdl2.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-input_sdl2.obj -MD -MP -MF $(DEPDIR)/arcemtest-input_sdl2.Tpo -c -o arcemtest-input_sdl2.obj `if test -f 'input_sdl2.c'; then $(CYGPATH_W) 'input_sdl2.c'; else $(CYGPATH_W) '$(srcdir)/input_sdl2.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-input_sdl2.Tpo $(DEPDIR)/arcemtest-input_sdl2.Po
-#	$(AM_V_CC)source='input_sdl2.c' object='arcemtest-input_sdl2.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-input_sdl2.obj `if test -f 'input_sdl2.c'; then $(CYGPATH_W) 'input_sdl2.c'; else $(CYGPATH_W) '$(srcdir)/input_sdl2.c'; fi`
-
-arcemtest-ioc.o: ioc.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ioc.o -MD -MP -MF $(DEPDIR)/arcemtest-ioc.Tpo -c -o arcemtest-ioc.o `test -f 'ioc.c' || echo '$(srcdir)/'`ioc.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ioc.Tpo $(DEPDIR)/arcemtest-ioc.Po
-#	$(AM_V_CC)source='ioc.c' object='arcemtest-ioc.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ioc.o `test -f 'ioc.c' || echo '$(srcdir)/'`ioc.c
-
-arcemtest-ioc.obj: ioc.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ioc.obj -MD -MP -MF $(DEPDIR)/arcemtest-ioc.Tpo -c -o arcemtest-ioc.obj `if test -f 'ioc.c'; then $(CYGPATH_W) 'ioc.c'; else $(CYGPATH_W) '$(srcdir)/ioc.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ioc.Tpo $(DEPDIR)/arcemtest-ioc.Po
-#	$(AM_V_CC)source='ioc.c' object='arcemtest-ioc.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ioc.obj `if test -f 'ioc.c'; then $(CYGPATH_W) 'ioc.c'; else $(CYGPATH_W) '$(srcdir)/ioc.c'; fi`
-
-arcemtest-ioeb.o: ioeb.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ioeb.o -MD -MP -MF $(DEPDIR)/arcemtest-ioeb.Tpo -c -o arcemtest-ioeb.o `test -f 'ioeb.c' || echo '$(srcdir)/'`ioeb.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ioeb.Tpo $(DEPDIR)/arcemtest-ioeb.Po
-#	$(AM_V_CC)source='ioeb.c' object='arcemtest-ioeb.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ioeb.o `test -f 'ioeb.c' || echo '$(srcdir)/'`ioeb.c
-
-arcemtest-ioeb.obj: ioeb.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-ioeb.obj -MD -MP -MF $(DEPDIR)/arcemtest-ioeb.Tpo -c -o arcemtest-ioeb.obj `if test -f 'ioeb.c'; then $(CYGPATH_W) 'ioeb.c'; else $(CYGPATH_W) '$(srcdir)/ioeb.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-ioeb.Tpo $(DEPDIR)/arcemtest-ioeb.Po
-#	$(AM_V_CC)source='ioeb.c' object='arcemtest-ioeb.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-ioeb.obj `if test -f 'ioeb.c'; then $(CYGPATH_W) 'ioeb.c'; else $(CYGPATH_W) '$(srcdir)/ioeb.c'; fi`
-
-arcemtest-joystick.o: joystick.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-joystick.o -MD -MP -MF $(DEPDIR)/arcemtest-joystick.Tpo -c -o arcemtest-joystick.o `test -f 'joystick.c' || echo '$(srcdir)/'`joystick.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-joystick.Tpo $(DEPDIR)/arcemtest-joystick.Po
-#	$(AM_V_CC)source='joystick.c' object='arcemtest-joystick.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-joystick.o `test -f 'joystick.c' || echo '$(srcdir)/'`joystick.c
-
-arcemtest-joystick.obj: joystick.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-joystick.obj -MD -MP -MF $(DEPDIR)/arcemtest-joystick.Tpo -c -o arcemtest-joystick.obj `if test -f 'joystick.c'; then $(CYGPATH_W) 'joystick.c'; else $(CYGPATH_W) '$(srcdir)/joystick.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-joystick.Tpo $(DEPDIR)/arcemtest-joystick.Po
-#	$(AM_V_CC)source='joystick.c' object='arcemtest-joystick.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-joystick.obj `if test -f 'joystick.c'; then $(CYGPATH_W) 'joystick.c'; else $(CYGPATH_W) '$(srcdir)/joystick.c'; fi`
-
-arcemtest-keyboard.o: keyboard.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-keyboard.o -MD -MP -MF $(DEPDIR)/arcemtest-keyboard.Tpo -c -o arcemtest-keyboard.o `test -f 'keyboard.c' || echo '$(srcdir)/'`keyboard.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-keyboard.Tpo $(DEPDIR)/arcemtest-keyboard.Po
-#	$(AM_V_CC)source='keyboard.c' object='arcemtest-keyboard.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-keyboard.o `test -f 'keyboard.c' || echo '$(srcdir)/'`keyboard.c
-
-arcemtest-keyboard.obj: keyboard.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-keyboard.obj -MD -MP -MF $(DEPDIR)/arcemtest-keyboard.Tpo -c -o arcemtest-keyboard.obj `if test -f 'keyboard.c'; then $(CYGPATH_W) 'keyboard.c'; else $(CYGPATH_W) '$(srcdir)/keyboard.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-keyboard.Tpo $(DEPDIR)/arcemtest-keyboard.Po
-#	$(AM_V_CC)source='keyboard.c' object='arcemtest-keyboard.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-keyboard.obj `if test -f 'keyboard.c'; then $(CYGPATH_W) 'keyboard.c'; else $(CYGPATH_W) '$(srcdir)/keyboard.c'; fi`
-
-arcemtest-lc.o: lc.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-lc.o -MD -MP -MF $(DEPDIR)/arcemtest-lc.Tpo -c -o arcemtest-lc.o `test -f 'lc.c' || echo '$(srcdir)/'`lc.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-lc.Tpo $(DEPDIR)/arcemtest-lc.Po
-#	$(AM_V_CC)source='lc.c' object='arcemtest-lc.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-lc.o `test -f 'lc.c' || echo '$(srcdir)/'`lc.c
-
-arcemtest-lc.obj: lc.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-lc.obj -MD -MP -MF $(DEPDIR)/arcemtest-lc.Tpo -c -o arcemtest-lc.obj `if test -f 'lc.c'; then $(CYGPATH_W) 'lc.c'; else $(CYGPATH_W) '$(srcdir)/lc.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-lc.Tpo $(DEPDIR)/arcemtest-lc.Po
-#	$(AM_V_CC)source='lc.c' object='arcemtest-lc.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-lc.obj `if test -f 'lc.c'; then $(CYGPATH_W) 'lc.c'; else $(CYGPATH_W) '$(srcdir)/lc.c'; fi`
-
-arcemtest-main.o: main.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-main.o -MD -MP -MF $(DEPDIR)/arcemtest-main.Tpo -c -o arcemtest-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-main.Tpo $(DEPDIR)/arcemtest-main.Po
-#	$(AM_V_CC)source='main.c' object='arcemtest-main.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
-
-arcemtest-main.obj: main.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-main.obj -MD -MP -MF $(DEPDIR)/arcemtest-main.Tpo -c -o arcemtest-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-main.Tpo $(DEPDIR)/arcemtest-main.Po
-#	$(AM_V_CC)source='main.c' object='arcemtest-main.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
-
-arcemtest-mem.o: mem.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-mem.o -MD -MP -MF $(DEPDIR)/arcemtest-mem.Tpo -c -o arcemtest-mem.o `test -f 'mem.c' || echo '$(srcdir)/'`mem.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-mem.Tpo $(DEPDIR)/arcemtest-mem.Po
-#	$(AM_V_CC)source='mem.c' object='arcemtest-mem.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-mem.o `test -f 'mem.c' || echo '$(srcdir)/'`mem.c
-
-arcemtest-mem.obj: mem.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-mem.obj -MD -MP -MF $(DEPDIR)/arcemtest-mem.Tpo -c -o arcemtest-mem.obj `if test -f 'mem.c'; then $(CYGPATH_W) 'mem.c'; else $(CYGPATH_W) '$(srcdir)/mem.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-mem.Tpo $(DEPDIR)/arcemtest-mem.Po
-#	$(AM_V_CC)source='mem.c' object='arcemtest-mem.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-mem.obj `if test -f 'mem.c'; then $(CYGPATH_W) 'mem.c'; else $(CYGPATH_W) '$(srcdir)/mem.c'; fi`
-
-arcemtest-memc.o: memc.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-memc.o -MD -MP -MF $(DEPDIR)/arcemtest-memc.Tpo -c -o arcemtest-memc.o `test -f 'memc.c' || echo '$(srcdir)/'`memc.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-memc.Tpo $(DEPDIR)/arcemtest-memc.Po
-#	$(AM_V_CC)source='memc.c' object='arcemtest-memc.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-memc.o `test -f 'memc.c' || echo '$(srcdir)/'`memc.c
-
-arcemtest-memc.obj: memc.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-memc.obj -MD -MP -MF $(DEPDIR)/arcemtest-memc.Tpo -c -o arcemtest-memc.obj `if test -f 'memc.c'; then $(CYGPATH_W) 'memc.c'; else $(CYGPATH_W) '$(srcdir)/memc.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-memc.Tpo $(DEPDIR)/arcemtest-memc.Po
-#	$(AM_V_CC)source='memc.c' object='arcemtest-memc.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-memc.obj `if test -f 'memc.c'; then $(CYGPATH_W) 'memc.c'; else $(CYGPATH_W) '$(srcdir)/memc.c'; fi`
-
-arcemtest-podules.o: podules.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-podules.o -MD -MP -MF $(DEPDIR)/arcemtest-podules.Tpo -c -o arcemtest-podules.o `test -f 'podules.c' || echo '$(srcdir)/'`podules.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-podules.Tpo $(DEPDIR)/arcemtest-podules.Po
-#	$(AM_V_CC)source='podules.c' object='arcemtest-podules.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-podules.o `test -f 'podules.c' || echo '$(srcdir)/'`podules.c
-
-arcemtest-podules.obj: podules.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-podules.obj -MD -MP -MF $(DEPDIR)/arcemtest-podules.Tpo -c -o arcemtest-podules.obj `if test -f 'podules.c'; then $(CYGPATH_W) 'podules.c'; else $(CYGPATH_W) '$(srcdir)/podules.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-podules.Tpo $(DEPDIR)/arcemtest-podules.Po
-#	$(AM_V_CC)source='podules.c' object='arcemtest-podules.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-podules.obj `if test -f 'podules.c'; then $(CYGPATH_W) 'podules.c'; else $(CYGPATH_W) '$(srcdir)/podules.c'; fi`
-
-arcemtest-printer.o: printer.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-printer.o -MD -MP -MF $(DEPDIR)/arcemtest-printer.Tpo -c -o arcemtest-printer.o `test -f 'printer.c' || echo '$(srcdir)/'`printer.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-printer.Tpo $(DEPDIR)/arcemtest-printer.Po
-#	$(AM_V_CC)source='printer.c' object='arcemtest-printer.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-printer.o `test -f 'printer.c' || echo '$(srcdir)/'`printer.c
-
-arcemtest-printer.obj: printer.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-printer.obj -MD -MP -MF $(DEPDIR)/arcemtest-printer.Tpo -c -o arcemtest-printer.obj `if test -f 'printer.c'; then $(CYGPATH_W) 'printer.c'; else $(CYGPATH_W) '$(srcdir)/printer.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-printer.Tpo $(DEPDIR)/arcemtest-printer.Po
-#	$(AM_V_CC)source='printer.c' object='arcemtest-printer.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-printer.obj `if test -f 'printer.c'; then $(CYGPATH_W) 'printer.c'; else $(CYGPATH_W) '$(srcdir)/printer.c'; fi`
-
-arcemtest-riscdev_hdfc.o: riscdev_hdfc.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-riscdev_hdfc.o -MD -MP -MF $(DEPDIR)/arcemtest-riscdev_hdfc.Tpo -c -o arcemtest-riscdev_hdfc.o `test -f 'riscdev_hdfc.c' || echo '$(srcdir)/'`riscdev_hdfc.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-riscdev_hdfc.Tpo $(DEPDIR)/arcemtest-riscdev_hdfc.Po
-#	$(AM_V_CC)source='riscdev_hdfc.c' object='arcemtest-riscdev_hdfc.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-riscdev_hdfc.o `test -f 'riscdev_hdfc.c' || echo '$(srcdir)/'`riscdev_hdfc.c
-
-arcemtest-riscdev_hdfc.obj: riscdev_hdfc.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-riscdev_hdfc.obj -MD -MP -MF $(DEPDIR)/arcemtest-riscdev_hdfc.Tpo -c -o arcemtest-riscdev_hdfc.obj `if test -f 'riscdev_hdfc.c'; then $(CYGPATH_W) 'riscdev_hdfc.c'; else $(CYGPATH_W) '$(srcdir)/riscdev_hdfc.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-riscdev_hdfc.Tpo $(DEPDIR)/arcemtest-riscdev_hdfc.Po
-#	$(AM_V_CC)source='riscdev_hdfc.c' object='arcemtest-riscdev_hdfc.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-riscdev_hdfc.obj `if test -f 'riscdev_hdfc.c'; then $(CYGPATH_W) 'riscdev_hdfc.c'; else $(CYGPATH_W) '$(srcdir)/riscdev_hdfc.c'; fi`
-
-arcemtest-romload.o: romload.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-romload.o -MD -MP -MF $(DEPDIR)/arcemtest-romload.Tpo -c -o arcemtest-romload.o `test -f 'romload.c' || echo '$(srcdir)/'`romload.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-romload.Tpo $(DEPDIR)/arcemtest-romload.Po
-#	$(AM_V_CC)source='romload.c' object='arcemtest-romload.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-romload.o `test -f 'romload.c' || echo '$(srcdir)/'`romload.c
-
-arcemtest-romload.obj: romload.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-romload.obj -MD -MP -MF $(DEPDIR)/arcemtest-romload.Tpo -c -o arcemtest-romload.obj `if test -f 'romload.c'; then $(CYGPATH_W) 'romload.c'; else $(CYGPATH_W) '$(srcdir)/romload.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-romload.Tpo $(DEPDIR)/arcemtest-romload.Po
-#	$(AM_V_CC)source='romload.c' object='arcemtest-romload.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-romload.obj `if test -f 'romload.c'; then $(CYGPATH_W) 'romload.c'; else $(CYGPATH_W) '$(srcdir)/romload.c'; fi`
-
-arcemtest-sound.o: sound.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-sound.o -MD -MP -MF $(DEPDIR)/arcemtest-sound.Tpo -c -o arcemtest-sound.o `test -f 'sound.c' || echo '$(srcdir)/'`sound.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-sound.Tpo $(DEPDIR)/arcemtest-sound.Po
-#	$(AM_V_CC)source='sound.c' object='arcemtest-sound.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-sound.o `test -f 'sound.c' || echo '$(srcdir)/'`sound.c
-
-arcemtest-sound.obj: sound.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-sound.obj -MD -MP -MF $(DEPDIR)/arcemtest-sound.Tpo -c -o arcemtest-sound.obj `if test -f 'sound.c'; then $(CYGPATH_W) 'sound.c'; else $(CYGPATH_W) '$(srcdir)/sound.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-sound.Tpo $(DEPDIR)/arcemtest-sound.Po
-#	$(AM_V_CC)source='sound.c' object='arcemtest-sound.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-sound.obj `if test -f 'sound.c'; then $(CYGPATH_W) 'sound.c'; else $(CYGPATH_W) '$(srcdir)/sound.c'; fi`
-
-arcemtest-soundopenal.o: soundopenal.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-soundopenal.o -MD -MP -MF $(DEPDIR)/arcemtest-soundopenal.Tpo -c -o arcemtest-soundopenal.o `test -f 'soundopenal.c' || echo '$(srcdir)/'`soundopenal.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-soundopenal.Tpo $(DEPDIR)/arcemtest-soundopenal.Po
-#	$(AM_V_CC)source='soundopenal.c' object='arcemtest-soundopenal.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-soundopenal.o `test -f 'soundopenal.c' || echo '$(srcdir)/'`soundopenal.c
-
-arcemtest-soundopenal.obj: soundopenal.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-soundopenal.obj -MD -MP -MF $(DEPDIR)/arcemtest-soundopenal.Tpo -c -o arcemtest-soundopenal.obj `if test -f 'soundopenal.c'; then $(CYGPATH_W) 'soundopenal.c'; else $(CYGPATH_W) '$(srcdir)/soundopenal.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-soundopenal.Tpo $(DEPDIR)/arcemtest-soundopenal.Po
-#	$(AM_V_CC)source='soundopenal.c' object='arcemtest-soundopenal.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-soundopenal.obj `if test -f 'soundopenal.c'; then $(CYGPATH_W) 'soundopenal.c'; else $(CYGPATH_W) '$(srcdir)/soundopenal.c'; fi`
-
-arcemtest-st506.o: st506.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-st506.o -MD -MP -MF $(DEPDIR)/arcemtest-st506.Tpo -c -o arcemtest-st506.o `test -f 'st506.c' || echo '$(srcdir)/'`st506.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-st506.Tpo $(DEPDIR)/arcemtest-st506.Po
-#	$(AM_V_CC)source='st506.c' object='arcemtest-st506.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-st506.o `test -f 'st506.c' || echo '$(srcdir)/'`st506.c
-
-arcemtest-st506.obj: st506.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-st506.obj -MD -MP -MF $(DEPDIR)/arcemtest-st506.Tpo -c -o arcemtest-st506.obj `if test -f 'st506.c'; then $(CYGPATH_W) 'st506.c'; else $(CYGPATH_W) '$(srcdir)/st506.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-st506.Tpo $(DEPDIR)/arcemtest-st506.Po
-#	$(AM_V_CC)source='st506.c' object='arcemtest-st506.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-st506.obj `if test -f 'st506.c'; then $(CYGPATH_W) 'st506.c'; else $(CYGPATH_W) '$(srcdir)/st506.c'; fi`
-
-arcemtest-st506_akd52.o: st506_akd52.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-st506_akd52.o -MD -MP -MF $(DEPDIR)/arcemtest-st506_akd52.Tpo -c -o arcemtest-st506_akd52.o `test -f 'st506_akd52.c' || echo '$(srcdir)/'`st506_akd52.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-st506_akd52.Tpo $(DEPDIR)/arcemtest-st506_akd52.Po
-#	$(AM_V_CC)source='st506_akd52.c' object='arcemtest-st506_akd52.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-st506_akd52.o `test -f 'st506_akd52.c' || echo '$(srcdir)/'`st506_akd52.c
-
-arcemtest-st506_akd52.obj: st506_akd52.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-st506_akd52.obj -MD -MP -MF $(DEPDIR)/arcemtest-st506_akd52.Tpo -c -o arcemtest-st506_akd52.obj `if test -f 'st506_akd52.c'; then $(CYGPATH_W) 'st506_akd52.c'; else $(CYGPATH_W) '$(srcdir)/st506_akd52.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-st506_akd52.Tpo $(DEPDIR)/arcemtest-st506_akd52.Po
-#	$(AM_V_CC)source='st506_akd52.c' object='arcemtest-st506_akd52.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-st506_akd52.obj `if test -f 'st506_akd52.c'; then $(CYGPATH_W) 'st506_akd52.c'; else $(CYGPATH_W) '$(srcdir)/st506_akd52.c'; fi`
-
-arcemtest-timer.o: timer.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-timer.o -MD -MP -MF $(DEPDIR)/arcemtest-timer.Tpo -c -o arcemtest-timer.o `test -f 'timer.c' || echo '$(srcdir)/'`timer.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-timer.Tpo $(DEPDIR)/arcemtest-timer.Po
-#	$(AM_V_CC)source='timer.c' object='arcemtest-timer.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-timer.o `test -f 'timer.c' || echo '$(srcdir)/'`timer.c
-
-arcemtest-timer.obj: timer.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-timer.obj -MD -MP -MF $(DEPDIR)/arcemtest-timer.Tpo -c -o arcemtest-timer.obj `if test -f 'timer.c'; then $(CYGPATH_W) 'timer.c'; else $(CYGPATH_W) '$(srcdir)/timer.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-timer.Tpo $(DEPDIR)/arcemtest-timer.Po
-#	$(AM_V_CC)source='timer.c' object='arcemtest-timer.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-timer.obj `if test -f 'timer.c'; then $(CYGPATH_W) 'timer.c'; else $(CYGPATH_W) '$(srcdir)/timer.c'; fi`
-
-arcemtest-vidc.o: vidc.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-vidc.o -MD -MP -MF $(DEPDIR)/arcemtest-vidc.Tpo -c -o arcemtest-vidc.o `test -f 'vidc.c' || echo '$(srcdir)/'`vidc.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-vidc.Tpo $(DEPDIR)/arcemtest-vidc.Po
-#	$(AM_V_CC)source='vidc.c' object='arcemtest-vidc.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-vidc.o `test -f 'vidc.c' || echo '$(srcdir)/'`vidc.c
-
-arcemtest-vidc.obj: vidc.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-vidc.obj -MD -MP -MF $(DEPDIR)/arcemtest-vidc.Tpo -c -o arcemtest-vidc.obj `if test -f 'vidc.c'; then $(CYGPATH_W) 'vidc.c'; else $(CYGPATH_W) '$(srcdir)/vidc.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-vidc.Tpo $(DEPDIR)/arcemtest-vidc.Po
-#	$(AM_V_CC)source='vidc.c' object='arcemtest-vidc.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-vidc.obj `if test -f 'vidc.c'; then $(CYGPATH_W) 'vidc.c'; else $(CYGPATH_W) '$(srcdir)/vidc.c'; fi`
-
-arcemtest-video_sdl2.o: video_sdl2.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-video_sdl2.o -MD -MP -MF $(DEPDIR)/arcemtest-video_sdl2.Tpo -c -o arcemtest-video_sdl2.o `test -f 'video_sdl2.c' || echo '$(srcdir)/'`video_sdl2.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-video_sdl2.Tpo $(DEPDIR)/arcemtest-video_sdl2.Po
-#	$(AM_V_CC)source='video_sdl2.c' object='arcemtest-video_sdl2.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-video_sdl2.o `test -f 'video_sdl2.c' || echo '$(srcdir)/'`video_sdl2.c
-
-arcemtest-video_sdl2.obj: video_sdl2.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-video_sdl2.obj -MD -MP -MF $(DEPDIR)/arcemtest-video_sdl2.Tpo -c -o arcemtest-video_sdl2.obj `if test -f 'video_sdl2.c'; then $(CYGPATH_W) 'video_sdl2.c'; else $(CYGPATH_W) '$(srcdir)/video_sdl2.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-video_sdl2.Tpo $(DEPDIR)/arcemtest-video_sdl2.Po
-#	$(AM_V_CC)source='video_sdl2.c' object='arcemtest-video_sdl2.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-video_sdl2.obj `if test -f 'video_sdl2.c'; then $(CYGPATH_W) 'video_sdl2.c'; else $(CYGPATH_W) '$(srcdir)/video_sdl2.c'; fi`
-
-arcemtest-wd1770.o: wd1770.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-wd1770.o -MD -MP -MF $(DEPDIR)/arcemtest-wd1770.Tpo -c -o arcemtest-wd1770.o `test -f 'wd1770.c' || echo '$(srcdir)/'`wd1770.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-wd1770.Tpo $(DEPDIR)/arcemtest-wd1770.Po
-#	$(AM_V_CC)source='wd1770.c' object='arcemtest-wd1770.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-wd1770.o `test -f 'wd1770.c' || echo '$(srcdir)/'`wd1770.c
-
-arcemtest-wd1770.obj: wd1770.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-wd1770.obj -MD -MP -MF $(DEPDIR)/arcemtest-wd1770.Tpo -c -o arcemtest-wd1770.obj `if test -f 'wd1770.c'; then $(CYGPATH_W) 'wd1770.c'; else $(CYGPATH_W) '$(srcdir)/wd1770.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-wd1770.Tpo $(DEPDIR)/arcemtest-wd1770.Po
-#	$(AM_V_CC)source='wd1770.c' object='arcemtest-wd1770.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-wd1770.obj `if test -f 'wd1770.c'; then $(CYGPATH_W) 'wd1770.c'; else $(CYGPATH_W) '$(srcdir)/wd1770.c'; fi`
-
-arcemtest-wx-sdl2-joystick.o: wx-sdl2-joystick.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-wx-sdl2-joystick.o -MD -MP -MF $(DEPDIR)/arcemtest-wx-sdl2-joystick.Tpo -c -o arcemtest-wx-sdl2-joystick.o `test -f 'wx-sdl2-joystick.c' || echo '$(srcdir)/'`wx-sdl2-joystick.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-wx-sdl2-joystick.Tpo $(DEPDIR)/arcemtest-wx-sdl2-joystick.Po
-#	$(AM_V_CC)source='wx-sdl2-joystick.c' object='arcemtest-wx-sdl2-joystick.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-wx-sdl2-joystick.o `test -f 'wx-sdl2-joystick.c' || echo '$(srcdir)/'`wx-sdl2-joystick.c
-
-arcemtest-wx-sdl2-joystick.obj: wx-sdl2-joystick.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-wx-sdl2-joystick.obj -MD -MP -MF $(DEPDIR)/arcemtest-wx-sdl2-joystick.Tpo -c -o arcemtest-wx-sdl2-joystick.obj `if test -f 'wx-sdl2-joystick.c'; then $(CYGPATH_W) 'wx-sdl2-joystick.c'; else $(CYGPATH_W) '$(srcdir)/wx-sdl2-joystick.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-wx-sdl2-joystick.Tpo $(DEPDIR)/arcemtest-wx-sdl2-joystick.Po
-#	$(AM_V_CC)source='wx-sdl2-joystick.c' object='arcemtest-wx-sdl2-joystick.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-wx-sdl2-joystick.obj `if test -f 'wx-sdl2-joystick.c'; then $(CYGPATH_W) 'wx-sdl2-joystick.c'; else $(CYGPATH_W) '$(srcdir)/wx-sdl2-joystick.c'; fi`
-
-arcemtest-arctest.o: arctest.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-arctest.o -MD -MP -MF $(DEPDIR)/arcemtest-arctest.Tpo -c -o arcemtest-arctest.o `test -f 'arctest.c' || echo '$(srcdir)/'`arctest.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-arctest.Tpo $(DEPDIR)/arcemtest-arctest.Po
-#	$(AM_V_CC)source='arctest.c' object='arcemtest-arctest.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-arctest.o `test -f 'arctest.c' || echo '$(srcdir)/'`arctest.c
-
-arcemtest-arctest.obj: arctest.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-arctest.obj -MD -MP -MF $(DEPDIR)/arcemtest-arctest.Tpo -c -o arcemtest-arctest.obj `if test -f 'arctest.c'; then $(CYGPATH_W) 'arctest.c'; else $(CYGPATH_W) '$(srcdir)/arctest.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-arctest.Tpo $(DEPDIR)/arcemtest-arctest.Po
-#	$(AM_V_CC)source='arctest.c' object='arcemtest-arctest.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-arctest.obj `if test -f 'arctest.c'; then $(CYGPATH_W) 'arctest.c'; else $(CYGPATH_W) '$(srcdir)/arctest.c'; fi`
-
-arcemtest-hostfs-unix.o: hostfs-unix.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-hostfs-unix.o -MD -MP -MF $(DEPDIR)/arcemtest-hostfs-unix.Tpo -c -o arcemtest-hostfs-unix.o `test -f 'hostfs-unix.c' || echo '$(srcdir)/'`hostfs-unix.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-hostfs-unix.Tpo $(DEPDIR)/arcemtest-hostfs-unix.Po
-#	$(AM_V_CC)source='hostfs-unix.c' object='arcemtest-hostfs-unix.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-hostfs-unix.o `test -f 'hostfs-unix.c' || echo '$(srcdir)/'`hostfs-unix.c
-
-arcemtest-hostfs-unix.obj: hostfs-unix.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-hostfs-unix.obj -MD -MP -MF $(DEPDIR)/arcemtest-hostfs-unix.Tpo -c -o arcemtest-hostfs-unix.obj `if test -f 'hostfs-unix.c'; then $(CYGPATH_W) 'hostfs-unix.c'; else $(CYGPATH_W) '$(srcdir)/hostfs-unix.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-hostfs-unix.Tpo $(DEPDIR)/arcemtest-hostfs-unix.Po
-#	$(AM_V_CC)source='hostfs-unix.c' object='arcemtest-hostfs-unix.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-hostfs-unix.obj `if test -f 'hostfs-unix.c'; then $(CYGPATH_W) 'hostfs-unix.c'; else $(CYGPATH_W) '$(srcdir)/hostfs-unix.c'; fi`
-
-arcemtest-podules-linux.o: podules-linux.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-podules-linux.o -MD -MP -MF $(DEPDIR)/arcemtest-podules-linux.Tpo -c -o arcemtest-podules-linux.o `test -f 'podules-linux.c' || echo '$(srcdir)/'`podules-linux.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-podules-linux.Tpo $(DEPDIR)/arcemtest-podules-linux.Po
-#	$(AM_V_CC)source='podules-linux.c' object='arcemtest-podules-linux.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-podules-linux.o `test -f 'podules-linux.c' || echo '$(srcdir)/'`podules-linux.c
-
-arcemtest-podules-linux.obj: podules-linux.c
-	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -MT arcemtest-podules-linux.obj -MD -MP -MF $(DEPDIR)/arcemtest-podules-linux.Tpo -c -o arcemtest-podules-linux.obj `if test -f 'podules-linux.c'; then $(CYGPATH_W) 'podules-linux.c'; else $(CYGPATH_W) '$(srcdir)/podules-linux.c'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/arcemtest-podules-linux.Tpo $(DEPDIR)/arcemtest-podules-linux.Po
-#	$(AM_V_CC)source='podules-linux.c' object='arcemtest-podules-linux.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arcemtest_CFLAGS) $(CFLAGS) -c -o arcemtest-podules-linux.obj `if test -f 'podules-linux.c'; then $(CYGPATH_W) 'podules-linux.c'; else $(CYGPATH_W) '$(srcdir)/podules-linux.c'; fi`
 
 arculator-82c711.o: 82c711.c
 	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculator_CFLAGS) $(CFLAGS) -MT arculator-82c711.o -MD -MP -MF $(DEPDIR)/arculator-82c711.Tpo -c -o arculator-82c711.o `test -f '82c711.c' || echo '$(srcdir)/'`82c711.c
@@ -2372,6 +1624,776 @@ arculator-podules-macosx.obj: podules-macosx.c
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
 #	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculator_CFLAGS) $(CFLAGS) -c -o arculator-podules-macosx.obj `if test -f 'podules-macosx.c'; then $(CYGPATH_W) 'podules-macosx.c'; else $(CYGPATH_W) '$(srcdir)/podules-macosx.c'; fi`
 
+arculatorweb-82c711.o: 82c711.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-82c711.o -MD -MP -MF $(DEPDIR)/arculatorweb-82c711.Tpo -c -o arculatorweb-82c711.o `test -f '82c711.c' || echo '$(srcdir)/'`82c711.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-82c711.Tpo $(DEPDIR)/arculatorweb-82c711.Po
+#	$(AM_V_CC)source='82c711.c' object='arculatorweb-82c711.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-82c711.o `test -f '82c711.c' || echo '$(srcdir)/'`82c711.c
+
+arculatorweb-82c711.obj: 82c711.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-82c711.obj -MD -MP -MF $(DEPDIR)/arculatorweb-82c711.Tpo -c -o arculatorweb-82c711.obj `if test -f '82c711.c'; then $(CYGPATH_W) '82c711.c'; else $(CYGPATH_W) '$(srcdir)/82c711.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-82c711.Tpo $(DEPDIR)/arculatorweb-82c711.Po
+#	$(AM_V_CC)source='82c711.c' object='arculatorweb-82c711.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-82c711.obj `if test -f '82c711.c'; then $(CYGPATH_W) '82c711.c'; else $(CYGPATH_W) '$(srcdir)/82c711.c'; fi`
+
+arculatorweb-82c711_fdc.o: 82c711_fdc.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-82c711_fdc.o -MD -MP -MF $(DEPDIR)/arculatorweb-82c711_fdc.Tpo -c -o arculatorweb-82c711_fdc.o `test -f '82c711_fdc.c' || echo '$(srcdir)/'`82c711_fdc.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-82c711_fdc.Tpo $(DEPDIR)/arculatorweb-82c711_fdc.Po
+#	$(AM_V_CC)source='82c711_fdc.c' object='arculatorweb-82c711_fdc.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-82c711_fdc.o `test -f '82c711_fdc.c' || echo '$(srcdir)/'`82c711_fdc.c
+
+arculatorweb-82c711_fdc.obj: 82c711_fdc.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-82c711_fdc.obj -MD -MP -MF $(DEPDIR)/arculatorweb-82c711_fdc.Tpo -c -o arculatorweb-82c711_fdc.obj `if test -f '82c711_fdc.c'; then $(CYGPATH_W) '82c711_fdc.c'; else $(CYGPATH_W) '$(srcdir)/82c711_fdc.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-82c711_fdc.Tpo $(DEPDIR)/arculatorweb-82c711_fdc.Po
+#	$(AM_V_CC)source='82c711_fdc.c' object='arculatorweb-82c711_fdc.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-82c711_fdc.obj `if test -f '82c711_fdc.c'; then $(CYGPATH_W) '82c711_fdc.c'; else $(CYGPATH_W) '$(srcdir)/82c711_fdc.c'; fi`
+
+arculatorweb-arm.o: arm.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-arm.o -MD -MP -MF $(DEPDIR)/arculatorweb-arm.Tpo -c -o arculatorweb-arm.o `test -f 'arm.c' || echo '$(srcdir)/'`arm.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-arm.Tpo $(DEPDIR)/arculatorweb-arm.Po
+#	$(AM_V_CC)source='arm.c' object='arculatorweb-arm.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-arm.o `test -f 'arm.c' || echo '$(srcdir)/'`arm.c
+
+arculatorweb-arm.obj: arm.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-arm.obj -MD -MP -MF $(DEPDIR)/arculatorweb-arm.Tpo -c -o arculatorweb-arm.obj `if test -f 'arm.c'; then $(CYGPATH_W) 'arm.c'; else $(CYGPATH_W) '$(srcdir)/arm.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-arm.Tpo $(DEPDIR)/arculatorweb-arm.Po
+#	$(AM_V_CC)source='arm.c' object='arculatorweb-arm.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-arm.obj `if test -f 'arm.c'; then $(CYGPATH_W) 'arm.c'; else $(CYGPATH_W) '$(srcdir)/arm.c'; fi`
+
+arculatorweb-bmu.o: bmu.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-bmu.o -MD -MP -MF $(DEPDIR)/arculatorweb-bmu.Tpo -c -o arculatorweb-bmu.o `test -f 'bmu.c' || echo '$(srcdir)/'`bmu.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-bmu.Tpo $(DEPDIR)/arculatorweb-bmu.Po
+#	$(AM_V_CC)source='bmu.c' object='arculatorweb-bmu.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-bmu.o `test -f 'bmu.c' || echo '$(srcdir)/'`bmu.c
+
+arculatorweb-bmu.obj: bmu.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-bmu.obj -MD -MP -MF $(DEPDIR)/arculatorweb-bmu.Tpo -c -o arculatorweb-bmu.obj `if test -f 'bmu.c'; then $(CYGPATH_W) 'bmu.c'; else $(CYGPATH_W) '$(srcdir)/bmu.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-bmu.Tpo $(DEPDIR)/arculatorweb-bmu.Po
+#	$(AM_V_CC)source='bmu.c' object='arculatorweb-bmu.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-bmu.obj `if test -f 'bmu.c'; then $(CYGPATH_W) 'bmu.c'; else $(CYGPATH_W) '$(srcdir)/bmu.c'; fi`
+
+arculatorweb-cmos.o: cmos.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-cmos.o -MD -MP -MF $(DEPDIR)/arculatorweb-cmos.Tpo -c -o arculatorweb-cmos.o `test -f 'cmos.c' || echo '$(srcdir)/'`cmos.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-cmos.Tpo $(DEPDIR)/arculatorweb-cmos.Po
+#	$(AM_V_CC)source='cmos.c' object='arculatorweb-cmos.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-cmos.o `test -f 'cmos.c' || echo '$(srcdir)/'`cmos.c
+
+arculatorweb-cmos.obj: cmos.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-cmos.obj -MD -MP -MF $(DEPDIR)/arculatorweb-cmos.Tpo -c -o arculatorweb-cmos.obj `if test -f 'cmos.c'; then $(CYGPATH_W) 'cmos.c'; else $(CYGPATH_W) '$(srcdir)/cmos.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-cmos.Tpo $(DEPDIR)/arculatorweb-cmos.Po
+#	$(AM_V_CC)source='cmos.c' object='arculatorweb-cmos.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-cmos.obj `if test -f 'cmos.c'; then $(CYGPATH_W) 'cmos.c'; else $(CYGPATH_W) '$(srcdir)/cmos.c'; fi`
+
+arculatorweb-colourcard.o: colourcard.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-colourcard.o -MD -MP -MF $(DEPDIR)/arculatorweb-colourcard.Tpo -c -o arculatorweb-colourcard.o `test -f 'colourcard.c' || echo '$(srcdir)/'`colourcard.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-colourcard.Tpo $(DEPDIR)/arculatorweb-colourcard.Po
+#	$(AM_V_CC)source='colourcard.c' object='arculatorweb-colourcard.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-colourcard.o `test -f 'colourcard.c' || echo '$(srcdir)/'`colourcard.c
+
+arculatorweb-colourcard.obj: colourcard.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-colourcard.obj -MD -MP -MF $(DEPDIR)/arculatorweb-colourcard.Tpo -c -o arculatorweb-colourcard.obj `if test -f 'colourcard.c'; then $(CYGPATH_W) 'colourcard.c'; else $(CYGPATH_W) '$(srcdir)/colourcard.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-colourcard.Tpo $(DEPDIR)/arculatorweb-colourcard.Po
+#	$(AM_V_CC)source='colourcard.c' object='arculatorweb-colourcard.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-colourcard.obj `if test -f 'colourcard.c'; then $(CYGPATH_W) 'colourcard.c'; else $(CYGPATH_W) '$(srcdir)/colourcard.c'; fi`
+
+arculatorweb-config.o: config.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-config.o -MD -MP -MF $(DEPDIR)/arculatorweb-config.Tpo -c -o arculatorweb-config.o `test -f 'config.c' || echo '$(srcdir)/'`config.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-config.Tpo $(DEPDIR)/arculatorweb-config.Po
+#	$(AM_V_CC)source='config.c' object='arculatorweb-config.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-config.o `test -f 'config.c' || echo '$(srcdir)/'`config.c
+
+arculatorweb-config.obj: config.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-config.obj -MD -MP -MF $(DEPDIR)/arculatorweb-config.Tpo -c -o arculatorweb-config.obj `if test -f 'config.c'; then $(CYGPATH_W) 'config.c'; else $(CYGPATH_W) '$(srcdir)/config.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-config.Tpo $(DEPDIR)/arculatorweb-config.Po
+#	$(AM_V_CC)source='config.c' object='arculatorweb-config.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-config.obj `if test -f 'config.c'; then $(CYGPATH_W) 'config.c'; else $(CYGPATH_W) '$(srcdir)/config.c'; fi`
+
+arculatorweb-cp15.o: cp15.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-cp15.o -MD -MP -MF $(DEPDIR)/arculatorweb-cp15.Tpo -c -o arculatorweb-cp15.o `test -f 'cp15.c' || echo '$(srcdir)/'`cp15.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-cp15.Tpo $(DEPDIR)/arculatorweb-cp15.Po
+#	$(AM_V_CC)source='cp15.c' object='arculatorweb-cp15.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-cp15.o `test -f 'cp15.c' || echo '$(srcdir)/'`cp15.c
+
+arculatorweb-cp15.obj: cp15.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-cp15.obj -MD -MP -MF $(DEPDIR)/arculatorweb-cp15.Tpo -c -o arculatorweb-cp15.obj `if test -f 'cp15.c'; then $(CYGPATH_W) 'cp15.c'; else $(CYGPATH_W) '$(srcdir)/cp15.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-cp15.Tpo $(DEPDIR)/arculatorweb-cp15.Po
+#	$(AM_V_CC)source='cp15.c' object='arculatorweb-cp15.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-cp15.obj `if test -f 'cp15.c'; then $(CYGPATH_W) 'cp15.c'; else $(CYGPATH_W) '$(srcdir)/cp15.c'; fi`
+
+arculatorweb-ddnoise.o: ddnoise.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ddnoise.o -MD -MP -MF $(DEPDIR)/arculatorweb-ddnoise.Tpo -c -o arculatorweb-ddnoise.o `test -f 'ddnoise.c' || echo '$(srcdir)/'`ddnoise.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ddnoise.Tpo $(DEPDIR)/arculatorweb-ddnoise.Po
+#	$(AM_V_CC)source='ddnoise.c' object='arculatorweb-ddnoise.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ddnoise.o `test -f 'ddnoise.c' || echo '$(srcdir)/'`ddnoise.c
+
+arculatorweb-ddnoise.obj: ddnoise.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ddnoise.obj -MD -MP -MF $(DEPDIR)/arculatorweb-ddnoise.Tpo -c -o arculatorweb-ddnoise.obj `if test -f 'ddnoise.c'; then $(CYGPATH_W) 'ddnoise.c'; else $(CYGPATH_W) '$(srcdir)/ddnoise.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ddnoise.Tpo $(DEPDIR)/arculatorweb-ddnoise.Po
+#	$(AM_V_CC)source='ddnoise.c' object='arculatorweb-ddnoise.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ddnoise.obj `if test -f 'ddnoise.c'; then $(CYGPATH_W) 'ddnoise.c'; else $(CYGPATH_W) '$(srcdir)/ddnoise.c'; fi`
+
+arculatorweb-disc.o: disc.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-disc.o -MD -MP -MF $(DEPDIR)/arculatorweb-disc.Tpo -c -o arculatorweb-disc.o `test -f 'disc.c' || echo '$(srcdir)/'`disc.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-disc.Tpo $(DEPDIR)/arculatorweb-disc.Po
+#	$(AM_V_CC)source='disc.c' object='arculatorweb-disc.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-disc.o `test -f 'disc.c' || echo '$(srcdir)/'`disc.c
+
+arculatorweb-disc.obj: disc.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-disc.obj -MD -MP -MF $(DEPDIR)/arculatorweb-disc.Tpo -c -o arculatorweb-disc.obj `if test -f 'disc.c'; then $(CYGPATH_W) 'disc.c'; else $(CYGPATH_W) '$(srcdir)/disc.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-disc.Tpo $(DEPDIR)/arculatorweb-disc.Po
+#	$(AM_V_CC)source='disc.c' object='arculatorweb-disc.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-disc.obj `if test -f 'disc.c'; then $(CYGPATH_W) 'disc.c'; else $(CYGPATH_W) '$(srcdir)/disc.c'; fi`
+
+arculatorweb-disc_adf.o: disc_adf.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-disc_adf.o -MD -MP -MF $(DEPDIR)/arculatorweb-disc_adf.Tpo -c -o arculatorweb-disc_adf.o `test -f 'disc_adf.c' || echo '$(srcdir)/'`disc_adf.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-disc_adf.Tpo $(DEPDIR)/arculatorweb-disc_adf.Po
+#	$(AM_V_CC)source='disc_adf.c' object='arculatorweb-disc_adf.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-disc_adf.o `test -f 'disc_adf.c' || echo '$(srcdir)/'`disc_adf.c
+
+arculatorweb-disc_adf.obj: disc_adf.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-disc_adf.obj -MD -MP -MF $(DEPDIR)/arculatorweb-disc_adf.Tpo -c -o arculatorweb-disc_adf.obj `if test -f 'disc_adf.c'; then $(CYGPATH_W) 'disc_adf.c'; else $(CYGPATH_W) '$(srcdir)/disc_adf.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-disc_adf.Tpo $(DEPDIR)/arculatorweb-disc_adf.Po
+#	$(AM_V_CC)source='disc_adf.c' object='arculatorweb-disc_adf.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-disc_adf.obj `if test -f 'disc_adf.c'; then $(CYGPATH_W) 'disc_adf.c'; else $(CYGPATH_W) '$(srcdir)/disc_adf.c'; fi`
+
+arculatorweb-disc_apd.o: disc_apd.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-disc_apd.o -MD -MP -MF $(DEPDIR)/arculatorweb-disc_apd.Tpo -c -o arculatorweb-disc_apd.o `test -f 'disc_apd.c' || echo '$(srcdir)/'`disc_apd.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-disc_apd.Tpo $(DEPDIR)/arculatorweb-disc_apd.Po
+#	$(AM_V_CC)source='disc_apd.c' object='arculatorweb-disc_apd.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-disc_apd.o `test -f 'disc_apd.c' || echo '$(srcdir)/'`disc_apd.c
+
+arculatorweb-disc_apd.obj: disc_apd.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-disc_apd.obj -MD -MP -MF $(DEPDIR)/arculatorweb-disc_apd.Tpo -c -o arculatorweb-disc_apd.obj `if test -f 'disc_apd.c'; then $(CYGPATH_W) 'disc_apd.c'; else $(CYGPATH_W) '$(srcdir)/disc_apd.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-disc_apd.Tpo $(DEPDIR)/arculatorweb-disc_apd.Po
+#	$(AM_V_CC)source='disc_apd.c' object='arculatorweb-disc_apd.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-disc_apd.obj `if test -f 'disc_apd.c'; then $(CYGPATH_W) 'disc_apd.c'; else $(CYGPATH_W) '$(srcdir)/disc_apd.c'; fi`
+
+arculatorweb-disc_fdi.o: disc_fdi.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-disc_fdi.o -MD -MP -MF $(DEPDIR)/arculatorweb-disc_fdi.Tpo -c -o arculatorweb-disc_fdi.o `test -f 'disc_fdi.c' || echo '$(srcdir)/'`disc_fdi.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-disc_fdi.Tpo $(DEPDIR)/arculatorweb-disc_fdi.Po
+#	$(AM_V_CC)source='disc_fdi.c' object='arculatorweb-disc_fdi.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-disc_fdi.o `test -f 'disc_fdi.c' || echo '$(srcdir)/'`disc_fdi.c
+
+arculatorweb-disc_fdi.obj: disc_fdi.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-disc_fdi.obj -MD -MP -MF $(DEPDIR)/arculatorweb-disc_fdi.Tpo -c -o arculatorweb-disc_fdi.obj `if test -f 'disc_fdi.c'; then $(CYGPATH_W) 'disc_fdi.c'; else $(CYGPATH_W) '$(srcdir)/disc_fdi.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-disc_fdi.Tpo $(DEPDIR)/arculatorweb-disc_fdi.Po
+#	$(AM_V_CC)source='disc_fdi.c' object='arculatorweb-disc_fdi.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-disc_fdi.obj `if test -f 'disc_fdi.c'; then $(CYGPATH_W) 'disc_fdi.c'; else $(CYGPATH_W) '$(srcdir)/disc_fdi.c'; fi`
+
+arculatorweb-disc_hfe.o: disc_hfe.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-disc_hfe.o -MD -MP -MF $(DEPDIR)/arculatorweb-disc_hfe.Tpo -c -o arculatorweb-disc_hfe.o `test -f 'disc_hfe.c' || echo '$(srcdir)/'`disc_hfe.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-disc_hfe.Tpo $(DEPDIR)/arculatorweb-disc_hfe.Po
+#	$(AM_V_CC)source='disc_hfe.c' object='arculatorweb-disc_hfe.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-disc_hfe.o `test -f 'disc_hfe.c' || echo '$(srcdir)/'`disc_hfe.c
+
+arculatorweb-disc_hfe.obj: disc_hfe.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-disc_hfe.obj -MD -MP -MF $(DEPDIR)/arculatorweb-disc_hfe.Tpo -c -o arculatorweb-disc_hfe.obj `if test -f 'disc_hfe.c'; then $(CYGPATH_W) 'disc_hfe.c'; else $(CYGPATH_W) '$(srcdir)/disc_hfe.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-disc_hfe.Tpo $(DEPDIR)/arculatorweb-disc_hfe.Po
+#	$(AM_V_CC)source='disc_hfe.c' object='arculatorweb-disc_hfe.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-disc_hfe.obj `if test -f 'disc_hfe.c'; then $(CYGPATH_W) 'disc_hfe.c'; else $(CYGPATH_W) '$(srcdir)/disc_hfe.c'; fi`
+
+arculatorweb-disc_jfd.o: disc_jfd.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-disc_jfd.o -MD -MP -MF $(DEPDIR)/arculatorweb-disc_jfd.Tpo -c -o arculatorweb-disc_jfd.o `test -f 'disc_jfd.c' || echo '$(srcdir)/'`disc_jfd.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-disc_jfd.Tpo $(DEPDIR)/arculatorweb-disc_jfd.Po
+#	$(AM_V_CC)source='disc_jfd.c' object='arculatorweb-disc_jfd.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-disc_jfd.o `test -f 'disc_jfd.c' || echo '$(srcdir)/'`disc_jfd.c
+
+arculatorweb-disc_jfd.obj: disc_jfd.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-disc_jfd.obj -MD -MP -MF $(DEPDIR)/arculatorweb-disc_jfd.Tpo -c -o arculatorweb-disc_jfd.obj `if test -f 'disc_jfd.c'; then $(CYGPATH_W) 'disc_jfd.c'; else $(CYGPATH_W) '$(srcdir)/disc_jfd.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-disc_jfd.Tpo $(DEPDIR)/arculatorweb-disc_jfd.Po
+#	$(AM_V_CC)source='disc_jfd.c' object='arculatorweb-disc_jfd.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-disc_jfd.obj `if test -f 'disc_jfd.c'; then $(CYGPATH_W) 'disc_jfd.c'; else $(CYGPATH_W) '$(srcdir)/disc_jfd.c'; fi`
+
+arculatorweb-disc_mfm_common.o: disc_mfm_common.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-disc_mfm_common.o -MD -MP -MF $(DEPDIR)/arculatorweb-disc_mfm_common.Tpo -c -o arculatorweb-disc_mfm_common.o `test -f 'disc_mfm_common.c' || echo '$(srcdir)/'`disc_mfm_common.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-disc_mfm_common.Tpo $(DEPDIR)/arculatorweb-disc_mfm_common.Po
+#	$(AM_V_CC)source='disc_mfm_common.c' object='arculatorweb-disc_mfm_common.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-disc_mfm_common.o `test -f 'disc_mfm_common.c' || echo '$(srcdir)/'`disc_mfm_common.c
+
+arculatorweb-disc_mfm_common.obj: disc_mfm_common.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-disc_mfm_common.obj -MD -MP -MF $(DEPDIR)/arculatorweb-disc_mfm_common.Tpo -c -o arculatorweb-disc_mfm_common.obj `if test -f 'disc_mfm_common.c'; then $(CYGPATH_W) 'disc_mfm_common.c'; else $(CYGPATH_W) '$(srcdir)/disc_mfm_common.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-disc_mfm_common.Tpo $(DEPDIR)/arculatorweb-disc_mfm_common.Po
+#	$(AM_V_CC)source='disc_mfm_common.c' object='arculatorweb-disc_mfm_common.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-disc_mfm_common.obj `if test -f 'disc_mfm_common.c'; then $(CYGPATH_W) 'disc_mfm_common.c'; else $(CYGPATH_W) '$(srcdir)/disc_mfm_common.c'; fi`
+
+arculatorweb-ds2401.o: ds2401.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ds2401.o -MD -MP -MF $(DEPDIR)/arculatorweb-ds2401.Tpo -c -o arculatorweb-ds2401.o `test -f 'ds2401.c' || echo '$(srcdir)/'`ds2401.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ds2401.Tpo $(DEPDIR)/arculatorweb-ds2401.Po
+#	$(AM_V_CC)source='ds2401.c' object='arculatorweb-ds2401.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ds2401.o `test -f 'ds2401.c' || echo '$(srcdir)/'`ds2401.c
+
+arculatorweb-ds2401.obj: ds2401.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ds2401.obj -MD -MP -MF $(DEPDIR)/arculatorweb-ds2401.Tpo -c -o arculatorweb-ds2401.obj `if test -f 'ds2401.c'; then $(CYGPATH_W) 'ds2401.c'; else $(CYGPATH_W) '$(srcdir)/ds2401.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ds2401.Tpo $(DEPDIR)/arculatorweb-ds2401.Po
+#	$(AM_V_CC)source='ds2401.c' object='arculatorweb-ds2401.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ds2401.obj `if test -f 'ds2401.c'; then $(CYGPATH_W) 'ds2401.c'; else $(CYGPATH_W) '$(srcdir)/ds2401.c'; fi`
+
+arculatorweb-eterna.o: eterna.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-eterna.o -MD -MP -MF $(DEPDIR)/arculatorweb-eterna.Tpo -c -o arculatorweb-eterna.o `test -f 'eterna.c' || echo '$(srcdir)/'`eterna.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-eterna.Tpo $(DEPDIR)/arculatorweb-eterna.Po
+#	$(AM_V_CC)source='eterna.c' object='arculatorweb-eterna.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-eterna.o `test -f 'eterna.c' || echo '$(srcdir)/'`eterna.c
+
+arculatorweb-eterna.obj: eterna.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-eterna.obj -MD -MP -MF $(DEPDIR)/arculatorweb-eterna.Tpo -c -o arculatorweb-eterna.obj `if test -f 'eterna.c'; then $(CYGPATH_W) 'eterna.c'; else $(CYGPATH_W) '$(srcdir)/eterna.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-eterna.Tpo $(DEPDIR)/arculatorweb-eterna.Po
+#	$(AM_V_CC)source='eterna.c' object='arculatorweb-eterna.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-eterna.obj `if test -f 'eterna.c'; then $(CYGPATH_W) 'eterna.c'; else $(CYGPATH_W) '$(srcdir)/eterna.c'; fi`
+
+arculatorweb-fdi2raw.o: fdi2raw.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-fdi2raw.o -MD -MP -MF $(DEPDIR)/arculatorweb-fdi2raw.Tpo -c -o arculatorweb-fdi2raw.o `test -f 'fdi2raw.c' || echo '$(srcdir)/'`fdi2raw.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-fdi2raw.Tpo $(DEPDIR)/arculatorweb-fdi2raw.Po
+#	$(AM_V_CC)source='fdi2raw.c' object='arculatorweb-fdi2raw.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-fdi2raw.o `test -f 'fdi2raw.c' || echo '$(srcdir)/'`fdi2raw.c
+
+arculatorweb-fdi2raw.obj: fdi2raw.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-fdi2raw.obj -MD -MP -MF $(DEPDIR)/arculatorweb-fdi2raw.Tpo -c -o arculatorweb-fdi2raw.obj `if test -f 'fdi2raw.c'; then $(CYGPATH_W) 'fdi2raw.c'; else $(CYGPATH_W) '$(srcdir)/fdi2raw.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-fdi2raw.Tpo $(DEPDIR)/arculatorweb-fdi2raw.Po
+#	$(AM_V_CC)source='fdi2raw.c' object='arculatorweb-fdi2raw.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-fdi2raw.obj `if test -f 'fdi2raw.c'; then $(CYGPATH_W) 'fdi2raw.c'; else $(CYGPATH_W) '$(srcdir)/fdi2raw.c'; fi`
+
+arculatorweb-fpa.o: fpa.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-fpa.o -MD -MP -MF $(DEPDIR)/arculatorweb-fpa.Tpo -c -o arculatorweb-fpa.o `test -f 'fpa.c' || echo '$(srcdir)/'`fpa.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-fpa.Tpo $(DEPDIR)/arculatorweb-fpa.Po
+#	$(AM_V_CC)source='fpa.c' object='arculatorweb-fpa.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-fpa.o `test -f 'fpa.c' || echo '$(srcdir)/'`fpa.c
+
+arculatorweb-fpa.obj: fpa.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-fpa.obj -MD -MP -MF $(DEPDIR)/arculatorweb-fpa.Tpo -c -o arculatorweb-fpa.obj `if test -f 'fpa.c'; then $(CYGPATH_W) 'fpa.c'; else $(CYGPATH_W) '$(srcdir)/fpa.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-fpa.Tpo $(DEPDIR)/arculatorweb-fpa.Po
+#	$(AM_V_CC)source='fpa.c' object='arculatorweb-fpa.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-fpa.obj `if test -f 'fpa.c'; then $(CYGPATH_W) 'fpa.c'; else $(CYGPATH_W) '$(srcdir)/fpa.c'; fi`
+
+arculatorweb-g16.o: g16.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-g16.o -MD -MP -MF $(DEPDIR)/arculatorweb-g16.Tpo -c -o arculatorweb-g16.o `test -f 'g16.c' || echo '$(srcdir)/'`g16.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-g16.Tpo $(DEPDIR)/arculatorweb-g16.Po
+#	$(AM_V_CC)source='g16.c' object='arculatorweb-g16.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-g16.o `test -f 'g16.c' || echo '$(srcdir)/'`g16.c
+
+arculatorweb-g16.obj: g16.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-g16.obj -MD -MP -MF $(DEPDIR)/arculatorweb-g16.Tpo -c -o arculatorweb-g16.obj `if test -f 'g16.c'; then $(CYGPATH_W) 'g16.c'; else $(CYGPATH_W) '$(srcdir)/g16.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-g16.Tpo $(DEPDIR)/arculatorweb-g16.Po
+#	$(AM_V_CC)source='g16.c' object='arculatorweb-g16.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-g16.obj `if test -f 'g16.c'; then $(CYGPATH_W) 'g16.c'; else $(CYGPATH_W) '$(srcdir)/g16.c'; fi`
+
+arculatorweb-g332.o: g332.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-g332.o -MD -MP -MF $(DEPDIR)/arculatorweb-g332.Tpo -c -o arculatorweb-g332.o `test -f 'g332.c' || echo '$(srcdir)/'`g332.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-g332.Tpo $(DEPDIR)/arculatorweb-g332.Po
+#	$(AM_V_CC)source='g332.c' object='arculatorweb-g332.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-g332.o `test -f 'g332.c' || echo '$(srcdir)/'`g332.c
+
+arculatorweb-g332.obj: g332.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-g332.obj -MD -MP -MF $(DEPDIR)/arculatorweb-g332.Tpo -c -o arculatorweb-g332.obj `if test -f 'g332.c'; then $(CYGPATH_W) 'g332.c'; else $(CYGPATH_W) '$(srcdir)/g332.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-g332.Tpo $(DEPDIR)/arculatorweb-g332.Po
+#	$(AM_V_CC)source='g332.c' object='arculatorweb-g332.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-g332.obj `if test -f 'g332.c'; then $(CYGPATH_W) 'g332.c'; else $(CYGPATH_W) '$(srcdir)/g332.c'; fi`
+
+arculatorweb-hostfs.o: hostfs.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-hostfs.o -MD -MP -MF $(DEPDIR)/arculatorweb-hostfs.Tpo -c -o arculatorweb-hostfs.o `test -f 'hostfs.c' || echo '$(srcdir)/'`hostfs.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-hostfs.Tpo $(DEPDIR)/arculatorweb-hostfs.Po
+#	$(AM_V_CC)source='hostfs.c' object='arculatorweb-hostfs.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-hostfs.o `test -f 'hostfs.c' || echo '$(srcdir)/'`hostfs.c
+
+arculatorweb-hostfs.obj: hostfs.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-hostfs.obj -MD -MP -MF $(DEPDIR)/arculatorweb-hostfs.Tpo -c -o arculatorweb-hostfs.obj `if test -f 'hostfs.c'; then $(CYGPATH_W) 'hostfs.c'; else $(CYGPATH_W) '$(srcdir)/hostfs.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-hostfs.Tpo $(DEPDIR)/arculatorweb-hostfs.Po
+#	$(AM_V_CC)source='hostfs.c' object='arculatorweb-hostfs.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-hostfs.obj `if test -f 'hostfs.c'; then $(CYGPATH_W) 'hostfs.c'; else $(CYGPATH_W) '$(srcdir)/hostfs.c'; fi`
+
+arculatorweb-ide.o: ide.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ide.o -MD -MP -MF $(DEPDIR)/arculatorweb-ide.Tpo -c -o arculatorweb-ide.o `test -f 'ide.c' || echo '$(srcdir)/'`ide.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ide.Tpo $(DEPDIR)/arculatorweb-ide.Po
+#	$(AM_V_CC)source='ide.c' object='arculatorweb-ide.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ide.o `test -f 'ide.c' || echo '$(srcdir)/'`ide.c
+
+arculatorweb-ide.obj: ide.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ide.obj -MD -MP -MF $(DEPDIR)/arculatorweb-ide.Tpo -c -o arculatorweb-ide.obj `if test -f 'ide.c'; then $(CYGPATH_W) 'ide.c'; else $(CYGPATH_W) '$(srcdir)/ide.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ide.Tpo $(DEPDIR)/arculatorweb-ide.Po
+#	$(AM_V_CC)source='ide.c' object='arculatorweb-ide.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ide.obj `if test -f 'ide.c'; then $(CYGPATH_W) 'ide.c'; else $(CYGPATH_W) '$(srcdir)/ide.c'; fi`
+
+arculatorweb-ide_a3in.o: ide_a3in.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ide_a3in.o -MD -MP -MF $(DEPDIR)/arculatorweb-ide_a3in.Tpo -c -o arculatorweb-ide_a3in.o `test -f 'ide_a3in.c' || echo '$(srcdir)/'`ide_a3in.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ide_a3in.Tpo $(DEPDIR)/arculatorweb-ide_a3in.Po
+#	$(AM_V_CC)source='ide_a3in.c' object='arculatorweb-ide_a3in.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ide_a3in.o `test -f 'ide_a3in.c' || echo '$(srcdir)/'`ide_a3in.c
+
+arculatorweb-ide_a3in.obj: ide_a3in.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ide_a3in.obj -MD -MP -MF $(DEPDIR)/arculatorweb-ide_a3in.Tpo -c -o arculatorweb-ide_a3in.obj `if test -f 'ide_a3in.c'; then $(CYGPATH_W) 'ide_a3in.c'; else $(CYGPATH_W) '$(srcdir)/ide_a3in.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ide_a3in.Tpo $(DEPDIR)/arculatorweb-ide_a3in.Po
+#	$(AM_V_CC)source='ide_a3in.c' object='arculatorweb-ide_a3in.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ide_a3in.obj `if test -f 'ide_a3in.c'; then $(CYGPATH_W) 'ide_a3in.c'; else $(CYGPATH_W) '$(srcdir)/ide_a3in.c'; fi`
+
+arculatorweb-ide_config.o: ide_config.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ide_config.o -MD -MP -MF $(DEPDIR)/arculatorweb-ide_config.Tpo -c -o arculatorweb-ide_config.o `test -f 'ide_config.c' || echo '$(srcdir)/'`ide_config.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ide_config.Tpo $(DEPDIR)/arculatorweb-ide_config.Po
+#	$(AM_V_CC)source='ide_config.c' object='arculatorweb-ide_config.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ide_config.o `test -f 'ide_config.c' || echo '$(srcdir)/'`ide_config.c
+
+arculatorweb-ide_config.obj: ide_config.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ide_config.obj -MD -MP -MF $(DEPDIR)/arculatorweb-ide_config.Tpo -c -o arculatorweb-ide_config.obj `if test -f 'ide_config.c'; then $(CYGPATH_W) 'ide_config.c'; else $(CYGPATH_W) '$(srcdir)/ide_config.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ide_config.Tpo $(DEPDIR)/arculatorweb-ide_config.Po
+#	$(AM_V_CC)source='ide_config.c' object='arculatorweb-ide_config.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ide_config.obj `if test -f 'ide_config.c'; then $(CYGPATH_W) 'ide_config.c'; else $(CYGPATH_W) '$(srcdir)/ide_config.c'; fi`
+
+arculatorweb-ide_idea.o: ide_idea.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ide_idea.o -MD -MP -MF $(DEPDIR)/arculatorweb-ide_idea.Tpo -c -o arculatorweb-ide_idea.o `test -f 'ide_idea.c' || echo '$(srcdir)/'`ide_idea.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ide_idea.Tpo $(DEPDIR)/arculatorweb-ide_idea.Po
+#	$(AM_V_CC)source='ide_idea.c' object='arculatorweb-ide_idea.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ide_idea.o `test -f 'ide_idea.c' || echo '$(srcdir)/'`ide_idea.c
+
+arculatorweb-ide_idea.obj: ide_idea.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ide_idea.obj -MD -MP -MF $(DEPDIR)/arculatorweb-ide_idea.Tpo -c -o arculatorweb-ide_idea.obj `if test -f 'ide_idea.c'; then $(CYGPATH_W) 'ide_idea.c'; else $(CYGPATH_W) '$(srcdir)/ide_idea.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ide_idea.Tpo $(DEPDIR)/arculatorweb-ide_idea.Po
+#	$(AM_V_CC)source='ide_idea.c' object='arculatorweb-ide_idea.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ide_idea.obj `if test -f 'ide_idea.c'; then $(CYGPATH_W) 'ide_idea.c'; else $(CYGPATH_W) '$(srcdir)/ide_idea.c'; fi`
+
+arculatorweb-ide_riscdev.o: ide_riscdev.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ide_riscdev.o -MD -MP -MF $(DEPDIR)/arculatorweb-ide_riscdev.Tpo -c -o arculatorweb-ide_riscdev.o `test -f 'ide_riscdev.c' || echo '$(srcdir)/'`ide_riscdev.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ide_riscdev.Tpo $(DEPDIR)/arculatorweb-ide_riscdev.Po
+#	$(AM_V_CC)source='ide_riscdev.c' object='arculatorweb-ide_riscdev.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ide_riscdev.o `test -f 'ide_riscdev.c' || echo '$(srcdir)/'`ide_riscdev.c
+
+arculatorweb-ide_riscdev.obj: ide_riscdev.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ide_riscdev.obj -MD -MP -MF $(DEPDIR)/arculatorweb-ide_riscdev.Tpo -c -o arculatorweb-ide_riscdev.obj `if test -f 'ide_riscdev.c'; then $(CYGPATH_W) 'ide_riscdev.c'; else $(CYGPATH_W) '$(srcdir)/ide_riscdev.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ide_riscdev.Tpo $(DEPDIR)/arculatorweb-ide_riscdev.Po
+#	$(AM_V_CC)source='ide_riscdev.c' object='arculatorweb-ide_riscdev.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ide_riscdev.obj `if test -f 'ide_riscdev.c'; then $(CYGPATH_W) 'ide_riscdev.c'; else $(CYGPATH_W) '$(srcdir)/ide_riscdev.c'; fi`
+
+arculatorweb-ide_zidefs.o: ide_zidefs.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ide_zidefs.o -MD -MP -MF $(DEPDIR)/arculatorweb-ide_zidefs.Tpo -c -o arculatorweb-ide_zidefs.o `test -f 'ide_zidefs.c' || echo '$(srcdir)/'`ide_zidefs.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ide_zidefs.Tpo $(DEPDIR)/arculatorweb-ide_zidefs.Po
+#	$(AM_V_CC)source='ide_zidefs.c' object='arculatorweb-ide_zidefs.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ide_zidefs.o `test -f 'ide_zidefs.c' || echo '$(srcdir)/'`ide_zidefs.c
+
+arculatorweb-ide_zidefs.obj: ide_zidefs.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ide_zidefs.obj -MD -MP -MF $(DEPDIR)/arculatorweb-ide_zidefs.Tpo -c -o arculatorweb-ide_zidefs.obj `if test -f 'ide_zidefs.c'; then $(CYGPATH_W) 'ide_zidefs.c'; else $(CYGPATH_W) '$(srcdir)/ide_zidefs.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ide_zidefs.Tpo $(DEPDIR)/arculatorweb-ide_zidefs.Po
+#	$(AM_V_CC)source='ide_zidefs.c' object='arculatorweb-ide_zidefs.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ide_zidefs.obj `if test -f 'ide_zidefs.c'; then $(CYGPATH_W) 'ide_zidefs.c'; else $(CYGPATH_W) '$(srcdir)/ide_zidefs.c'; fi`
+
+arculatorweb-ide_zidefs_a3k.o: ide_zidefs_a3k.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ide_zidefs_a3k.o -MD -MP -MF $(DEPDIR)/arculatorweb-ide_zidefs_a3k.Tpo -c -o arculatorweb-ide_zidefs_a3k.o `test -f 'ide_zidefs_a3k.c' || echo '$(srcdir)/'`ide_zidefs_a3k.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ide_zidefs_a3k.Tpo $(DEPDIR)/arculatorweb-ide_zidefs_a3k.Po
+#	$(AM_V_CC)source='ide_zidefs_a3k.c' object='arculatorweb-ide_zidefs_a3k.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ide_zidefs_a3k.o `test -f 'ide_zidefs_a3k.c' || echo '$(srcdir)/'`ide_zidefs_a3k.c
+
+arculatorweb-ide_zidefs_a3k.obj: ide_zidefs_a3k.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ide_zidefs_a3k.obj -MD -MP -MF $(DEPDIR)/arculatorweb-ide_zidefs_a3k.Tpo -c -o arculatorweb-ide_zidefs_a3k.obj `if test -f 'ide_zidefs_a3k.c'; then $(CYGPATH_W) 'ide_zidefs_a3k.c'; else $(CYGPATH_W) '$(srcdir)/ide_zidefs_a3k.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ide_zidefs_a3k.Tpo $(DEPDIR)/arculatorweb-ide_zidefs_a3k.Po
+#	$(AM_V_CC)source='ide_zidefs_a3k.c' object='arculatorweb-ide_zidefs_a3k.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ide_zidefs_a3k.obj `if test -f 'ide_zidefs_a3k.c'; then $(CYGPATH_W) 'ide_zidefs_a3k.c'; else $(CYGPATH_W) '$(srcdir)/ide_zidefs_a3k.c'; fi`
+
+arculatorweb-input_sdl2.o: input_sdl2.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-input_sdl2.o -MD -MP -MF $(DEPDIR)/arculatorweb-input_sdl2.Tpo -c -o arculatorweb-input_sdl2.o `test -f 'input_sdl2.c' || echo '$(srcdir)/'`input_sdl2.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-input_sdl2.Tpo $(DEPDIR)/arculatorweb-input_sdl2.Po
+#	$(AM_V_CC)source='input_sdl2.c' object='arculatorweb-input_sdl2.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-input_sdl2.o `test -f 'input_sdl2.c' || echo '$(srcdir)/'`input_sdl2.c
+
+arculatorweb-input_sdl2.obj: input_sdl2.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-input_sdl2.obj -MD -MP -MF $(DEPDIR)/arculatorweb-input_sdl2.Tpo -c -o arculatorweb-input_sdl2.obj `if test -f 'input_sdl2.c'; then $(CYGPATH_W) 'input_sdl2.c'; else $(CYGPATH_W) '$(srcdir)/input_sdl2.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-input_sdl2.Tpo $(DEPDIR)/arculatorweb-input_sdl2.Po
+#	$(AM_V_CC)source='input_sdl2.c' object='arculatorweb-input_sdl2.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-input_sdl2.obj `if test -f 'input_sdl2.c'; then $(CYGPATH_W) 'input_sdl2.c'; else $(CYGPATH_W) '$(srcdir)/input_sdl2.c'; fi`
+
+arculatorweb-ioc.o: ioc.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ioc.o -MD -MP -MF $(DEPDIR)/arculatorweb-ioc.Tpo -c -o arculatorweb-ioc.o `test -f 'ioc.c' || echo '$(srcdir)/'`ioc.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ioc.Tpo $(DEPDIR)/arculatorweb-ioc.Po
+#	$(AM_V_CC)source='ioc.c' object='arculatorweb-ioc.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ioc.o `test -f 'ioc.c' || echo '$(srcdir)/'`ioc.c
+
+arculatorweb-ioc.obj: ioc.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ioc.obj -MD -MP -MF $(DEPDIR)/arculatorweb-ioc.Tpo -c -o arculatorweb-ioc.obj `if test -f 'ioc.c'; then $(CYGPATH_W) 'ioc.c'; else $(CYGPATH_W) '$(srcdir)/ioc.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ioc.Tpo $(DEPDIR)/arculatorweb-ioc.Po
+#	$(AM_V_CC)source='ioc.c' object='arculatorweb-ioc.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ioc.obj `if test -f 'ioc.c'; then $(CYGPATH_W) 'ioc.c'; else $(CYGPATH_W) '$(srcdir)/ioc.c'; fi`
+
+arculatorweb-ioeb.o: ioeb.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ioeb.o -MD -MP -MF $(DEPDIR)/arculatorweb-ioeb.Tpo -c -o arculatorweb-ioeb.o `test -f 'ioeb.c' || echo '$(srcdir)/'`ioeb.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ioeb.Tpo $(DEPDIR)/arculatorweb-ioeb.Po
+#	$(AM_V_CC)source='ioeb.c' object='arculatorweb-ioeb.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ioeb.o `test -f 'ioeb.c' || echo '$(srcdir)/'`ioeb.c
+
+arculatorweb-ioeb.obj: ioeb.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-ioeb.obj -MD -MP -MF $(DEPDIR)/arculatorweb-ioeb.Tpo -c -o arculatorweb-ioeb.obj `if test -f 'ioeb.c'; then $(CYGPATH_W) 'ioeb.c'; else $(CYGPATH_W) '$(srcdir)/ioeb.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-ioeb.Tpo $(DEPDIR)/arculatorweb-ioeb.Po
+#	$(AM_V_CC)source='ioeb.c' object='arculatorweb-ioeb.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-ioeb.obj `if test -f 'ioeb.c'; then $(CYGPATH_W) 'ioeb.c'; else $(CYGPATH_W) '$(srcdir)/ioeb.c'; fi`
+
+arculatorweb-joystick.o: joystick.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-joystick.o -MD -MP -MF $(DEPDIR)/arculatorweb-joystick.Tpo -c -o arculatorweb-joystick.o `test -f 'joystick.c' || echo '$(srcdir)/'`joystick.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-joystick.Tpo $(DEPDIR)/arculatorweb-joystick.Po
+#	$(AM_V_CC)source='joystick.c' object='arculatorweb-joystick.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-joystick.o `test -f 'joystick.c' || echo '$(srcdir)/'`joystick.c
+
+arculatorweb-joystick.obj: joystick.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-joystick.obj -MD -MP -MF $(DEPDIR)/arculatorweb-joystick.Tpo -c -o arculatorweb-joystick.obj `if test -f 'joystick.c'; then $(CYGPATH_W) 'joystick.c'; else $(CYGPATH_W) '$(srcdir)/joystick.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-joystick.Tpo $(DEPDIR)/arculatorweb-joystick.Po
+#	$(AM_V_CC)source='joystick.c' object='arculatorweb-joystick.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-joystick.obj `if test -f 'joystick.c'; then $(CYGPATH_W) 'joystick.c'; else $(CYGPATH_W) '$(srcdir)/joystick.c'; fi`
+
+arculatorweb-keyboard.o: keyboard.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-keyboard.o -MD -MP -MF $(DEPDIR)/arculatorweb-keyboard.Tpo -c -o arculatorweb-keyboard.o `test -f 'keyboard.c' || echo '$(srcdir)/'`keyboard.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-keyboard.Tpo $(DEPDIR)/arculatorweb-keyboard.Po
+#	$(AM_V_CC)source='keyboard.c' object='arculatorweb-keyboard.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-keyboard.o `test -f 'keyboard.c' || echo '$(srcdir)/'`keyboard.c
+
+arculatorweb-keyboard.obj: keyboard.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-keyboard.obj -MD -MP -MF $(DEPDIR)/arculatorweb-keyboard.Tpo -c -o arculatorweb-keyboard.obj `if test -f 'keyboard.c'; then $(CYGPATH_W) 'keyboard.c'; else $(CYGPATH_W) '$(srcdir)/keyboard.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-keyboard.Tpo $(DEPDIR)/arculatorweb-keyboard.Po
+#	$(AM_V_CC)source='keyboard.c' object='arculatorweb-keyboard.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-keyboard.obj `if test -f 'keyboard.c'; then $(CYGPATH_W) 'keyboard.c'; else $(CYGPATH_W) '$(srcdir)/keyboard.c'; fi`
+
+arculatorweb-lc.o: lc.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-lc.o -MD -MP -MF $(DEPDIR)/arculatorweb-lc.Tpo -c -o arculatorweb-lc.o `test -f 'lc.c' || echo '$(srcdir)/'`lc.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-lc.Tpo $(DEPDIR)/arculatorweb-lc.Po
+#	$(AM_V_CC)source='lc.c' object='arculatorweb-lc.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-lc.o `test -f 'lc.c' || echo '$(srcdir)/'`lc.c
+
+arculatorweb-lc.obj: lc.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-lc.obj -MD -MP -MF $(DEPDIR)/arculatorweb-lc.Tpo -c -o arculatorweb-lc.obj `if test -f 'lc.c'; then $(CYGPATH_W) 'lc.c'; else $(CYGPATH_W) '$(srcdir)/lc.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-lc.Tpo $(DEPDIR)/arculatorweb-lc.Po
+#	$(AM_V_CC)source='lc.c' object='arculatorweb-lc.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-lc.obj `if test -f 'lc.c'; then $(CYGPATH_W) 'lc.c'; else $(CYGPATH_W) '$(srcdir)/lc.c'; fi`
+
+arculatorweb-main.o: main.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-main.o -MD -MP -MF $(DEPDIR)/arculatorweb-main.Tpo -c -o arculatorweb-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-main.Tpo $(DEPDIR)/arculatorweb-main.Po
+#	$(AM_V_CC)source='main.c' object='arculatorweb-main.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
+
+arculatorweb-main.obj: main.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-main.obj -MD -MP -MF $(DEPDIR)/arculatorweb-main.Tpo -c -o arculatorweb-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-main.Tpo $(DEPDIR)/arculatorweb-main.Po
+#	$(AM_V_CC)source='main.c' object='arculatorweb-main.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
+
+arculatorweb-mem.o: mem.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-mem.o -MD -MP -MF $(DEPDIR)/arculatorweb-mem.Tpo -c -o arculatorweb-mem.o `test -f 'mem.c' || echo '$(srcdir)/'`mem.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-mem.Tpo $(DEPDIR)/arculatorweb-mem.Po
+#	$(AM_V_CC)source='mem.c' object='arculatorweb-mem.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-mem.o `test -f 'mem.c' || echo '$(srcdir)/'`mem.c
+
+arculatorweb-mem.obj: mem.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-mem.obj -MD -MP -MF $(DEPDIR)/arculatorweb-mem.Tpo -c -o arculatorweb-mem.obj `if test -f 'mem.c'; then $(CYGPATH_W) 'mem.c'; else $(CYGPATH_W) '$(srcdir)/mem.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-mem.Tpo $(DEPDIR)/arculatorweb-mem.Po
+#	$(AM_V_CC)source='mem.c' object='arculatorweb-mem.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-mem.obj `if test -f 'mem.c'; then $(CYGPATH_W) 'mem.c'; else $(CYGPATH_W) '$(srcdir)/mem.c'; fi`
+
+arculatorweb-memc.o: memc.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-memc.o -MD -MP -MF $(DEPDIR)/arculatorweb-memc.Tpo -c -o arculatorweb-memc.o `test -f 'memc.c' || echo '$(srcdir)/'`memc.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-memc.Tpo $(DEPDIR)/arculatorweb-memc.Po
+#	$(AM_V_CC)source='memc.c' object='arculatorweb-memc.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-memc.o `test -f 'memc.c' || echo '$(srcdir)/'`memc.c
+
+arculatorweb-memc.obj: memc.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-memc.obj -MD -MP -MF $(DEPDIR)/arculatorweb-memc.Tpo -c -o arculatorweb-memc.obj `if test -f 'memc.c'; then $(CYGPATH_W) 'memc.c'; else $(CYGPATH_W) '$(srcdir)/memc.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-memc.Tpo $(DEPDIR)/arculatorweb-memc.Po
+#	$(AM_V_CC)source='memc.c' object='arculatorweb-memc.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-memc.obj `if test -f 'memc.c'; then $(CYGPATH_W) 'memc.c'; else $(CYGPATH_W) '$(srcdir)/memc.c'; fi`
+
+arculatorweb-podules.o: podules.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-podules.o -MD -MP -MF $(DEPDIR)/arculatorweb-podules.Tpo -c -o arculatorweb-podules.o `test -f 'podules.c' || echo '$(srcdir)/'`podules.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-podules.Tpo $(DEPDIR)/arculatorweb-podules.Po
+#	$(AM_V_CC)source='podules.c' object='arculatorweb-podules.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-podules.o `test -f 'podules.c' || echo '$(srcdir)/'`podules.c
+
+arculatorweb-podules.obj: podules.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-podules.obj -MD -MP -MF $(DEPDIR)/arculatorweb-podules.Tpo -c -o arculatorweb-podules.obj `if test -f 'podules.c'; then $(CYGPATH_W) 'podules.c'; else $(CYGPATH_W) '$(srcdir)/podules.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-podules.Tpo $(DEPDIR)/arculatorweb-podules.Po
+#	$(AM_V_CC)source='podules.c' object='arculatorweb-podules.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-podules.obj `if test -f 'podules.c'; then $(CYGPATH_W) 'podules.c'; else $(CYGPATH_W) '$(srcdir)/podules.c'; fi`
+
+arculatorweb-printer.o: printer.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-printer.o -MD -MP -MF $(DEPDIR)/arculatorweb-printer.Tpo -c -o arculatorweb-printer.o `test -f 'printer.c' || echo '$(srcdir)/'`printer.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-printer.Tpo $(DEPDIR)/arculatorweb-printer.Po
+#	$(AM_V_CC)source='printer.c' object='arculatorweb-printer.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-printer.o `test -f 'printer.c' || echo '$(srcdir)/'`printer.c
+
+arculatorweb-printer.obj: printer.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-printer.obj -MD -MP -MF $(DEPDIR)/arculatorweb-printer.Tpo -c -o arculatorweb-printer.obj `if test -f 'printer.c'; then $(CYGPATH_W) 'printer.c'; else $(CYGPATH_W) '$(srcdir)/printer.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-printer.Tpo $(DEPDIR)/arculatorweb-printer.Po
+#	$(AM_V_CC)source='printer.c' object='arculatorweb-printer.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-printer.obj `if test -f 'printer.c'; then $(CYGPATH_W) 'printer.c'; else $(CYGPATH_W) '$(srcdir)/printer.c'; fi`
+
+arculatorweb-riscdev_hdfc.o: riscdev_hdfc.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-riscdev_hdfc.o -MD -MP -MF $(DEPDIR)/arculatorweb-riscdev_hdfc.Tpo -c -o arculatorweb-riscdev_hdfc.o `test -f 'riscdev_hdfc.c' || echo '$(srcdir)/'`riscdev_hdfc.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-riscdev_hdfc.Tpo $(DEPDIR)/arculatorweb-riscdev_hdfc.Po
+#	$(AM_V_CC)source='riscdev_hdfc.c' object='arculatorweb-riscdev_hdfc.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-riscdev_hdfc.o `test -f 'riscdev_hdfc.c' || echo '$(srcdir)/'`riscdev_hdfc.c
+
+arculatorweb-riscdev_hdfc.obj: riscdev_hdfc.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-riscdev_hdfc.obj -MD -MP -MF $(DEPDIR)/arculatorweb-riscdev_hdfc.Tpo -c -o arculatorweb-riscdev_hdfc.obj `if test -f 'riscdev_hdfc.c'; then $(CYGPATH_W) 'riscdev_hdfc.c'; else $(CYGPATH_W) '$(srcdir)/riscdev_hdfc.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-riscdev_hdfc.Tpo $(DEPDIR)/arculatorweb-riscdev_hdfc.Po
+#	$(AM_V_CC)source='riscdev_hdfc.c' object='arculatorweb-riscdev_hdfc.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-riscdev_hdfc.obj `if test -f 'riscdev_hdfc.c'; then $(CYGPATH_W) 'riscdev_hdfc.c'; else $(CYGPATH_W) '$(srcdir)/riscdev_hdfc.c'; fi`
+
+arculatorweb-romload.o: romload.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-romload.o -MD -MP -MF $(DEPDIR)/arculatorweb-romload.Tpo -c -o arculatorweb-romload.o `test -f 'romload.c' || echo '$(srcdir)/'`romload.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-romload.Tpo $(DEPDIR)/arculatorweb-romload.Po
+#	$(AM_V_CC)source='romload.c' object='arculatorweb-romload.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-romload.o `test -f 'romload.c' || echo '$(srcdir)/'`romload.c
+
+arculatorweb-romload.obj: romload.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-romload.obj -MD -MP -MF $(DEPDIR)/arculatorweb-romload.Tpo -c -o arculatorweb-romload.obj `if test -f 'romload.c'; then $(CYGPATH_W) 'romload.c'; else $(CYGPATH_W) '$(srcdir)/romload.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-romload.Tpo $(DEPDIR)/arculatorweb-romload.Po
+#	$(AM_V_CC)source='romload.c' object='arculatorweb-romload.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-romload.obj `if test -f 'romload.c'; then $(CYGPATH_W) 'romload.c'; else $(CYGPATH_W) '$(srcdir)/romload.c'; fi`
+
+arculatorweb-sound.o: sound.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-sound.o -MD -MP -MF $(DEPDIR)/arculatorweb-sound.Tpo -c -o arculatorweb-sound.o `test -f 'sound.c' || echo '$(srcdir)/'`sound.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-sound.Tpo $(DEPDIR)/arculatorweb-sound.Po
+#	$(AM_V_CC)source='sound.c' object='arculatorweb-sound.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-sound.o `test -f 'sound.c' || echo '$(srcdir)/'`sound.c
+
+arculatorweb-sound.obj: sound.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-sound.obj -MD -MP -MF $(DEPDIR)/arculatorweb-sound.Tpo -c -o arculatorweb-sound.obj `if test -f 'sound.c'; then $(CYGPATH_W) 'sound.c'; else $(CYGPATH_W) '$(srcdir)/sound.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-sound.Tpo $(DEPDIR)/arculatorweb-sound.Po
+#	$(AM_V_CC)source='sound.c' object='arculatorweb-sound.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-sound.obj `if test -f 'sound.c'; then $(CYGPATH_W) 'sound.c'; else $(CYGPATH_W) '$(srcdir)/sound.c'; fi`
+
+arculatorweb-soundopenal.o: soundopenal.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-soundopenal.o -MD -MP -MF $(DEPDIR)/arculatorweb-soundopenal.Tpo -c -o arculatorweb-soundopenal.o `test -f 'soundopenal.c' || echo '$(srcdir)/'`soundopenal.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-soundopenal.Tpo $(DEPDIR)/arculatorweb-soundopenal.Po
+#	$(AM_V_CC)source='soundopenal.c' object='arculatorweb-soundopenal.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-soundopenal.o `test -f 'soundopenal.c' || echo '$(srcdir)/'`soundopenal.c
+
+arculatorweb-soundopenal.obj: soundopenal.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-soundopenal.obj -MD -MP -MF $(DEPDIR)/arculatorweb-soundopenal.Tpo -c -o arculatorweb-soundopenal.obj `if test -f 'soundopenal.c'; then $(CYGPATH_W) 'soundopenal.c'; else $(CYGPATH_W) '$(srcdir)/soundopenal.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-soundopenal.Tpo $(DEPDIR)/arculatorweb-soundopenal.Po
+#	$(AM_V_CC)source='soundopenal.c' object='arculatorweb-soundopenal.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-soundopenal.obj `if test -f 'soundopenal.c'; then $(CYGPATH_W) 'soundopenal.c'; else $(CYGPATH_W) '$(srcdir)/soundopenal.c'; fi`
+
+arculatorweb-st506.o: st506.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-st506.o -MD -MP -MF $(DEPDIR)/arculatorweb-st506.Tpo -c -o arculatorweb-st506.o `test -f 'st506.c' || echo '$(srcdir)/'`st506.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-st506.Tpo $(DEPDIR)/arculatorweb-st506.Po
+#	$(AM_V_CC)source='st506.c' object='arculatorweb-st506.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-st506.o `test -f 'st506.c' || echo '$(srcdir)/'`st506.c
+
+arculatorweb-st506.obj: st506.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-st506.obj -MD -MP -MF $(DEPDIR)/arculatorweb-st506.Tpo -c -o arculatorweb-st506.obj `if test -f 'st506.c'; then $(CYGPATH_W) 'st506.c'; else $(CYGPATH_W) '$(srcdir)/st506.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-st506.Tpo $(DEPDIR)/arculatorweb-st506.Po
+#	$(AM_V_CC)source='st506.c' object='arculatorweb-st506.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-st506.obj `if test -f 'st506.c'; then $(CYGPATH_W) 'st506.c'; else $(CYGPATH_W) '$(srcdir)/st506.c'; fi`
+
+arculatorweb-st506_akd52.o: st506_akd52.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-st506_akd52.o -MD -MP -MF $(DEPDIR)/arculatorweb-st506_akd52.Tpo -c -o arculatorweb-st506_akd52.o `test -f 'st506_akd52.c' || echo '$(srcdir)/'`st506_akd52.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-st506_akd52.Tpo $(DEPDIR)/arculatorweb-st506_akd52.Po
+#	$(AM_V_CC)source='st506_akd52.c' object='arculatorweb-st506_akd52.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-st506_akd52.o `test -f 'st506_akd52.c' || echo '$(srcdir)/'`st506_akd52.c
+
+arculatorweb-st506_akd52.obj: st506_akd52.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-st506_akd52.obj -MD -MP -MF $(DEPDIR)/arculatorweb-st506_akd52.Tpo -c -o arculatorweb-st506_akd52.obj `if test -f 'st506_akd52.c'; then $(CYGPATH_W) 'st506_akd52.c'; else $(CYGPATH_W) '$(srcdir)/st506_akd52.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-st506_akd52.Tpo $(DEPDIR)/arculatorweb-st506_akd52.Po
+#	$(AM_V_CC)source='st506_akd52.c' object='arculatorweb-st506_akd52.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-st506_akd52.obj `if test -f 'st506_akd52.c'; then $(CYGPATH_W) 'st506_akd52.c'; else $(CYGPATH_W) '$(srcdir)/st506_akd52.c'; fi`
+
+arculatorweb-timer.o: timer.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-timer.o -MD -MP -MF $(DEPDIR)/arculatorweb-timer.Tpo -c -o arculatorweb-timer.o `test -f 'timer.c' || echo '$(srcdir)/'`timer.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-timer.Tpo $(DEPDIR)/arculatorweb-timer.Po
+#	$(AM_V_CC)source='timer.c' object='arculatorweb-timer.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-timer.o `test -f 'timer.c' || echo '$(srcdir)/'`timer.c
+
+arculatorweb-timer.obj: timer.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-timer.obj -MD -MP -MF $(DEPDIR)/arculatorweb-timer.Tpo -c -o arculatorweb-timer.obj `if test -f 'timer.c'; then $(CYGPATH_W) 'timer.c'; else $(CYGPATH_W) '$(srcdir)/timer.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-timer.Tpo $(DEPDIR)/arculatorweb-timer.Po
+#	$(AM_V_CC)source='timer.c' object='arculatorweb-timer.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-timer.obj `if test -f 'timer.c'; then $(CYGPATH_W) 'timer.c'; else $(CYGPATH_W) '$(srcdir)/timer.c'; fi`
+
+arculatorweb-vidc.o: vidc.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-vidc.o -MD -MP -MF $(DEPDIR)/arculatorweb-vidc.Tpo -c -o arculatorweb-vidc.o `test -f 'vidc.c' || echo '$(srcdir)/'`vidc.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-vidc.Tpo $(DEPDIR)/arculatorweb-vidc.Po
+#	$(AM_V_CC)source='vidc.c' object='arculatorweb-vidc.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-vidc.o `test -f 'vidc.c' || echo '$(srcdir)/'`vidc.c
+
+arculatorweb-vidc.obj: vidc.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-vidc.obj -MD -MP -MF $(DEPDIR)/arculatorweb-vidc.Tpo -c -o arculatorweb-vidc.obj `if test -f 'vidc.c'; then $(CYGPATH_W) 'vidc.c'; else $(CYGPATH_W) '$(srcdir)/vidc.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-vidc.Tpo $(DEPDIR)/arculatorweb-vidc.Po
+#	$(AM_V_CC)source='vidc.c' object='arculatorweb-vidc.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-vidc.obj `if test -f 'vidc.c'; then $(CYGPATH_W) 'vidc.c'; else $(CYGPATH_W) '$(srcdir)/vidc.c'; fi`
+
+arculatorweb-video_sdl2.o: video_sdl2.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-video_sdl2.o -MD -MP -MF $(DEPDIR)/arculatorweb-video_sdl2.Tpo -c -o arculatorweb-video_sdl2.o `test -f 'video_sdl2.c' || echo '$(srcdir)/'`video_sdl2.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-video_sdl2.Tpo $(DEPDIR)/arculatorweb-video_sdl2.Po
+#	$(AM_V_CC)source='video_sdl2.c' object='arculatorweb-video_sdl2.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-video_sdl2.o `test -f 'video_sdl2.c' || echo '$(srcdir)/'`video_sdl2.c
+
+arculatorweb-video_sdl2.obj: video_sdl2.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-video_sdl2.obj -MD -MP -MF $(DEPDIR)/arculatorweb-video_sdl2.Tpo -c -o arculatorweb-video_sdl2.obj `if test -f 'video_sdl2.c'; then $(CYGPATH_W) 'video_sdl2.c'; else $(CYGPATH_W) '$(srcdir)/video_sdl2.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-video_sdl2.Tpo $(DEPDIR)/arculatorweb-video_sdl2.Po
+#	$(AM_V_CC)source='video_sdl2.c' object='arculatorweb-video_sdl2.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-video_sdl2.obj `if test -f 'video_sdl2.c'; then $(CYGPATH_W) 'video_sdl2.c'; else $(CYGPATH_W) '$(srcdir)/video_sdl2.c'; fi`
+
+arculatorweb-wd1770.o: wd1770.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-wd1770.o -MD -MP -MF $(DEPDIR)/arculatorweb-wd1770.Tpo -c -o arculatorweb-wd1770.o `test -f 'wd1770.c' || echo '$(srcdir)/'`wd1770.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-wd1770.Tpo $(DEPDIR)/arculatorweb-wd1770.Po
+#	$(AM_V_CC)source='wd1770.c' object='arculatorweb-wd1770.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-wd1770.o `test -f 'wd1770.c' || echo '$(srcdir)/'`wd1770.c
+
+arculatorweb-wd1770.obj: wd1770.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-wd1770.obj -MD -MP -MF $(DEPDIR)/arculatorweb-wd1770.Tpo -c -o arculatorweb-wd1770.obj `if test -f 'wd1770.c'; then $(CYGPATH_W) 'wd1770.c'; else $(CYGPATH_W) '$(srcdir)/wd1770.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-wd1770.Tpo $(DEPDIR)/arculatorweb-wd1770.Po
+#	$(AM_V_CC)source='wd1770.c' object='arculatorweb-wd1770.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-wd1770.obj `if test -f 'wd1770.c'; then $(CYGPATH_W) 'wd1770.c'; else $(CYGPATH_W) '$(srcdir)/wd1770.c'; fi`
+
+arculatorweb-wx-sdl2-joystick.o: wx-sdl2-joystick.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-wx-sdl2-joystick.o -MD -MP -MF $(DEPDIR)/arculatorweb-wx-sdl2-joystick.Tpo -c -o arculatorweb-wx-sdl2-joystick.o `test -f 'wx-sdl2-joystick.c' || echo '$(srcdir)/'`wx-sdl2-joystick.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-wx-sdl2-joystick.Tpo $(DEPDIR)/arculatorweb-wx-sdl2-joystick.Po
+#	$(AM_V_CC)source='wx-sdl2-joystick.c' object='arculatorweb-wx-sdl2-joystick.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-wx-sdl2-joystick.o `test -f 'wx-sdl2-joystick.c' || echo '$(srcdir)/'`wx-sdl2-joystick.c
+
+arculatorweb-wx-sdl2-joystick.obj: wx-sdl2-joystick.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-wx-sdl2-joystick.obj -MD -MP -MF $(DEPDIR)/arculatorweb-wx-sdl2-joystick.Tpo -c -o arculatorweb-wx-sdl2-joystick.obj `if test -f 'wx-sdl2-joystick.c'; then $(CYGPATH_W) 'wx-sdl2-joystick.c'; else $(CYGPATH_W) '$(srcdir)/wx-sdl2-joystick.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-wx-sdl2-joystick.Tpo $(DEPDIR)/arculatorweb-wx-sdl2-joystick.Po
+#	$(AM_V_CC)source='wx-sdl2-joystick.c' object='arculatorweb-wx-sdl2-joystick.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-wx-sdl2-joystick.obj `if test -f 'wx-sdl2-joystick.c'; then $(CYGPATH_W) 'wx-sdl2-joystick.c'; else $(CYGPATH_W) '$(srcdir)/wx-sdl2-joystick.c'; fi`
+
+arculatorweb-hostfs-unix.o: hostfs-unix.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-hostfs-unix.o -MD -MP -MF $(DEPDIR)/arculatorweb-hostfs-unix.Tpo -c -o arculatorweb-hostfs-unix.o `test -f 'hostfs-unix.c' || echo '$(srcdir)/'`hostfs-unix.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-hostfs-unix.Tpo $(DEPDIR)/arculatorweb-hostfs-unix.Po
+#	$(AM_V_CC)source='hostfs-unix.c' object='arculatorweb-hostfs-unix.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-hostfs-unix.o `test -f 'hostfs-unix.c' || echo '$(srcdir)/'`hostfs-unix.c
+
+arculatorweb-hostfs-unix.obj: hostfs-unix.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-hostfs-unix.obj -MD -MP -MF $(DEPDIR)/arculatorweb-hostfs-unix.Tpo -c -o arculatorweb-hostfs-unix.obj `if test -f 'hostfs-unix.c'; then $(CYGPATH_W) 'hostfs-unix.c'; else $(CYGPATH_W) '$(srcdir)/hostfs-unix.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-hostfs-unix.Tpo $(DEPDIR)/arculatorweb-hostfs-unix.Po
+#	$(AM_V_CC)source='hostfs-unix.c' object='arculatorweb-hostfs-unix.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-hostfs-unix.obj `if test -f 'hostfs-unix.c'; then $(CYGPATH_W) 'hostfs-unix.c'; else $(CYGPATH_W) '$(srcdir)/hostfs-unix.c'; fi`
+
+arculatorweb-podules-linux.o: podules-linux.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-podules-linux.o -MD -MP -MF $(DEPDIR)/arculatorweb-podules-linux.Tpo -c -o arculatorweb-podules-linux.o `test -f 'podules-linux.c' || echo '$(srcdir)/'`podules-linux.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-podules-linux.Tpo $(DEPDIR)/arculatorweb-podules-linux.Po
+#	$(AM_V_CC)source='podules-linux.c' object='arculatorweb-podules-linux.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-podules-linux.o `test -f 'podules-linux.c' || echo '$(srcdir)/'`podules-linux.c
+
+arculatorweb-podules-linux.obj: podules-linux.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-podules-linux.obj -MD -MP -MF $(DEPDIR)/arculatorweb-podules-linux.Tpo -c -o arculatorweb-podules-linux.obj `if test -f 'podules-linux.c'; then $(CYGPATH_W) 'podules-linux.c'; else $(CYGPATH_W) '$(srcdir)/podules-linux.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-podules-linux.Tpo $(DEPDIR)/arculatorweb-podules-linux.Po
+#	$(AM_V_CC)source='podules-linux.c' object='arculatorweb-podules-linux.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-podules-linux.obj `if test -f 'podules-linux.c'; then $(CYGPATH_W) 'podules-linux.c'; else $(CYGPATH_W) '$(srcdir)/podules-linux.c'; fi`
+
+arculatorweb-emscripten_main.o: emscripten_main.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-emscripten_main.o -MD -MP -MF $(DEPDIR)/arculatorweb-emscripten_main.Tpo -c -o arculatorweb-emscripten_main.o `test -f 'emscripten_main.c' || echo '$(srcdir)/'`emscripten_main.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-emscripten_main.Tpo $(DEPDIR)/arculatorweb-emscripten_main.Po
+#	$(AM_V_CC)source='emscripten_main.c' object='arculatorweb-emscripten_main.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-emscripten_main.o `test -f 'emscripten_main.c' || echo '$(srcdir)/'`emscripten_main.c
+
+arculatorweb-emscripten_main.obj: emscripten_main.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -MT arculatorweb-emscripten_main.obj -MD -MP -MF $(DEPDIR)/arculatorweb-emscripten_main.Tpo -c -o arculatorweb-emscripten_main.obj `if test -f 'emscripten_main.c'; then $(CYGPATH_W) 'emscripten_main.c'; else $(CYGPATH_W) '$(srcdir)/emscripten_main.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/arculatorweb-emscripten_main.Tpo $(DEPDIR)/arculatorweb-emscripten_main.Po
+#	$(AM_V_CC)source='emscripten_main.c' object='arculatorweb-emscripten_main.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(arculatorweb_CFLAGS) $(CFLAGS) -c -o arculatorweb-emscripten_main.obj `if test -f 'emscripten_main.c'; then $(CYGPATH_W) 'emscripten_main.c'; else $(CYGPATH_W) '$(srcdir)/emscripten_main.c'; fi`
+
 .cc.o:
 	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
 	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
@@ -2655,62 +2677,7 @@ clean: clean-am
 clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/arcemtest-82c711.Po
-	-rm -f ./$(DEPDIR)/arcemtest-82c711_fdc.Po
-	-rm -f ./$(DEPDIR)/arcemtest-arctest.Po
-	-rm -f ./$(DEPDIR)/arcemtest-arm.Po
-	-rm -f ./$(DEPDIR)/arcemtest-bmu.Po
-	-rm -f ./$(DEPDIR)/arcemtest-cmos.Po
-	-rm -f ./$(DEPDIR)/arcemtest-colourcard.Po
-	-rm -f ./$(DEPDIR)/arcemtest-config.Po
-	-rm -f ./$(DEPDIR)/arcemtest-cp15.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ddnoise.Po
-	-rm -f ./$(DEPDIR)/arcemtest-disc.Po
-	-rm -f ./$(DEPDIR)/arcemtest-disc_adf.Po
-	-rm -f ./$(DEPDIR)/arcemtest-disc_apd.Po
-	-rm -f ./$(DEPDIR)/arcemtest-disc_fdi.Po
-	-rm -f ./$(DEPDIR)/arcemtest-disc_hfe.Po
-	-rm -f ./$(DEPDIR)/arcemtest-disc_jfd.Po
-	-rm -f ./$(DEPDIR)/arcemtest-disc_mfm_common.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ds2401.Po
-	-rm -f ./$(DEPDIR)/arcemtest-eterna.Po
-	-rm -f ./$(DEPDIR)/arcemtest-fdi2raw.Po
-	-rm -f ./$(DEPDIR)/arcemtest-fpa.Po
-	-rm -f ./$(DEPDIR)/arcemtest-g16.Po
-	-rm -f ./$(DEPDIR)/arcemtest-g332.Po
-	-rm -f ./$(DEPDIR)/arcemtest-hostfs-unix.Po
-	-rm -f ./$(DEPDIR)/arcemtest-hostfs.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ide.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ide_a3in.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ide_config.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ide_idea.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ide_riscdev.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ide_zidefs.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ide_zidefs_a3k.Po
-	-rm -f ./$(DEPDIR)/arcemtest-input_sdl2.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ioc.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ioeb.Po
-	-rm -f ./$(DEPDIR)/arcemtest-joystick.Po
-	-rm -f ./$(DEPDIR)/arcemtest-keyboard.Po
-	-rm -f ./$(DEPDIR)/arcemtest-lc.Po
-	-rm -f ./$(DEPDIR)/arcemtest-main.Po
-	-rm -f ./$(DEPDIR)/arcemtest-mem.Po
-	-rm -f ./$(DEPDIR)/arcemtest-memc.Po
-	-rm -f ./$(DEPDIR)/arcemtest-podules-linux.Po
-	-rm -f ./$(DEPDIR)/arcemtest-podules.Po
-	-rm -f ./$(DEPDIR)/arcemtest-printer.Po
-	-rm -f ./$(DEPDIR)/arcemtest-riscdev_hdfc.Po
-	-rm -f ./$(DEPDIR)/arcemtest-romload.Po
-	-rm -f ./$(DEPDIR)/arcemtest-sound.Po
-	-rm -f ./$(DEPDIR)/arcemtest-soundopenal.Po
-	-rm -f ./$(DEPDIR)/arcemtest-st506.Po
-	-rm -f ./$(DEPDIR)/arcemtest-st506_akd52.Po
-	-rm -f ./$(DEPDIR)/arcemtest-timer.Po
-	-rm -f ./$(DEPDIR)/arcemtest-vidc.Po
-	-rm -f ./$(DEPDIR)/arcemtest-video_sdl2.Po
-	-rm -f ./$(DEPDIR)/arcemtest-wd1770.Po
-	-rm -f ./$(DEPDIR)/arcemtest-wx-sdl2-joystick.Po
-	-rm -f ./$(DEPDIR)/arculator-82c711.Po
+		-rm -f ./$(DEPDIR)/arculator-82c711.Po
 	-rm -f ./$(DEPDIR)/arculator-82c711_fdc.Po
 	-rm -f ./$(DEPDIR)/arculator-arm.Po
 	-rm -f ./$(DEPDIR)/arculator-bmu.Po
@@ -2775,6 +2742,61 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/arculator-wx-resources.Po
 	-rm -f ./$(DEPDIR)/arculator-wx-sdl2-joystick.Po
 	-rm -f ./$(DEPDIR)/arculator-wx-sdl2.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-82c711.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-82c711_fdc.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-arm.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-bmu.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-cmos.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-colourcard.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-config.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-cp15.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ddnoise.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-disc.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-disc_adf.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-disc_apd.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-disc_fdi.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-disc_hfe.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-disc_jfd.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-disc_mfm_common.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ds2401.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-emscripten_main.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-eterna.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-fdi2raw.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-fpa.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-g16.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-g332.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-hostfs-unix.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-hostfs.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ide.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ide_a3in.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ide_config.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ide_idea.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ide_riscdev.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ide_zidefs.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ide_zidefs_a3k.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-input_sdl2.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ioc.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ioeb.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-joystick.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-keyboard.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-lc.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-main.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-mem.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-memc.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-podules-linux.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-podules.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-printer.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-riscdev_hdfc.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-romload.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-sound.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-soundopenal.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-st506.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-st506_akd52.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-timer.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-vidc.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-video_sdl2.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-wd1770.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-wx-sdl2-joystick.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -2820,62 +2842,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/arcemtest-82c711.Po
-	-rm -f ./$(DEPDIR)/arcemtest-82c711_fdc.Po
-	-rm -f ./$(DEPDIR)/arcemtest-arctest.Po
-	-rm -f ./$(DEPDIR)/arcemtest-arm.Po
-	-rm -f ./$(DEPDIR)/arcemtest-bmu.Po
-	-rm -f ./$(DEPDIR)/arcemtest-cmos.Po
-	-rm -f ./$(DEPDIR)/arcemtest-colourcard.Po
-	-rm -f ./$(DEPDIR)/arcemtest-config.Po
-	-rm -f ./$(DEPDIR)/arcemtest-cp15.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ddnoise.Po
-	-rm -f ./$(DEPDIR)/arcemtest-disc.Po
-	-rm -f ./$(DEPDIR)/arcemtest-disc_adf.Po
-	-rm -f ./$(DEPDIR)/arcemtest-disc_apd.Po
-	-rm -f ./$(DEPDIR)/arcemtest-disc_fdi.Po
-	-rm -f ./$(DEPDIR)/arcemtest-disc_hfe.Po
-	-rm -f ./$(DEPDIR)/arcemtest-disc_jfd.Po
-	-rm -f ./$(DEPDIR)/arcemtest-disc_mfm_common.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ds2401.Po
-	-rm -f ./$(DEPDIR)/arcemtest-eterna.Po
-	-rm -f ./$(DEPDIR)/arcemtest-fdi2raw.Po
-	-rm -f ./$(DEPDIR)/arcemtest-fpa.Po
-	-rm -f ./$(DEPDIR)/arcemtest-g16.Po
-	-rm -f ./$(DEPDIR)/arcemtest-g332.Po
-	-rm -f ./$(DEPDIR)/arcemtest-hostfs-unix.Po
-	-rm -f ./$(DEPDIR)/arcemtest-hostfs.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ide.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ide_a3in.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ide_config.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ide_idea.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ide_riscdev.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ide_zidefs.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ide_zidefs_a3k.Po
-	-rm -f ./$(DEPDIR)/arcemtest-input_sdl2.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ioc.Po
-	-rm -f ./$(DEPDIR)/arcemtest-ioeb.Po
-	-rm -f ./$(DEPDIR)/arcemtest-joystick.Po
-	-rm -f ./$(DEPDIR)/arcemtest-keyboard.Po
-	-rm -f ./$(DEPDIR)/arcemtest-lc.Po
-	-rm -f ./$(DEPDIR)/arcemtest-main.Po
-	-rm -f ./$(DEPDIR)/arcemtest-mem.Po
-	-rm -f ./$(DEPDIR)/arcemtest-memc.Po
-	-rm -f ./$(DEPDIR)/arcemtest-podules-linux.Po
-	-rm -f ./$(DEPDIR)/arcemtest-podules.Po
-	-rm -f ./$(DEPDIR)/arcemtest-printer.Po
-	-rm -f ./$(DEPDIR)/arcemtest-riscdev_hdfc.Po
-	-rm -f ./$(DEPDIR)/arcemtest-romload.Po
-	-rm -f ./$(DEPDIR)/arcemtest-sound.Po
-	-rm -f ./$(DEPDIR)/arcemtest-soundopenal.Po
-	-rm -f ./$(DEPDIR)/arcemtest-st506.Po
-	-rm -f ./$(DEPDIR)/arcemtest-st506_akd52.Po
-	-rm -f ./$(DEPDIR)/arcemtest-timer.Po
-	-rm -f ./$(DEPDIR)/arcemtest-vidc.Po
-	-rm -f ./$(DEPDIR)/arcemtest-video_sdl2.Po
-	-rm -f ./$(DEPDIR)/arcemtest-wd1770.Po
-	-rm -f ./$(DEPDIR)/arcemtest-wx-sdl2-joystick.Po
-	-rm -f ./$(DEPDIR)/arculator-82c711.Po
+		-rm -f ./$(DEPDIR)/arculator-82c711.Po
 	-rm -f ./$(DEPDIR)/arculator-82c711_fdc.Po
 	-rm -f ./$(DEPDIR)/arculator-arm.Po
 	-rm -f ./$(DEPDIR)/arculator-bmu.Po
@@ -2940,6 +2907,61 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/arculator-wx-resources.Po
 	-rm -f ./$(DEPDIR)/arculator-wx-sdl2-joystick.Po
 	-rm -f ./$(DEPDIR)/arculator-wx-sdl2.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-82c711.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-82c711_fdc.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-arm.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-bmu.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-cmos.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-colourcard.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-config.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-cp15.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ddnoise.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-disc.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-disc_adf.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-disc_apd.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-disc_fdi.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-disc_hfe.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-disc_jfd.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-disc_mfm_common.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ds2401.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-emscripten_main.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-eterna.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-fdi2raw.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-fpa.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-g16.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-g332.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-hostfs-unix.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-hostfs.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ide.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ide_a3in.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ide_config.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ide_idea.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ide_riscdev.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ide_zidefs.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ide_zidefs_a3k.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-input_sdl2.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ioc.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-ioeb.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-joystick.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-keyboard.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-lc.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-main.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-mem.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-memc.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-podules-linux.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-podules.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-printer.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-riscdev_hdfc.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-romload.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-sound.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-soundopenal.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-st506.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-st506_akd52.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-timer.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-vidc.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-video_sdl2.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-wd1770.Po
+	-rm -f ./$(DEPDIR)/arculatorweb-wx-sdl2-joystick.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -2978,8 +3000,16 @@ uninstall-am: uninstall-binPROGRAMS
 
 #../arculator: arculator
 #	cp arculator ...
-../arcemtest: arcemtest
-	emcc -sUSE_ZLIB=1 -sUSE_SDL=2  -sALLOW_MEMORY_GROWTH=1 *.o -o ../arcemtest.html
+../arculatorweb: arculatorweb
+	if [ -d ../emscripten_assets ]; then rm -rf ../emscripten_assets; fi
+	mkdir ../emscripten_assets
+	mkdir -p ../emscripten_out/
+	cp -r ../ddnoise ../emscripten_assets
+	cp -r ../cmos ../emscripten_assets
+	cp ../arc.cfg ../emscripten_assets
+	mkdir -p ../emscripten_assets/roms/
+	cp -r ../roms/riscos311 ../emscripten_assets/roms/
+	emcc -sUSE_ZLIB=1 -sUSE_SDL=2  -sALLOW_MEMORY_GROWTH=1 *.o -o ../emscripten_out/arculator.html --preload-file ../emscripten_assets@/
 
 amrefresh:	
 wx.res: wx.rc

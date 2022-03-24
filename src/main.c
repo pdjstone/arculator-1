@@ -102,7 +102,7 @@ void rpclog(const char *format, ...)
 
    fprintf(stderr, "[%08i]: %s", (uint32_t)(tsc >> 32), buf);
    fprintf(rlog, "[%08i]: %s", (uint32_t)(tsc >> 32), buf);
-
+   
    fflush(rlog);
 #endif
 }
@@ -166,8 +166,10 @@ int arc_init()
         
         if (loadrom())
                 return -1;
+        #ifndef __EMSCRIPTEN__
         rom_load_5th_column();
         rom_load_arc_support_extrom();
+        #endif
 
         resizemem(memsize);
         
@@ -241,7 +243,9 @@ void arc_reset()
                 cmos_save();
         }
         loadrom();
+        #ifndef __EMSCRIPTEN__
         rom_load_5th_column();
+        #endif
         cmos_load();
         resizemem(memsize);
         resetarm();
@@ -335,8 +339,10 @@ void arc_run()
         if (cmos_changed)
         {
                 cmos_changed--;
+                #ifndef __EMSCRIPTEN__
                 if (!cmos_changed)
                         cmos_save();
+                #endif
         }
         LOG_EVENT_LOOP("END arc_run()\n");
 }

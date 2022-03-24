@@ -279,7 +279,7 @@ void rom_load_5th_column(void)
                 fclose(f);
         }
         else
-                rpclog("File not found\n");
+                rpclog("rom_load_5th_column: file not found\n");
 }
 
 void rom_load_arc_support_extrom(void)
