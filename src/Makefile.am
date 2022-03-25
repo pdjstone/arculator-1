@@ -21,14 +21,20 @@ else
 noinst_SCRIPTS += ../arculatorweb
 ../arculatorweb: arculatorweb
 	if [ -d ../emscripten_assets ]; then rm -rf ../emscripten_assets; fi
+	if [ -d ../emscripten_out ]; then rm -rf ../emscripten_out; fi
 	mkdir ../emscripten_assets
-	mkdir -p ../emscripten_out/
+	mkdir ../emscripten_out/
 	cp -r ../ddnoise ../emscripten_assets
 	cp -r ../cmos ../emscripten_assets
 #	cp ../arc.cfg ../emscripten_assets
+	
 	mkdir -p ../emscripten_assets/roms/
 	cp -r ../roms/riscos311 ../emscripten_assets/roms/
-	emcc -sUSE_ZLIB=1 -sUSE_SDL=2  -sALLOW_MEMORY_GROWTH=1 *.o -o ../emscripten_out/arculator.html --preload-file ../emscripten_assets@/
+	emcc -sUSE_ZLIB=1 -sUSE_SDL=2  -sALLOW_MEMORY_GROWTH=1 *.o -o ../emscripten_out/arculator.js --preload-file ../emscripten_assets@/
+	
+	cp ../web/* ../emscripten_out/ 
+	cp -r ../disks ../emscripten_out/
+	$(cd ../emscripten_out/; find disks -type f > disk_index.txt)
 endif
 endif
 

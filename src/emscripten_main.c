@@ -83,11 +83,11 @@ void arcloop()
     }
 
     // Run for 10 ms of processor time
-    //SDL_LockMutex(main_thread_mutex);
+    SDL_LockMutex(main_thread_mutex);
     
     if (!pause_main_thread)
         arc_run();
-    //SDL_UnlockMutex(main_thread_mutex);
+    SDL_UnlockMutex(main_thread_mutex);
 
     // Sleep to make it up to 10 ms of real time
     static Uint32 last_timer_ticks = 0;
@@ -135,7 +135,7 @@ static int arc_main_thread()
         input_init(); 
         sdl_enable_mouse_capture();
         #ifdef __EMSCRIPTEN__
-        emscripten_set_main_loop(arcloop, 0, 1);
+                emscripten_set_main_loop(arcloop, 0, 1);
         #else
         while(1) {        
                 arcloop();
@@ -153,7 +153,7 @@ void arc_do_reset()
         SDL_UnlockMutex(main_thread_mutex);
 }
 
-void arc_disc_change(int drive, char *fn)
+void EMSCRIPTEN_KEEPALIVE arc_disc_change(int drive, char *fn)
 {
         rpclog("arc_disc_change: drive=%i fn=%s\n", drive, fn);
 
@@ -167,7 +167,7 @@ void arc_disc_change(int drive, char *fn)
         SDL_UnlockMutex(main_thread_mutex);
 }
 
-void arc_disc_eject(int drive)
+void EMSCRIPTEN_KEEPALIVE arc_disc_eject(int drive)
 {
         rpclog("arc_disc_eject: drive=%i\n", drive);
 
@@ -217,5 +217,6 @@ void arc_enter_fullscreen()
 }
 
 int main() {
-    arc_main_thread();
+        main_thread_mutex = SDL_CreateMutex();
+        arc_main_thread();
 }
