@@ -21,3 +21,6 @@ autom4te.cache/
 /emscripten_assets/
 /emscripten_out/
 roms.txt
+config.status
+libtool
+Makefile
