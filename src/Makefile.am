@@ -25,7 +25,7 @@ noinst_SCRIPTS += ../arculatorweb
 	mkdir -p ../emscripten_out/
 	cp -r ../ddnoise ../emscripten_assets
 	cp -r ../cmos ../emscripten_assets
-	cp ../arc.cfg ../emscripten_assets
+#	cp ../arc.cfg ../emscripten_assets
 	mkdir -p ../emscripten_assets/roms/
 	cp -r ../roms/riscos311 ../emscripten_assets/roms/
 	emcc -sUSE_ZLIB=1 -sUSE_SDL=2  -sALLOW_MEMORY_GROWTH=1 *.o -o ../emscripten_out/arculator.html --preload-file ../emscripten_assets@/
