@@ -8,8 +8,6 @@ roms/
 autom4te.cache/
 .deps/
 *.wasm
-*.js
-*.html
 *.bin
 *.cfg
 *log.txt
