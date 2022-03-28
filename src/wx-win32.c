@@ -158,7 +158,7 @@ void mainthread(LPVOID param)
                         if (draw_count > 80)
                                 draw_count = 0;
 
-                        arc_run();
+                        arc_run(100);
 
                         frames++;
                         SDL_UnlockMutex(main_thread_mutex);

@@ -182,7 +182,7 @@ static int arc_main_thread(void *p)
                 // Run for 10 ms of processor time
                 SDL_LockMutex(main_thread_mutex);
                 if (!pause_main_thread)
-                        arc_run();
+                        arc_run(100);
                 SDL_UnlockMutex(main_thread_mutex);
 
                 // Sleep to make it up to 10 ms of real time

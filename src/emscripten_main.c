@@ -180,7 +180,7 @@ void arcloop()
     SDL_LockMutex(main_thread_mutex);
     
     if (!pause_main_thread)
-        arc_run();
+        arc_run(60);
     SDL_UnlockMutex(main_thread_mutex);
 
     // Sleep to make it up to 10 ms of real time
