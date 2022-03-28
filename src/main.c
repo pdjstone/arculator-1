@@ -162,20 +162,8 @@ int arc_init()
 #if 0
 	initarculfs();
 #endif
-<<<<<<< HEAD
 	hostfs_init();
 	initmem(memsize);
-=======
-        hostfs_init();
-        initmem(memsize);
-        
-        if (loadrom())
-                return -1;
-        #ifndef __EMSCRIPTEN__
-        rom_load_5th_column();
-        rom_load_arc_support_extrom();
-        #endif
->>>>>>> 48c5cb8 (arculator builds with emscripten and runs)
 
 	if (loadrom())
 		return -1;
@@ -340,7 +328,7 @@ static int ddnoise_frames = 0;
 void arc_run()
 {
 	LOG_EVENT_LOOP("arc_run()\n");
-	execarm((speed_mhz * 1000000) / 100);
+	execarm((speed_mhz * 1000000) / 60);
 	joystick_poll_host();
 	mouse_poll_host();
 	keyboard_poll_host();
