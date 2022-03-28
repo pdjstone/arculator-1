@@ -2999,14 +2999,20 @@ uninstall-am: uninstall-binPROGRAMS
 @EMSCRIPTEN_FALSE@@OS_WINDOWS_FALSE@	cp arculator ..
 @EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@../arculatorweb: arculatorweb
 @EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	if [ -d ../emscripten_assets ]; then rm -rf ../emscripten_assets; fi
+@EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	if [ -d ../emscripten_out ]; then rm -rf ../emscripten_out; fi
 @EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	mkdir ../emscripten_assets
-@EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	mkdir -p ../emscripten_out/
+@EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	mkdir ../emscripten_out/
 @EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	cp -r ../ddnoise ../emscripten_assets
 @EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	cp -r ../cmos ../emscripten_assets
 #	cp ../arc.cfg ../emscripten_assets
+
 @EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	mkdir -p ../emscripten_assets/roms/
 @EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	cp -r ../roms/riscos311 ../emscripten_assets/roms/
-@EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	emcc -sUSE_ZLIB=1 -sUSE_SDL=2  -sALLOW_MEMORY_GROWTH=1 *.o -o ../emscripten_out/arculator.html --preload-file ../emscripten_assets@/
+@EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	emcc -sUSE_ZLIB=1 -sUSE_SDL=2  -sALLOW_MEMORY_GROWTH=1 *.o -o ../emscripten_out/arculator.js --preload-file ../emscripten_assets@/
+
+@EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	cp ../web/* ../emscripten_out/ 
+@EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	cp -r ../disks ../emscripten_out/
+@EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	$(cd ../emscripten_out/; find disks -type f > disk_index.txt)
 
 amrefresh:	
 wx.res: wx.rc
