@@ -325,13 +325,13 @@ void arc_set_cpu(int cpu, int memc)
 }
 
 static int ddnoise_frames = 0;
-void arc_run()
+void arc_run(int fps)
 {
 	LOG_EVENT_LOOP("arc_run()\n");
-	execarm((speed_mhz * 1000000) / 60);
 	joystick_poll_host();
 	mouse_poll_host();
 	keyboard_poll_host();
+	execarm((speed_mhz * 1000000) / fps);
 	if (mousehack) doosmouse();
 	frameco++;
 	ddnoise_frames++;
