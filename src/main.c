@@ -324,7 +324,7 @@ static int ddnoise_frames = 0;
 void arc_run()
 {
         LOG_EVENT_LOOP("arc_run()\n");
-        execarm((speed_mhz * 1000000) / 100);
+        execarm((speed_mhz * 1000000) / 60);
         joystick_poll_host();
         mouse_poll_host();
         keyboard_poll_host();

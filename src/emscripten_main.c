@@ -10,11 +10,16 @@
 #include "arc.h"
 #include "disc.h"
 #include "ioc.h"
+#include "soundopenal.h"
 #include "plat_input.h"
 #include "plat_video.h"
 #include "vidc.h"
 #include "video.h"
 #include "video_sdl2.h"
+
+#ifndef __EMSCRIPTEN__
+#define EMSCRIPTEN_KEEPALIVE 
+#endif
 
 static int winsizex = 0, winsizey = 0;
 static int win_doresize = 0;
@@ -52,35 +57,124 @@ static SDL_mutex *main_thread_mutex = NULL;
 static time_t last_seconds = 0;
 void arcloop()
 {
-    struct timeval tp;
-    
-    //rpclog("Aevent loop\n");
-    
-    if (gettimeofday(&tp, NULL) == -1)
-    {
-            perror("gettimeofday");
-            fatal("gettimeofday failed\n");
-    }
-    else if (!last_seconds)
-    {
-            last_seconds = tp.tv_sec;
-            rpclog("start time = %d\n", last_seconds);
-    }
-    else if (last_seconds != tp.tv_sec)
-    {
-            //rpclog("calling updateins");
-            updateins();
-            last_seconds = tp.tv_sec;
-    }
+        struct timeval tp;
 
-    if (win_renderer_reset)
-    {
-            rpclog("a1");
-        win_renderer_reset = 0;
+        //rpclog("Aevent loop\n");
 
-        if (!video_renderer_reinit(NULL))
-                fatal("Video renderer init failed");
-    }
+        if (gettimeofday(&tp, NULL) == -1)
+        {
+                perror("gettimeofday");
+                fatal("gettimeofday failed\n");
+        }
+        else if (!last_seconds)
+        {
+                last_seconds = tp.tv_sec;
+                rpclog("start time = %d\n", last_seconds);
+        }
+        else if (last_seconds != tp.tv_sec)
+        {
+                //rpclog("calling updateins");
+                updateins();
+                last_seconds = tp.tv_sec;
+        }
+
+        SDL_Event e;
+
+        while (SDL_PollEvent(&e) != 0)
+        {
+                if (e.type == SDL_QUIT)
+                {
+        //                                quited = 1;
+                        //arc_stop_emulation();
+                }
+                if (e.type == SDL_MOUSEBUTTONUP)
+                {
+                        if (e.button.button == SDL_BUTTON_LEFT && !mousecapture)
+                        {
+                                rpclog("Mouse click -- enabling mouse capture\n");
+                                sdl_enable_mouse_capture();
+                        }
+                        else if (e.button.button == SDL_BUTTON_RIGHT && !mousecapture)
+                        {
+                                //arc_popup_menu();
+                        }
+                }
+                if (e.type == SDL_WINDOWEVENT)
+                {
+                        switch (e.window.event)
+                        {
+                                case SDL_WINDOWEVENT_FOCUS_LOST:
+                                if (mousecapture)
+                                {
+                                        rpclog("Focus lost -- disabling mouse capture\n");
+                                        sdl_disable_mouse_capture();
+                                }
+                                break;
+
+                                default:
+                                break;
+                        }
+                }
+                if ((key[KEY_LCONTROL] || key[KEY_RCONTROL])
+                        && key[KEY_END]
+                        && !fullscreen && mousecapture)
+                {
+                        rpclog("CTRL-END pressed -- disabling mouse capture\n");
+                        sdl_disable_mouse_capture();
+                }
+        }
+
+        /*Resize window to match screen mode*/
+        if (!fullscreen && win_doresize)
+        {
+                SDL_Rect rect;
+
+                win_doresize = 0;
+
+                SDL_GetWindowSize(sdl_main_window, &rect.w, &rect.h);
+                if (rect.w != winsizex || rect.h != winsizey)
+                {
+                        rpclog("Resizing window to %d, %d\n", winsizex, winsizey);
+                        SDL_GetWindowPosition(sdl_main_window, &rect.x, &rect.y);
+                        SDL_SetWindowSize(sdl_main_window, winsizex, winsizey);
+                        SDL_SetWindowPosition(sdl_main_window, rect.x, rect.y);
+                }
+        }
+
+        /*Toggle fullscreen with RWIN-Enter (Alt-Enter, Cmd-Enter),
+                or enter by selecting Fullscreen from the menu.*/
+        if (win_dofullscreen ||
+                (key[KEY_RWIN] && key[KEY_ENTER] && !fullscreen)
+        )
+        {
+                win_dofullscreen = 0;
+
+                SDL_RaiseWindow(sdl_main_window);
+                SDL_SetWindowFullscreen(sdl_main_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+                sdl_enable_mouse_capture();
+                fullscreen = 1;
+        } else if (fullscreen && (
+                /*Exit fullscreen with Ctrl-End*/
+                ((key[KEY_LCONTROL] || key[KEY_RCONTROL]) && key[KEY_END])
+                /*Toggle with RWIN-Enter*/
+                || (key[KEY_RWIN] && key[KEY_ENTER])
+        ))
+        {
+                SDL_SetWindowFullscreen(sdl_main_window, 0);
+                sdl_disable_mouse_capture();
+
+                fullscreen=0;
+                if (fullborders) updatewindowsize(800,600);
+                else             updatewindowsize(672,544);
+        }
+
+        if (win_renderer_reset)
+        {
+                win_renderer_reset = 0;
+
+                if (!video_renderer_reinit(NULL))
+                        fatal("Video renderer init failed");
+        }
 
     // Run for 10 ms of processor time
     SDL_LockMutex(main_thread_mutex);
@@ -95,8 +189,7 @@ void arcloop()
     Uint32 current_timer_ticks = SDL_GetTicks();
     Uint32 ticks_since_last = current_timer_ticks - last_timer_ticks;
     last_timer_ticks = current_timer_ticks;
-    timer_offset += 10 - (int)ticks_since_last;
-    // rpclog("timer_offset now %d; %d ticks since last; delaying %d\n", timer_offset, ticks_since_last, 10 - ticks_since_last);
+    timer_offset += 16 - (int)ticks_since_last;
     if (timer_offset > 100 || timer_offset < -100)
     {
             timer_offset = 0;
@@ -109,8 +202,9 @@ void arcloop()
     if (updatemips)
     {
             char s[80];
-
-            sprintf(s, "Arculator %s - %i%%", VERSION_STRING, inssec);
+rpclog("timer_offset now %d; %d ticks since last; delaying %d\n", timer_offset, ticks_since_last, 16 - ticks_since_last);
+            int pct = (int)((inssec / 60.0) * 100);
+            sprintf(s, "Arculator %s - %i%%", VERSION_STRING, pct);
             vidc_framecount = 0;
             if (!fullscreen)
             SDL_SetWindowTitle(sdl_main_window, s);
@@ -180,6 +274,14 @@ void EMSCRIPTEN_KEEPALIVE arc_disc_eject(int drive)
         SDL_UnlockMutex(main_thread_mutex);
 }
 
+void arc_stop_main_thread()
+{
+        quited = 1;
+        //SDL_WaitThread(main_thread, NULL);
+       // SDL_DestroyMutex(main_thread_mutex);
+       // main_thread_mutex = NULL;
+}
+
 void arc_renderer_reset()
 {
         win_renderer_reset = 1;
@@ -217,6 +319,7 @@ void arc_enter_fullscreen()
 }
 
 int main() {
+        al_init_main(0, NULL);
         main_thread_mutex = SDL_CreateMutex();
         arc_main_thread();
 }
