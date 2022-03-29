@@ -27,6 +27,10 @@ static int win_dofullscreen = 0;
 static int win_dosetresize = 0;
 static int win_renderer_reset = 0;
 
+
+#define TARGET_FPS 60
+static int target_delay = 1000/TARGET_FPS;
+
 void updatewindowsize(int x, int y)
 {
         winsizex = x; winsizey = y;
@@ -84,8 +88,7 @@ void arcloop()
         {
                 if (e.type == SDL_QUIT)
                 {
-        //                                quited = 1;
-                        //arc_stop_emulation();
+                        arc_stop_main_thread();
                 }
                 if (e.type == SDL_MOUSEBUTTONUP)
                 {
@@ -180,7 +183,7 @@ void arcloop()
     SDL_LockMutex(main_thread_mutex);
     
     if (!pause_main_thread)
-        arc_run(60);
+        arc_run(TARGET_FPS);
     SDL_UnlockMutex(main_thread_mutex);
 
     // Sleep to make it up to 10 ms of real time
@@ -189,21 +192,23 @@ void arcloop()
     Uint32 current_timer_ticks = SDL_GetTicks();
     Uint32 ticks_since_last = current_timer_ticks - last_timer_ticks;
     last_timer_ticks = current_timer_ticks;
-    timer_offset += 16 - (int)ticks_since_last;
+    timer_offset += target_delay - (int)ticks_since_last;
     if (timer_offset > 100 || timer_offset < -100)
     {
             timer_offset = 0;
     }
     else if (timer_offset > 0)
     {
-            //SDL_Delay(timer_offset);
+            #ifndef __EMSCRIPTEN__
+            SDL_Delay(timer_offset);
+            #endif
     }
 
     if (updatemips)
     {
             char s[80];
-rpclog("timer_offset now %d; %d ticks since last; delaying %d\n", timer_offset, ticks_since_last, 16 - ticks_since_last);
-            int pct = (int)((inssec / 60.0) * 100);
+            //rpclog("timer_offset now %d; %d ticks since last; delaying %d\n", timer_offset, ticks_since_last, target_delay - ticks_since_last);
+            int pct = (int)((inssec / (TARGET_FPS * 1.0)) * 100);
             sprintf(s, "Arculator %s - %i%%", VERSION_STRING, pct);
             vidc_framecount = 0;
             if (!fullscreen)
@@ -228,10 +233,12 @@ static int arc_main_thread()
         }
         input_init(); 
         sdl_enable_mouse_capture();
-        #ifdef __EMSCRIPTEN__
+       
+        #ifdef __EMSCRIPTEN__  
                 emscripten_set_main_loop(arcloop, 0, 1);
         #else
-        while(1) {        
+        
+        while(!quited) {        
                 arcloop();
         }
         #endif 
@@ -278,8 +285,8 @@ void arc_stop_main_thread()
 {
         quited = 1;
         //SDL_WaitThread(main_thread, NULL);
-       // SDL_DestroyMutex(main_thread_mutex);
-       // main_thread_mutex = NULL;
+        SDL_DestroyMutex(main_thread_mutex);
+        main_thread_mutex = NULL;
 }
 
 void arc_renderer_reset()
