@@ -29,7 +29,7 @@ static void check()
 	ALenum error;
 	if ((error = alGetError()) != AL_NO_ERROR)
 	{
-		//printf("AL Error : %08X\n", error);
+		//rpclog("AL Error : %08X\n", error);
 		//printf("Description : %s\n",alGetErrorString(error));
 	}
 /*        if ((error = alutGetError()) != ALUT_ERROR_NO_ERROR)
@@ -45,7 +45,7 @@ ALvoid  alutInit(ALint *argc,ALbyte **argv)
 	ALCdevice *Device;
 
 	//Open device
- 	Device=alcOpenDevice((void *)"");
+ 	Device=alcOpenDevice(NULL);
 	//Create context(s)
 	Context=alcCreateContext(Device,NULL);
 	//Set active context

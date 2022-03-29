@@ -335,7 +335,7 @@ void arc_run(int fps)
 	if (mousehack) doosmouse();
 	frameco++;
 	ddnoise_frames++;
-	if (ddnoise_frames == 10)
+	if (ddnoise_frames == 6)
 	{
 		ddnoise_frames = 0;
 		ddnoise_mix();
