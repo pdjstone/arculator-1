@@ -8,6 +8,7 @@
 #include <emscripten.h>
 #endif
 #include "arc.h"
+#include "config.h"
 #include "disc.h"
 #include "ioc.h"
 #include "soundopenal.h"
@@ -27,9 +28,9 @@ static int win_dofullscreen = 0;
 static int win_dosetresize = 0;
 static int win_renderer_reset = 0;
 
+#define MAX_TICKS_PER_FRAME 100
 
-#define TARGET_FPS 60
-static int target_delay = 1000/TARGET_FPS;
+static int fixed_fps = 0;
 
 void updatewindowsize(int x, int y)
 {
@@ -63,8 +64,6 @@ void arcloop()
 {
         struct timeval tp;
 
-        //rpclog("Aevent loop\n");
-
         if (gettimeofday(&tp, NULL) == -1)
         {
                 perror("gettimeofday");
@@ -77,7 +76,6 @@ void arcloop()
         }
         else if (last_seconds != tp.tv_sec)
         {
-                //rpclog("calling updateins");
                 updateins();
                 last_seconds = tp.tv_sec;
         }
@@ -179,42 +177,43 @@ void arcloop()
                         fatal("Video renderer init failed");
         }
 
-    // Run for 10 ms of processor time
-    SDL_LockMutex(main_thread_mutex);
-    
-    if (!pause_main_thread)
-        arc_run(TARGET_FPS);
-    SDL_UnlockMutex(main_thread_mutex);
+        static Uint32 last_timer_ticks = 0;
+       
+        Uint32 current_timer_ticks = SDL_GetTicks();
+        Uint32 ticks_since_last = current_timer_ticks - last_timer_ticks;
+        last_timer_ticks = current_timer_ticks;
 
-    // Sleep to make it up to 10 ms of real time
-    static Uint32 last_timer_ticks = 0;
-    static int timer_offset = 0;
-    Uint32 current_timer_ticks = SDL_GetTicks();
-    Uint32 ticks_since_last = current_timer_ticks - last_timer_ticks;
-    last_timer_ticks = current_timer_ticks;
-    timer_offset += target_delay - (int)ticks_since_last;
-    if (timer_offset > 100 || timer_offset < -100)
-    {
-            timer_offset = 0;
-    }
-    else if (timer_offset > 0)
-    {
-            #ifndef __EMSCRIPTEN__
-            SDL_Delay(timer_offset);
-            #endif
-    }
 
-    if (updatemips)
-    {
-            char s[80];
-            //rpclog("timer_offset now %d; %d ticks since last; delaying %d\n", timer_offset, ticks_since_last, target_delay - ticks_since_last);
-            int pct = (int)((inssec / (TARGET_FPS * 1.0)) * 100);
-            sprintf(s, "Arculator %s - %i%%", VERSION_STRING, pct);
-            vidc_framecount = 0;
-            if (!fullscreen)
-            SDL_SetWindowTitle(sdl_main_window, s);
-            updatemips=0;
-    }
+        SDL_LockMutex(main_thread_mutex);
+
+        if (!pause_main_thread)
+        arc_run(ticks_since_last < MAX_TICKS_PER_FRAME ? ticks_since_last : MAX_TICKS_PER_FRAME);
+
+        SDL_UnlockMutex(main_thread_mutex);
+        static int timer_offset = 0;
+        #ifndef __EMSCRIPTEN__
+        timer_offset += (1000 / (fixed_fps == 0 ? 60 : fixed_fps)) - (int)ticks_since_last;
+        if (timer_offset > 100 || timer_offset < -100)
+        {
+                timer_offset = 0;
+        }
+        else if (timer_offset > 0)
+        {
+                SDL_Delay(timer_offset);     
+        }
+        #endif
+
+        if (updatemips)
+        {
+                char s[80];
+                rpclog("ticks since last=%d; timer_offset=%d\n", ticks_since_last, timer_offset);
+                //int pct = (int)((inssec / (TARGET_FPS * 1.0)) * 100);
+                sprintf(s, "Arculator %s - %.2f MIPS", VERSION_STRING, inssecf);
+                vidc_framecount = 0;
+                if (!fullscreen)
+                        SDL_SetWindowTitle(sdl_main_window, s);
+                updatemips=0;
+        }
 
   
 }
@@ -226,7 +225,6 @@ static int arc_main_thread()
         last_seconds = 0;
         arc_init();
 
-        
         if (!video_renderer_init(NULL))
         {
                 fatal("Video renderer init failed");
@@ -235,9 +233,9 @@ static int arc_main_thread()
         sdl_enable_mouse_capture();
        
         #ifdef __EMSCRIPTEN__  
-                emscripten_set_main_loop(arcloop, 0, 1);
+        // if fixed_fps is 0, emscripten will use requestAnimationFrame
+        emscripten_set_main_loop(arcloop, fixed_fps, 1);
         #else
-        
         while(!quited) {        
                 arcloop();
         }
@@ -246,8 +244,22 @@ static int arc_main_thread()
 }
 
 
+void EMSCRIPTEN_KEEPALIVE arc_pause_main_thread()
+{
+        SDL_LockMutex(main_thread_mutex);
+        pause_main_thread = 1;
+        SDL_UnlockMutex(main_thread_mutex);
+}
 
-void arc_do_reset()
+void EMSCRIPTEN_KEEPALIVE arc_resume_main_thread()
+{
+        SDL_LockMutex(main_thread_mutex);
+        pause_main_thread = 0;
+        SDL_UnlockMutex(main_thread_mutex);
+}
+
+
+void EMSCRIPTEN_KEEPALIVE arc_do_reset()
 {
         SDL_LockMutex(main_thread_mutex);
         arc_reset();
@@ -289,12 +301,12 @@ void arc_stop_main_thread()
         main_thread_mutex = NULL;
 }
 
-void arc_renderer_reset()
+void EMSCRIPTEN_KEEPALIVE arc_renderer_reset()
 {
         win_renderer_reset = 1;
 }
 
-void arc_set_display_mode(int new_display_mode)
+void EMSCRIPTEN_KEEPALIVE arc_set_display_mode(int new_display_mode)
 {
         SDL_LockMutex(main_thread_mutex);
 
@@ -305,7 +317,7 @@ void arc_set_display_mode(int new_display_mode)
         SDL_UnlockMutex(main_thread_mutex);
 }
 
-void arc_set_dblscan(int new_dblscan)
+void EMSCRIPTEN_KEEPALIVE arc_set_dblscan(int new_dblscan)
 {
         SDL_LockMutex(main_thread_mutex);
 
@@ -320,13 +332,26 @@ void arc_set_resizeable()
         win_dosetresize = 1;
 }
 
-void arc_enter_fullscreen()
+void EMSCRIPTEN_KEEPALIVE arc_enter_fullscreen()
 {
         win_dofullscreen = 1;
 }
 
-int main() {
+int EMSCRIPTEN_KEEPALIVE main(int argc, char** argv) 
+{
+        rpclog("emscripten main - argc=%d\n", argc);
+        if (argc > 1) 
+        {
+                fixed_fps = atoi(argv[1]);
+                rpclog("setting fixed_fps=%d\n", fixed_fps);
+        }
+        if (argc > 2) 
+        {
+                snprintf(machine_config_file, 256, "configs/%s.cfg", argv[2]);
+                strncpy(machine_config_name, argv[1], 256);
+                rpclog("machine_config_name=%s machine_config_file=%s\n", machine_config_name, machine_config_file);
+        }
         al_init_main(0, NULL);
         main_thread_mutex = SDL_CreateMutex();
         arc_main_thread();
-}
+} 
