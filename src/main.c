@@ -61,7 +61,7 @@ int romset=2;
 void fdiclose();
 int firstfull=1;
 int memsize=4096;
-static float inssecf;  /*Millions of instructions executed in the last second*/
+float inssecf;  /*Millions of instructions executed in the last second*/
 int inssec;            /*Speed ratio percentage (100% = realtime emulation), updated by updateins()*/
 int updatemips;        /*1 if MIPS counter has not been updated since last updateins() call*/
 static int frameco=0;  /*Number of 1/100 second executions (arm_run() calls) since last updateins()*/
@@ -325,19 +325,22 @@ void arc_set_cpu(int cpu, int memc)
 }
 
 static int ddnoise_frames = 0;
-void arc_run(int fps)
+static int millisec_count = 0;
+void arc_run(int millisecs)
 {
 	LOG_EVENT_LOOP("arc_run()\n");
 	joystick_poll_host();
 	mouse_poll_host();
 	keyboard_poll_host();
-	execarm((speed_mhz * 1000000) / fps);
+	execarm(speed_mhz * 1000 * millisecs);
+	millisec_count += millisecs;
+
 	if (mousehack) doosmouse();
 	frameco++;
-	ddnoise_frames++;
-	if (ddnoise_frames == 6)
+	
+	if (millisec_count >= 100)
 	{
-		ddnoise_frames = 0;
+		millisec_count = 0;
 		ddnoise_mix();
 	}
 	if (cmos_changed)

@@ -77,6 +77,7 @@ extern void arc_set_cpu(int cpu, int memc);
 extern void updatewindowsize(int x, int y);
 
 extern int updatemips,inssec;
+extern float inssecf;
 
 /*ARM*/
 extern uint32_t armregs[16];

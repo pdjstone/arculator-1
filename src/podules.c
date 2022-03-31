@@ -473,7 +473,7 @@ const podule_callbacks_t podule_callbacks_def =
 	.config_get_string = podule_config_get_string,
 	.config_set_int = podule_config_set_int,
 	.config_set_string = podule_config_set_string,
-	#ifndef __EMSCRIPTEN__
+	#ifndef ARCWEB
 	.config_get_current = podule_config_get_current,
 	.config_set_current = podule_config_set_current,
 	.config_file_selector = podule_config_file_selector,

@@ -67,6 +67,21 @@ var Module = {
 
 };
 
+
+let searchParams = new URLSearchParams(location.search);
+let fps = 0;
+if (searchParams.has('fixedfps')) {
+  fps = searchParams.get('fixedfps');
+  if (fps != null) {
+    fps = parseInt(fps);
+  } else {
+    fps = 60;
+  }
+  console.log('UI: Fixing frame rate to ' + fps + ' FPS');
+
+}
+Module.arguments = [fps.toString()];
+
 Module.setStatus('Downloading...');
 
 window.onerror = function(event) {

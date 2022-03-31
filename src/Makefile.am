@@ -6,7 +6,7 @@ noinst_SCRIPTS =
 CLEANFILES =
 
 if !EMSCRIPTEN
-bin_PROGRAMS = arculator
+bin_PROGRAMS = arculator arculatorweb
 else
 bin_PROGRAMS = arculatorweb
 endif
@@ -26,10 +26,13 @@ noinst_SCRIPTS += ../arculatorweb
 	mkdir ../emscripten_out/
 	cp -r ../ddnoise ../emscripten_assets
 	cp -r ../cmos ../emscripten_assets
-#	cp ../arc.cfg ../emscripten_assets
+	cp -r ../hostfs ../emscripten_assets
+	cp ../arc.cfg ../emscripten_assets
+	cp -r ../configs ../emscripten_assets
 	
 	mkdir -p ../emscripten_assets/roms/
 	cp -r ../roms/riscos311 ../emscripten_assets/roms/
+	cp ../roms/arcrom_ext ../emscripten_assets/roms
 	emcc -sUSE_ZLIB=1 -sUSE_SDL=2  -sALLOW_MEMORY_GROWTH=1 *.o -o ../emscripten_out/arculator.js --preload-file ../emscripten_assets@/
 	
 	cp ../web/* ../emscripten_out/ 
@@ -77,7 +80,7 @@ arculatorweb_SOURCES = 82c711.c 82c711_fdc.c arm.c bmu.c cmos.c colourcard.c con
  romload.c sound.c soundopenal.c st506.c st506_akd52.c timer.c vidc.c video_sdl2.c wd1770.c wx-sdl2-joystick.c
 
 arculatorweb_SOURCES += hostfs-unix.c podules-linux.c emscripten_main.c 
-arculatorweb_CFLAGS = $(shell sdl2-config --cflags)
+arculatorweb_CFLAGS = $(shell sdl2-config --cflags) -DARCWEB
 arculatorweb_LDADD = @LIBS@ 
 arculatorweb_LDADD += -ldl -lX11 -lm
 

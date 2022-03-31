@@ -91,7 +91,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@EMSCRIPTEN_FALSE@bin_PROGRAMS = arculator$(EXEEXT)
+@EMSCRIPTEN_FALSE@bin_PROGRAMS = arculator$(EXEEXT) \
+@EMSCRIPTEN_FALSE@	arculatorweb$(EXEEXT)
 @EMSCRIPTEN_TRUE@bin_PROGRAMS = arculatorweb$(EXEEXT)
 @OS_WINDOWS_FALSE@am__append_1 = $(noinst_SCRIPTS)
 @EMSCRIPTEN_FALSE@@OS_WINDOWS_FALSE@am__append_2 = ../arculator
@@ -587,7 +588,8 @@ arculatorweb_SOURCES = 82c711.c 82c711_fdc.c arm.c bmu.c cmos.c \
 	st506_akd52.c timer.c vidc.c video_sdl2.c wd1770.c \
 	wx-sdl2-joystick.c hostfs-unix.c podules-linux.c \
 	emscripten_main.c
-arculatorweb_CFLAGS = $(shell sdl2-config --cflags) $(am__append_7)
+arculatorweb_CFLAGS = $(shell sdl2-config --cflags) -DARCWEB \
+	$(am__append_7)
 arculatorweb_LDADD = @LIBS@ -ldl -lX11 -lm
 all: all-am
 
@@ -3004,10 +3006,13 @@ uninstall-am: uninstall-binPROGRAMS
 @EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	mkdir ../emscripten_out/
 @EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	cp -r ../ddnoise ../emscripten_assets
 @EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	cp -r ../cmos ../emscripten_assets
-#	cp ../arc.cfg ../emscripten_assets
+@EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	cp -r ../hostfs ../emscripten_assets
+@EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	cp ../arc.cfg ../emscripten_assets
+@EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	cp -r ../configs ../emscripten_assets
 
 @EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	mkdir -p ../emscripten_assets/roms/
 @EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	cp -r ../roms/riscos311 ../emscripten_assets/roms/
+@EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	cp ../roms/arcrom_ext ../emscripten_assets/roms
 @EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	emcc -sUSE_ZLIB=1 -sUSE_SDL=2  -sALLOW_MEMORY_GROWTH=1 *.o -o ../emscripten_out/arculator.js --preload-file ../emscripten_assets@/
 
 @EMSCRIPTEN_TRUE@@OS_WINDOWS_FALSE@	cp ../web/* ../emscripten_out/ 
