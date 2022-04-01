@@ -69,6 +69,8 @@ var Module = {
 
 
 let searchParams = new URLSearchParams(location.search);
+let machineConfig = null;
+
 let fps = 0;
 if (searchParams.has('fixedfps')) {
   fps = searchParams.get('fixedfps');
@@ -78,9 +80,31 @@ if (searchParams.has('fixedfps')) {
     fps = 60;
   }
   console.log('UI: Fixing frame rate to ' + fps + ' FPS');
-
 }
+
+
+if (searchParams.has('disc')) {
+  Module.postRun.push(function() {
+    let discUrl = searchParams.get('disc')
+    console.log('UI: postRun - load disc URL ' + discUrl);
+    loadDisk(discUrl);
+  });
+}
+
+if (searchParams.has('autoboot')) {
+  Module.preRun.push(function() {
+    let autoboot = searchParams.get('autoboot');
+    console.log('UI: preRun - create !Boot:' + autoboot);
+    FS.createDataFile('/hostfs', '!boot,feb', autoboot, true, true);
+  }); 
+  machineConfig = 'A3010_autoboot';
+}
+
 Module.arguments = [fps.toString()];
+if (machineConfig) {
+  console.log('UI: Using machine config ' + machineConfig);
+  Module.arguments.push(machineConfig);
+}
 
 Module.setStatus('Downloading...');
 
@@ -95,17 +119,52 @@ window.onerror = function(event) {
 
 let currentDiskFile = null;
 
+
+// Disc image extensions that Arculator handles
+let validDiskExts = ['.ssd','.dsd','.adf','.adl', '.fdi', '.apd', '.hfe'];
+
 async function loadDisk(url) {
     if (url == "") return;
-    let response = await fetch(url);
+    let response = await fetch(url, {mode:'cors'});
     let buf = await response.arrayBuffer();
     let data = new Uint8Array(buf);
+    let discFilename = url.substr(url.lastIndexOf('/')+1);
+    var preamble = new TextDecoder().decode(data.slice(0, 2));
 
-    if (currentDiskFile) {
-    ccall('arc_disc_eject', null, ['number'], [0]);
-    FS.unlink(currentDiskFile);
+    if (preamble == 'PK') {
+      console.log("Extracting ZIP file to find disc image");
+      let unzip = new JSUnzip();
+      unzip.open(data);
+      let zipDiscFile = null;
+      for (const n in unzip.files) {
+        for (let ext of validDiskExts) {
+          if (n.toLowerCase().endsWith(ext))
+            zipDiscFile = n;
+        }
+        if (zipDiscFile)
+          break;
+      }
+      if (!zipDiscFile) {
+        console.warn("ZIP file did not contain a disc image with a valid extension");
+        return;
+      }
+      console.log("Extracting " + zipDiscFile);
+      let result = unzip.readBinary(zipDiscFile);
+      if (!result.status) {
+        console.error("failed to extract file: " + result.error)
+      }
+      data = result.data;
+
+      if (zipDiscFile.indexOf('/') >= 0)
+        zipDiscFile = zipDiscFile.substr(zipDiscFile.lastIndexOf('/')+1);
+      discFilename = zipDiscFile;
+      
     }
-    currentDiskFile = url.substr(url.lastIndexOf('/')+1);
+    if (currentDiskFile) {
+      ccall('arc_disc_eject', null, ['number'], [0]);
+      FS.unlink(currentDiskFile);
+    }
+    currentDiskFile = discFilename;
     FS.createDataFile("/", currentDiskFile, data, true, true);
     ccall('arc_disc_change', null, ['number', 'string'], [0, '/' + currentDiskFile]);
 }

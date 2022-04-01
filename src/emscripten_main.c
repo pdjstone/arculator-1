@@ -348,7 +348,7 @@ int EMSCRIPTEN_KEEPALIVE main(int argc, char** argv)
         if (argc > 2) 
         {
                 snprintf(machine_config_file, 256, "configs/%s.cfg", argv[2]);
-                strncpy(machine_config_name, argv[1], 256);
+                strncpy(machine_config_name, argv[2], 256);
                 rpclog("machine_config_name=%s machine_config_file=%s\n", machine_config_name, machine_config_file);
         }
         al_init_main(0, NULL);
