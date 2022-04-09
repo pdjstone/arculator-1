@@ -87,16 +87,39 @@ if (searchParams.has('disc')) {
   Module.postRun.push(function() {
     let discUrl = searchParams.get('disc')
     console.log('UI: postRun - load disc URL ' + discUrl);
-    loadDisk(discUrl);
+    loadDisc(discUrl);
+  });
+}
+
+if (searchParams.has('ff')) {
+  Module.postRun.push(function() {
+    let ff_ms = parseInt(searchParams.get('ff'));
+    console.log(`UI: postRun - fast forward to ${ff_ms} ms`);
+    ccall('arc_fast_forward', null, ['number'], [ff_ms]);
   });
 }
 
 if (searchParams.has('autoboot')) {
   Module.preRun.push(function() {
     let autoboot = searchParams.get('autoboot');
-    console.log('UI: preRun - create !Boot:' + autoboot);
+    console.log('UI: preRun - create !boot:' + autoboot);
     FS.createDataFile('/hostfs', '!boot,feb', autoboot, true, true);
   }); 
+  machineConfig = 'A3010_autoboot';
+} else if (searchParams.has('basic')) {
+  let prog = searchParams.get('basic');
+  
+  
+  Module.preRun.push(function() {
+    ENV.SDL_EMSCRIPTEN_KEYBOARD_ELEMENT ="#canvas";
+    console.log('UI: preRun - create !boot and prog');
+    FS.createDataFile('/hostfs', '!boot,ffe', 'KEY1 *!boot |M\r\nbasic\r\n' + prog + "\r\nRUN\r\n", true, true);
+  });
+  Module.postRun.push(function() {
+    //ccall('arc_fast_forward', null, ['number'], [6000]);
+  });
+  document.getElementById('prog-container').style.display = 'block';
+  document.getElementById('prog').value = prog;
   machineConfig = 'A3010_autoboot';
 }
 
@@ -117,13 +140,14 @@ window.onerror = function(event) {
     };
 };
 
-let currentDiskFile = null;
+let currentDiscFile = null;
 
 
-// Disc image extensions that Arculator handles
-let validDiskExts = ['.ssd','.dsd','.adf','.adl', '.fdi', '.apd', '.hfe'];
+// Disc image extensions that Arculator handles (see loaders struct in disc.c)
+let validDiscExts = ['.ssd','.dsd','.adf','.adl', '.fdi', '.apd', '.hfe'];
 
-async function loadDisk(url) {
+
+async function loadDisc(url) {
     if (url == "") return;
     let response = await fetch(url, {mode:'cors'});
     let buf = await response.arrayBuffer();
@@ -137,7 +161,7 @@ async function loadDisk(url) {
       unzip.open(data);
       let zipDiscFile = null;
       for (const n in unzip.files) {
-        for (let ext of validDiskExts) {
+        for (let ext of validDiscExts) {
           if (n.toLowerCase().endsWith(ext))
             zipDiscFile = n;
         }
@@ -160,13 +184,33 @@ async function loadDisk(url) {
       discFilename = zipDiscFile;
       
     }
-    if (currentDiskFile) {
+    if (currentDiscFile) {
       ccall('arc_disc_eject', null, ['number'], [0]);
-      FS.unlink(currentDiskFile);
+      FS.unlink(currentDiscFile);
     }
-    currentDiskFile = discFilename;
-    FS.createDataFile("/", currentDiskFile, data, true, true);
-    ccall('arc_disc_change', null, ['number', 'string'], [0, '/' + currentDiskFile]);
+    currentDiscFile = discFilename;
+    FS.createDataFile("/", currentDiscFile, data, true, true);
+    ccall('arc_disc_change', null, ['number', 'string'], [0, '/' + currentDiscFile]);
+}
+
+function arc_set_display_mode(display_mode) {
+  ccall('arc_set_display_mode', null, ['number'], display_mode);
+}
+
+function arc_set_dblscan(dbl_scan) {
+  ccall('arc_set_dblscan', null, ['number'], dbl_scan);
+}
+
+function arc_enter_fullscreen() {
+  ccall('arc_enter_fullscreen', null, []);
+}
+
+function arc_renderer_reset() {
+  ccall('arc_renderer_reset', null, []);
+}
+
+function arc_do_reset() {
+  ccall('arc_do_reset', null, []);
 }
 
 async function* makeTextFileLineIterator(fileURL) {
@@ -201,12 +245,97 @@ async function* makeTextFileLineIterator(fileURL) {
     }
 }
 
-async function setupDisks() {
-    let dropdown = document.getElementById('disks');
-    for await (let diskUrl of makeTextFileLineIterator('disk_index.txt')) {
-        let diskName = diskUrl.substr(diskUrl.lastIndexOf('/')+1);
-        dropdown.add(new Option(diskName, diskUrl));
+async function setupDiscPicker() {
+    let dropdown = document.getElementById('discs');
+    for await (let discUrl of makeTextFileLineIterator('disc_index.txt')) {
+        let discName = discUrl.substr(discUrl.lastIndexOf('/')+1);
+        dropdown.add(new Option(discName, discUrl));
     }
 }
 
-setupDisks();
+function simulateKeyEvent(eventType, keyCode, charCode) {
+  var e = document.createEventObject ? document.createEventObject() : document.createEvent("Events");
+  if (e.initEvent) e.initEvent(eventType, true, true);
+
+  e.keyCode = keyCode;
+  e.which = keyCode;
+  e.charCode = charCode;
+
+  // Dispatch directly to Emscripten's html5.h API (use this if page uses emscripten/html5.h event handling):
+  if (typeof JSEvents !== 'undefined' && JSEvents.eventHandlers && JSEvents.eventHandlers.length > 0) {
+    for(var i = 0; i < JSEvents.eventHandlers.length; ++i) {
+      if ((JSEvents.eventHandlers[i].target == Module['canvas'] || JSEvents.eventHandlers[i].target == window)
+       && JSEvents.eventHandlers[i].eventTypeString == eventType) {
+         JSEvents.eventHandlers[i].handlerFunc(e);
+      }
+    }
+  } else {
+    // Dispatch to browser for real (use this if page uses SDL or something else for event handling):
+    Module['canvas'].dispatchEvent ? Module['canvas'].dispatchEvent(e) : Module['canvas'].fireEvent("on" + eventType, e);
+  }
+}
+
+function sendKeyCode(keycode) {
+  simulateKeyEvent('keydown', keycode, 0);
+  setTimeout(() => simulateKeyEvent('keyup', keycode, 0), 100);
+}
+
+function rerunProg() {
+  sendKeyCode(KEY_ESCAPE);
+  setTimeout(() => sendKeyCode(KEY_F1), 200);
+  setTimeout(() => document.getElementById('prog').focus(), 200);
+}
+
+function runProgram() {
+  let prog = document.getElementById('prog').value;
+  FS.unlink('/hostfs/!boot,ffe');
+  FS.createDataFile('/hostfs', '!boot,ffe', 'KEY1 *!boot |M\r\nbasic\r\n' + prog + "\r\nRUN\r\n", true, true);
+  rerunProg();
+}
+
+KEY_ESCAPE = 27;
+KEY_F1 = 112;
+
+setupDiscPicker();
+
+function setClipboard(text) {
+  var type = "text/plain";
+  var blob = new Blob([text], { type });
+  var data = [new ClipboardItem({ [type]: blob })];
+
+  navigator.clipboard.write(data).then(
+      function () {
+      /* success */
+      },
+      function () {
+      /* failure */
+      }
+  );
+}
+
+
+
+function getBasicShareUrl() {
+  let prog = document.getElementById('prog').value;
+  return location.protocol + '//' + location.host + location.pathname + '?basic=' + encodeURIComponent(prog);
+}
+function showShareBox() {
+  document.getElementById('sharebox').style.display = 'block';
+  document.getElementById('shareurl').value = getBasicShareUrl();
+}
+
+function tweetProg() {
+  let prog = document.getElementById('prog').value;
+  let url = "https://twitter.com/intent/tweet?screen_name=ARM2bot&text=" + encodeURIComponent(prog);
+  window.open(url);
+  document.getElementById('sharebox').style.display = 'none';
+
+}
+function copyProgAsURL() {
+  navigator.clipboard.writeText(getBasicShareUrl()).then(function() {
+    console.log('clipboard write ok');
+  }, function() {
+    console.log('clipboard write failed');
+  });
+  document.getElementById('sharebox').style.display = 'none';
+}
