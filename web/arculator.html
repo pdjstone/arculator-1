@@ -11,6 +11,13 @@
         padding: none;
       }
 
+      h1, textarea { font-family: riscos-system}
+
+      @font-face {
+        font-family: "riscos-system";
+        src: url("System.Fixed.woff2") format("woff2");
+      }
+
       #logo {
         display: inline-block;
         margin: 0;
@@ -22,6 +29,8 @@
       /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
       canvas.emscripten { border: 0px none; background-color: black; }
 
+      #prog-container {float: left; display: none}
+      #prog { display: block}
       .spinner {
         height: 30px;
         width: 30px;
@@ -87,9 +96,31 @@
         font-family: 'Lucida Console', Monaco, monospace;
         outline: none;
       }
+
+      .modal {
+        background-color: rgba(0,0,0,.4);
+        display: none;
+        height: 100%;
+        left: 0;
+        overflow: auto;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1; 
+      }
+      .modal-content {
+        background-color: #aaa;
+        border: 1px solid black;
+        margin: 15% auto;
+        padding: 20px;
+        width: 80%;
+      }
+      #shareurl { width: 80% }
+
     </style>
   </head>
-  <body>
+  <body onclick="if(!event.target.hasAttribute('allowfocus'))document.getElementById('canvas').focus()">
+
     <div id="logo"> <h1>Arculator</h1></div>
    
     <div class="spinner" id='spinner'></div>
@@ -97,24 +128,40 @@
 
 <span id='controls'>
 
-  <select id="disks" onchange="loadDisk(this.selectedOptions[0].value)">
+  <select id="discs" onchange="loadDisc(this.selectedOptions[0].value)" allowfocus>
     <option value="">Load Floppy...</option>
   </select>
+  <!--
   <span><input type="checkbox" id="resize">Resize canvas</span>
   <span><input type="checkbox" id="pointerLock" checked>Lock/hide mouse pointer &nbsp;&nbsp;&nbsp;</span>
   <span><input type="button" value="Fullscreen" onclick="Module.requestFullscreen(document.getElementById('pointerLock').checked, 
                                                                             document.getElementById('resize').checked)">
   </span>
+-->
 </span>
 
+  
     <div class="emscripten">
       <progress value="0" max="100" id="progress" hidden=1></progress>
     </div>
 
-    
-    <div class="emscripten_border">
-      <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+    <div id="prog-container">
+      <textarea id="prog" cols="80" rows="20" allowfocus onkeydown="if(event.keyCode==13&&event.ctrlKey)runProgram()"></textarea><br>
+      <button onclick="runProgram()">RUN (ctrl-enter)</button> <button onclick="showShareBox()">Share</button>
     </div>
+    <div class="emscripten_border">
+      <canvas id="canvas" class="emscripten" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+    </div>
+
+    <div class="modal" id="sharebox">
+    <div class="modal-content">
+      <h2>Share your Archimedes program:</h2>
+      <input id="shareurl" readonly>
+      <div><button onclick="copyProgAsURL()">Copy as URL</button>
+      <button onclick="tweetProg()">Tweet</button></div>
+    </div>
+    </div>
+
     <!--<textarea id="output" rows="8"></textarea>-->
     <script async type='text/javascript' src="jsunzip.js"></script>
     <script async type='text/javascript' src="ui.js"></script>
