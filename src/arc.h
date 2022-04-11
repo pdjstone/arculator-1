@@ -144,6 +144,7 @@ extern int fullborders,noborders;
 extern int dblscan;
 extern int stereoimages[8];
 extern int flyback;
+extern int skip_video_render;
 
 extern void initvid();
 extern void reinitvideo();
@@ -192,7 +193,8 @@ extern int speed_mhz;
 
 
 extern int mousecapture;
-
+extern int fast_forward_to_time_ms;
+extern long long total_emulation_millis;
 
 void updateins();
 

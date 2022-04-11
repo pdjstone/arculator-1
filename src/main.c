@@ -236,6 +236,7 @@ void arc_reset()
 {
         arc_set_cpu(arm_cpu_type, memc_type);
         timer_reset();
+        total_emulation_millis=0;
         st506_internal_close();
         if (cmos_changed)
         {
@@ -320,8 +321,10 @@ void arc_set_cpu(int cpu, int memc)
         mem_updatetimings();
 }
 
-static int ddnoise_frames = 0;
-static int millisec_count = 0;
+static int ddnoise_millisec_count = 0;
+long long total_emulation_millis = 0;
+int fast_forward_to_time_ms = 0;
+
 void arc_run(int millisecs)
 {
         LOG_EVENT_LOOP("arc_run()\n");
@@ -330,14 +333,15 @@ void arc_run(int millisecs)
         keyboard_poll_host();
 
         execarm(speed_mhz * 1000 * millisecs);
-        millisec_count += millisecs;
+        ddnoise_millisec_count += millisecs;
+        total_emulation_millis += millisecs;
 
         if (mousehack) doosmouse();
         frameco++;
         
-        if (millisec_count >= 100)
+        if (ddnoise_millisec_count >= 100)
         {
-                millisec_count = 0;
+                ddnoise_millisec_count = 0;
                 ddnoise_mix();
         }
         if (cmos_changed)

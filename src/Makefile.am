@@ -36,8 +36,8 @@ noinst_SCRIPTS += ../arculatorweb
 	emcc -sUSE_ZLIB=1 -sUSE_SDL=2  -sALLOW_MEMORY_GROWTH=1 *.o -o ../emscripten_out/arculator.js --preload-file ../emscripten_assets@/
 	
 	cp ../web/* ../emscripten_out/ 
-	cp -r ../disks ../emscripten_out/
-	$(cd ../emscripten_out/; find disks -type f > disk_index.txt)
+	cp -r ../discs ../emscripten_out/
+	$(cd ../emscripten_out/; find discs -type f > disc_index.txt)
 endif
 endif
 
