@@ -28,7 +28,7 @@ static int win_dofullscreen = 0;
 static int win_dosetresize = 0;
 static int win_renderer_reset = 0;
 
-#define MAX_TICKS_PER_FRAME 100
+#define MAX_TICKS_PER_FRAME 500
 
 static int fixed_fps = 0;
 
@@ -38,7 +38,7 @@ void updatewindowsize(int x, int y)
         win_doresize = 1;
 }
 
-static void sdl_enable_mouse_capture()
+void EMSCRIPTEN_KEEPALIVE sdl_enable_mouse_capture()
 {
         mouse_capture_enable();
         SDL_SetWindowGrab(sdl_main_window, SDL_TRUE);
@@ -46,7 +46,7 @@ static void sdl_enable_mouse_capture()
         updatemips = 1;
 }
 
-static void sdl_disable_mouse_capture()
+void EMSCRIPTEN_KEEPALIVE sdl_disable_mouse_capture()
 {
         SDL_SetWindowGrab(sdl_main_window, SDL_FALSE);
         mouse_capture_disable();
@@ -178,16 +178,28 @@ void arcloop()
         }
 
         static Uint32 last_timer_ticks = 0;
-       
         Uint32 current_timer_ticks = SDL_GetTicks();
         Uint32 ticks_since_last = current_timer_ticks - last_timer_ticks;
         last_timer_ticks = current_timer_ticks;
 
+        int run_ms = 0;
+        if (fast_forward_to_time_ms != 0 && total_emulation_millis < fast_forward_to_time_ms) {
+                run_ms = MAX_TICKS_PER_FRAME;
+                //rpclog("fast forward to %d %d\n", fast_forward_to_time_ms, total_emulation_millis);
+        } else {
+                if (fast_forward_to_time_ms != 0) {
+                        rpclog("finshed fast forward - re-enabling sound and video\n");
+                        fast_forward_to_time_ms = 0;
+                        soundena = 1;
+                        skip_video_render = 0;
+                }
+                run_ms = ticks_since_last < MAX_TICKS_PER_FRAME ? ticks_since_last : MAX_TICKS_PER_FRAME;
+        }
 
         SDL_LockMutex(main_thread_mutex);
 
         if (!pause_main_thread)
-        arc_run(ticks_since_last < MAX_TICKS_PER_FRAME ? ticks_since_last : MAX_TICKS_PER_FRAME);
+                arc_run(run_ms);
 
         SDL_UnlockMutex(main_thread_mutex);
         static int timer_offset = 0;
@@ -206,7 +218,7 @@ void arcloop()
         if (updatemips)
         {
                 char s[80];
-                rpclog("ticks since last=%d; timer_offset=%d\n", ticks_since_last, timer_offset);
+                rpclog("ticks since last=%d; timer_offset=%d total_emulation_ms=%d\n", ticks_since_last, timer_offset, total_emulation_millis);
                 //int pct = (int)((inssec / (TARGET_FPS * 1.0)) * 100);
                 sprintf(s, "Arculator %s - %.2f MIPS", VERSION_STRING, inssecf);
                 vidc_framecount = 0;
@@ -230,7 +242,7 @@ static int arc_main_thread()
                 fatal("Video renderer init failed");
         }
         input_init(); 
-        sdl_enable_mouse_capture();
+        //sdl_enable_mouse_capture();
        
         #ifdef __EMSCRIPTEN__  
         // if fixed_fps is 0, emscripten will use requestAnimationFrame
@@ -291,6 +303,14 @@ void EMSCRIPTEN_KEEPALIVE arc_disc_eject(int drive)
         discname[drive][0] = 0;
 
         SDL_UnlockMutex(main_thread_mutex);
+}
+
+void EMSCRIPTEN_KEEPALIVE arc_fast_forward(int time_ms) 
+{
+        soundena = 0;
+        skip_video_render = 1;
+        fast_forward_to_time_ms = time_ms;
+        rpclog("arc_fast_forward: %d\n", time_ms);
 }
 
 void arc_stop_main_thread()

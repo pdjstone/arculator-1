@@ -344,7 +344,8 @@ void ddnoise_mix()
 		}
 	}
 
-	al_givebufferdd(ddbuffer);
+	if (soundena)
+		al_givebufferdd(ddbuffer);
 
 	oldmotoron=motoron;
 }

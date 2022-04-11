@@ -234,6 +234,7 @@ int speed_mhz;
 
 void arc_reset()
 {
+<<<<<<< HEAD
 	arc_set_cpu(arm_cpu_type, memc_type);
 	timer_reset();
 	st506_internal_close();
@@ -269,6 +270,44 @@ void arc_reset()
 	ioeb_init();
 	if (machine_type == MACHINE_TYPE_A4)
 		lc_init();
+=======
+        arc_set_cpu(arm_cpu_type, memc_type);
+        timer_reset();
+        total_emulation_millis=0;
+        st506_internal_close();
+        if (cmos_changed)
+        {
+                cmos_changed = 0;
+                cmos_save();
+        }
+        loadrom();
+        #ifndef __EMSCRIPTEN__
+        rom_load_5th_column();
+        #endif
+        cmos_load();
+        resizemem(memsize);
+        resetarm();
+        memset(ram,0,memsize*1024);
+        resetmouse();
+        ioc_reset();
+        vidc_reset();
+        keyboard_init();
+        disc_reset();
+        wd1770_reset();
+        c82c711_fdc_init();
+        if ((fdctype != FDC_82C711) && st506_present)
+                st506_internal_init();
+        sound_init();
+        cmos_init();
+        ds2401_init();
+        podules_close();
+        podules_init();
+        podules_reset();
+        joystick_if_init();
+        ioeb_init();
+        if (machine_type == MACHINE_TYPE_A4)
+                lc_init();
+>>>>>>> 2ad883e (fastforward mode (in progress))
 }
 
 static struct
@@ -324,8 +363,10 @@ void arc_set_cpu(int cpu, int memc)
 	mem_updatetimings();
 }
 
-static int ddnoise_frames = 0;
-static int millisec_count = 0;
+static int ddnoise_millisec_count = 0;
+long long total_emulation_millis = 0;
+int fast_forward_to_time_ms = 0;
+
 void arc_run(int millisecs)
 {
 	LOG_EVENT_LOOP("arc_run()\n");
@@ -333,14 +374,15 @@ void arc_run(int millisecs)
 	mouse_poll_host();
 	keyboard_poll_host();
 	execarm(speed_mhz * 1000 * millisecs);
-	millisec_count += millisecs;
+	ddnoise_millisec_count += millisecs;
+	total_emulation_millis += millisecs;
 
 	if (mousehack) doosmouse();
 	frameco++;
 	
-	if (millisec_count >= 100)
+	if (ddnoise_millisec_count >= 100)
 	{
-		millisec_count = 0;
+		ddnoise_millisec_count = 0;
 		ddnoise_mix();
 	}
 	if (cmos_changed)
