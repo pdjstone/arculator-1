@@ -4,23 +4,16 @@ Arculator WASM
 Compile Arculator to WebAssembly using Emscripten.
 
 What works:
- * Booting to the RISC OS 3 desktop
- * Mouse (difficult to control until the browser captures the cursor)
+ * Graphics
+ * Mouse
  * Keyboard
- * Sound (can be a bit glitchy)
+ * Sound
+ * HostFS
  * Loading disks via web interface
 
 Not working:
- * Fullscreen / resizing 
+ * Fullscreen
  * Podules
-
-TODO:
- * Machine configuration
- * Javascript integration/UI
- * HostFS support 
- * Fix sound glitches
- * Dynamic frame rate support
- * Improve sound quality, particularly on Firefox
 
 
 Build instructions:

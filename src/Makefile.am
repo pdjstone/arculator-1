@@ -25,19 +25,8 @@ noinst_SCRIPTS += ../arculatorweb
 	mkdir ../emscripten_assets
 	mkdir ../emscripten_out/
 	cp -r ../ddnoise ../emscripten_assets
-	cp -r ../cmos ../emscripten_assets
-	cp -r ../hostfs ../emscripten_assets
 	cp ../arc.cfg ../emscripten_assets
-	cp -r ../configs ../emscripten_assets
-	
-	mkdir -p ../emscripten_assets/roms/
-	cp -r ../roms/riscos311 ../emscripten_assets/roms/
-	cp ../roms/arcrom_ext ../emscripten_assets/roms
 	emcc -sUSE_ZLIB=1 -sUSE_SDL=2  -sALLOW_MEMORY_GROWTH=1 *.o -o ../emscripten_out/arculator.js --preload-file ../emscripten_assets@/
-	
-	cp ../web/* ../emscripten_out/ 
-	cp -r ../discs ../emscripten_out/
-	$(cd ../emscripten_out/; find discs -type f > disc_index.txt)
 endif
 endif
 
