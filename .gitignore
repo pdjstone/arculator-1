@@ -24,3 +24,5 @@ roms.txt
 config.status
 libtool
 Makefile
+arculator
+src/arculatorweb
