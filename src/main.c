@@ -234,9 +234,9 @@ int speed_mhz;
 
 void arc_reset()
 {
-<<<<<<< HEAD
 	arc_set_cpu(arm_cpu_type, memc_type);
 	timer_reset();
+	total_emulation_millis=0;
 	st506_internal_close();
 	if (cmos_changed)
 	{
@@ -270,44 +270,6 @@ void arc_reset()
 	ioeb_init();
 	if (machine_type == MACHINE_TYPE_A4)
 		lc_init();
-=======
-        arc_set_cpu(arm_cpu_type, memc_type);
-        timer_reset();
-        total_emulation_millis=0;
-        st506_internal_close();
-        if (cmos_changed)
-        {
-                cmos_changed = 0;
-                cmos_save();
-        }
-        loadrom();
-        #ifndef __EMSCRIPTEN__
-        rom_load_5th_column();
-        #endif
-        cmos_load();
-        resizemem(memsize);
-        resetarm();
-        memset(ram,0,memsize*1024);
-        resetmouse();
-        ioc_reset();
-        vidc_reset();
-        keyboard_init();
-        disc_reset();
-        wd1770_reset();
-        c82c711_fdc_init();
-        if ((fdctype != FDC_82C711) && st506_present)
-                st506_internal_init();
-        sound_init();
-        cmos_init();
-        ds2401_init();
-        podules_close();
-        podules_init();
-        podules_reset();
-        joystick_if_init();
-        ioeb_init();
-        if (machine_type == MACHINE_TYPE_A4)
-                lc_init();
->>>>>>> 2ad883e (fastforward mode (in progress))
 }
 
 static struct
@@ -388,10 +350,8 @@ void arc_run(int millisecs)
 	if (cmos_changed)
 	{
 		cmos_changed--;
-		#ifndef __EMSCRIPTEN__
 		if (!cmos_changed)
 			cmos_save();
-		#endif
 	}
 	LOG_EVENT_LOOP("END arc_run()\n");
 }
