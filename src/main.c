@@ -347,10 +347,8 @@ void arc_run(int millisecs)
         if (cmos_changed)
         {
                 cmos_changed--;
-                #ifndef __EMSCRIPTEN__
                 if (!cmos_changed)
                         cmos_save();
-                #endif
         }
         LOG_EVENT_LOOP("END arc_run()\n");
 }
