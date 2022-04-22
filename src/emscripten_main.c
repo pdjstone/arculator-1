@@ -213,7 +213,7 @@ void arcloop()
         {
                 SDL_Delay(timer_offset);     
         }
-        #endif
+        
 
         if (updatemips)
         {
@@ -226,7 +226,7 @@ void arcloop()
                         SDL_SetWindowTitle(sdl_main_window, s);
                 updatemips=0;
         }
-
+        #endif
   
 }
 
@@ -274,6 +274,18 @@ void EMSCRIPTEN_KEEPALIVE arc_resume_main_thread()
 void EMSCRIPTEN_KEEPALIVE arc_do_reset()
 {
         SDL_LockMutex(main_thread_mutex);
+        arc_reset();
+        SDL_UnlockMutex(main_thread_mutex);
+}
+
+void EMSCRIPTEN_KEEPALIVE arc_load_config_and_reset(char *config_name)
+{
+        SDL_LockMutex(main_thread_mutex);
+      
+        snprintf(machine_config_file, 256, "configs/%s.cfg", config_name);
+        strncpy(machine_config_name, config_name, 256);
+        rpclog("arc_load_config_and_reset: machine_config_name=%s machine_config_file=%s\n", machine_config_name, machine_config_file);
+        loadconfig();
         arc_reset();
         SDL_UnlockMutex(main_thread_mutex);
 }
