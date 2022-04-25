@@ -11,6 +11,7 @@
 #include "config.h"
 #include "disc.h"
 #include "ioc.h"
+#include "sound.h"
 #include "soundopenal.h"
 #include "plat_input.h"
 #include "plat_video.h"
@@ -357,6 +358,18 @@ void EMSCRIPTEN_KEEPALIVE arc_set_dblscan(int new_dblscan)
         clearbitmap();
 
         SDL_UnlockMutex(main_thread_mutex);
+}
+
+
+void EMSCRIPTEN_KEEPALIVE arc_set_sound_filter(int filter)
+{
+        SDL_LockMutex(main_thread_mutex);
+        if (filter >=0 && filter <= 2) {
+                sound_filter = filter;
+                sound_update_filter();
+        }
+        SDL_UnlockMutex(main_thread_mutex);
+
 }
 
 void arc_set_resizeable()
