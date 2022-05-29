@@ -5,6 +5,8 @@
 #include <string.h>
 #ifdef WIN32
 #include <windows.h>
+#else
+#include <time.h>
 #endif
 #include "arc.h"
 #include "bmu.h"
@@ -243,6 +245,15 @@ void cmos_init()
         systemtime.day = real_time.wDay;
         systemtime.mon = real_time.wMonth;
         systemtime.year = real_time.wYear;
+#else
+        time_t t = time(NULL);
+        struct tm real_time = *localtime(&t);
+        systemtime.sec = real_time.tm_sec;
+        systemtime.min = real_time.tm_min;
+        systemtime.hour = real_time.tm_hour;
+        systemtime.day = real_time.tm_mday;
+        systemtime.mon = real_time.tm_mon + 1;
+        systemtime.year = real_time.tm_year;
 #endif
 
         timer_add(&cmos.timer, cmos_tick, NULL, 1);
