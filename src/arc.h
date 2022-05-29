@@ -205,7 +205,7 @@ void updatewindowsize(int x, int y);
 
 int arc_init();
 void arc_reset();
-void arc_run();
+void arc_run(int millisecs);
 void arc_close();
 
 
