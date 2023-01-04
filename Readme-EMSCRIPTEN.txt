@@ -18,7 +18,7 @@ Not working:
 
 Build instructions:
 
-Install emscripten - see https://emscripten.org/docs/getting_started/downloads.html
+Install emscripten - see https://emscripten.org/docs/getting_started/downloads.html. Known to build with Emscripten 3.1.29.
 Then run these commands:
 
 source /path/to/emsdk/emsdk_env.sh

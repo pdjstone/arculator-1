@@ -26,7 +26,7 @@ noinst_SCRIPTS += ../arculatorweb
 	mkdir ../emscripten_out/
 	cp -r ../ddnoise ../emscripten_assets
 	cp ../arc.cfg ../emscripten_assets
-	emcc -sUSE_ZLIB=1 -sUSE_SDL=2  -sALLOW_MEMORY_GROWTH=1 *.o -o ../emscripten_out/arculator.js --preload-file ../emscripten_assets@/
+	emcc -sUSE_ZLIB=1 -sUSE_SDL=2 -sEXPORTED_RUNTIME_METHODS=ccall -sALLOW_MEMORY_GROWTH=1 *.o -o ../emscripten_out/arculator.js --preload-file ../emscripten_assets@/
 endif
 endif
 
