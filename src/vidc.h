@@ -20,14 +20,17 @@ extern int vidc_dma_length;
 
 void vidc_reset();
 
+uint32_t vidc_get_current_vaddr(void);
+uint32_t vidc_get_current_caddr(void);
 
+void vidc_debug_print(char *s);
 
 
 typedef struct
 {
-        int w, h;
-        uint8_t *dat;
-        uint8_t *line[0];
+	int w, h;
+	uint8_t *dat;
+	uint8_t *line[0];
 } BITMAP;
 
 extern BITMAP *screen;
@@ -37,9 +40,9 @@ void destroy_bitmap(BITMAP *b);
 
 typedef struct
 {
-        uint8_t r, g, b;
+	uint8_t r, g, b;
 } RGB;
-        
+
 typedef RGB PALETTE[256];
 
 #define makecol(r, g, b)    ((b) | ((g) << 8) | ((r) << 16))
