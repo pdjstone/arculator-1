@@ -24,16 +24,16 @@
 
 
 /*Memory*/
-uint8_t *ram;
+extern uint8_t *ram;
 
-uint32_t rammask;
+extern uint32_t rammask;
 
-int readlookup[256],readlookupp[256];
-uintptr_t *readlookup2;
-int readlnext;
-int writelookup[256],writelookupp[256];
-uintptr_t *writelookup2;
-int writelnext;
+extern int readlookup[256],readlookupp[256];
+extern uintptr_t *readlookup2;
+extern int readlnext;
+extern int writelookup[256],writelookupp[256];
+extern uintptr_t *writelookup2;
+extern int writelnext;
 
 extern int mmu_perm;
 
@@ -75,41 +75,41 @@ extern int cycles_lost;
 /*Timer*/
 typedef struct PIT_nr
 {
-        int nr;
-        struct PIT *pit;
+	int nr;
+	struct PIT *pit;
 } PIT_nr;
 
 typedef struct PIT
 {
-        uint32_t l[3];
+	uint32_t l[3];
 	pc_timer_t timer[3];
-        uint8_t m[3];
-        uint8_t ctrl,ctrls[3];
-        int wp,rm[3],wm[3];
-        uint16_t rl[3];
-        int thit[3];
-        int delay[3];
-        int rereadlatch[3];
-        int gate[3];
-        int out[3];
-        int running[3];
-        int enabled[3];
-        int newcount[3];
-        int count[3];
-        int using_timer[3];
-        int initial[3];
-        int latched[3];
-        int disabled[3];
+	uint8_t m[3];
+	uint8_t ctrl,ctrls[3];
+	int wp,rm[3],wm[3];
+	uint16_t rl[3];
+	int thit[3];
+	int delay[3];
+	int rereadlatch[3];
+	int gate[3];
+	int out[3];
+	int running[3];
+	int enabled[3];
+	int newcount[3];
+	int count[3];
+	int using_timer[3];
+	int initial[3];
+	int latched[3];
+	int disabled[3];
 
-        uint8_t read_status[3];
-        int do_read_status[3];
+	uint8_t read_status[3];
+	int do_read_status[3];
 
-        PIT_nr pit_nr[3];
+	PIT_nr pit_nr[3];
 
-        void (*set_out_funcs[3])(int new_out, int old_out);
+	void (*set_out_funcs[3])(int new_out, int old_out);
 } PIT;
 
-PIT pit, pit2;
+extern PIT pit, pit2;
 void setpitclock(float clock);
 
 float pit_timer0_freq();
@@ -123,48 +123,48 @@ float pit_timer0_freq();
 /*DMA*/
 typedef struct dma_t
 {
-        uint32_t ab, ac;
-        uint16_t cb;
-        int cc;
-        int wp;
-        uint8_t m, mode;
-        uint8_t page;
-        uint8_t stat, stat_rq;
-        uint8_t command;
-        int size;
+	uint32_t ab, ac;
+	uint16_t cb;
+	int cc;
+	int wp;
+	uint8_t m, mode;
+	uint8_t page;
+	uint8_t stat, stat_rq;
+	uint8_t command;
+	int size;
 
-        uint8_t ps2_mode;
-        uint8_t arb_level;
-        uint16_t io_addr;
+	uint8_t ps2_mode;
+	uint8_t arb_level;
+	uint16_t io_addr;
 } dma_t;
 
-dma_t dma[8];
+extern dma_t dma[8];
 
 
 
 /*PIC*/
 typedef struct PIC_t
 {
-        uint8_t icw1,icw4,mask,ins,pend,mask2;
-        int icw;
-        uint8_t vector;
-        int read;
-        uint8_t level_sensitive;
+	uint8_t icw1,icw4,mask,ins,pend,mask2;
+	int icw;
+	uint8_t vector;
+	int read;
+	uint8_t level_sensitive;
 } PIC_t;
 
-PIC_t pic,pic2;
+extern PIC_t pic,pic2;
 extern int pic_intpending;
 
 
-int hasfpu;
+extern int hasfpu;
 
 
-int cpuspeed;
+extern int cpuspeed;
 
 
 /*Sound*/
-int ppispeakon;
-int gated,speakval,speakon;
+extern int ppispeakon;
+extern int gated,speakval,speakon;
 
 
 

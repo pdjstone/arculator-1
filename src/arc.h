@@ -64,11 +64,14 @@ extern void fatal(const char *format, ...);
 
 
 #define container_of(ptr, type, member) ({                      \
-        const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
-        (type *)( (char *)__mptr - offsetof(type,member) );})
-        
+	const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
+	(type *)( (char *)__mptr - offsetof(type,member) );})
+
 
 #define nr_elems(array) (int)(sizeof(array) / sizeof(array[0]))
+
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
+#define MIN(x, y) ((x) < (y) ? (x) : (y))
 
 extern void arc_set_cpu(int cpu, int memc);
 extern void updatewindowsize(int x, int y);
@@ -99,12 +102,16 @@ extern uint32_t readcp15(int reg);
 extern void writecp15(int reg, uint32_t val);
 
 /*Memory*/
-extern int modepritabler[3][6],modepritablew[3][6];
-extern uint32_t *mempoint[0x4000];
-extern uint8_t *mempointb[0x4000];
-extern int memstat[0x4000];
+extern const int modepritabler[3][8],modepritablew[3][8];
+extern uint8_t *mempoint[0x4000];
+extern uint8_t memstat[0x4000];
 extern uint32_t *ram,*rom;
-extern uint8_t *romb;
+
+enum {
+	MEMMODE_USER,
+	MEMMODE_OS,
+	MEMMODE_SUPER
+};
 extern int memmode;
 
 extern void initmem(int memsize);
@@ -112,11 +119,11 @@ extern void resizemem(int memsize);
 extern int loadrom();
 extern void resetpagesize(int pagesize);
 
-#define readmemb(a)    ((modepritabler[memmode][memstat[((a)>>12)&0x3FFF]])?mempointb[((a)>>12)&0x3FFF][(a)&0xFFF]:readmemfb(a))
-#define readmeml(a)    ((modepritabler[memmode][memstat[((a)>>12)&0x3FFF]])?mempoint[((a)>>12)&0x3FFF][((a)&0xFFF)>>2]:readmemfl(a))
-#define writememb(a,v) do { if (modepritablew[memmode][memstat[((a)>>12)&0x3FFF]]) mempointb[((a)>>12)&0x3FFF][(a)&0xFFF]=(v&0xFF); else { writememfb(a,v); } } while (0)
-#define writememl(a,v) do { if (modepritablew[memmode][memstat[((a)>>12)&0x3FFF]]) mempoint[((a)>>12)&0x3FFF][((a)&0xFFF)>>2]=v; else { writememfl(a,v); } } while (0)
-#define readmemff(a)    ((modepritabler[memmode][memstat[((a)>>12)&0x3FFF]])?mempoint[((a)>>12)&0x3FFF][((a)&0xFFF)>>2]:readmemf(a))
+#define readmemb(a)    ((modepritabler[memmode][memstat[((a) >> 12) & 0x3FFF]]) ? mempoint[((a) >> 12) & 0x3FFF][(a)] : readmemfb(a))
+#define readmeml(a)    ((modepritabler[memmode][memstat[((a) >> 12) & 0x3FFF]]) ? *(uint32_t *)&mempoint[((a) >> 12) & 0x3FFF][(a) & ~3] : readmemfl(a))
+#define writememb(a,v) do { if (modepritablew[memmode][memstat[((a) >> 12) & 0x3FFF]]) mempoint[((a) >> 12) & 0x3FFF][(a)] = v; else { writememfb(a, v); } } while (0)
+#define writememl(a,v) do { if (modepritablew[memmode][memstat[((a) >> 12) & 0x3FFF]]) *(uint32_t *)&mempoint[((a) >> 12) & 0x3FFF][(a) & ~3] = v; else { writememfl(a, v); } } while (0)
+#define readmemff(a)    ((modepritabler[memmode][memstat[((a) >> 12) & 0x3FFF]]) ? *(uint32_t *)&mempoint[((a) >> 12) & 0x3FFF][(a) & ~3] : readmemf(a))
 
 extern uint32_t readmemf(uint32_t a);
 extern uint8_t readmemfb(uint32_t a);
