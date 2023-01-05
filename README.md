@@ -23,4 +23,6 @@ To build and test the Emscripten version:
 * Run `make -j8 serve`
 * Open [http://localhost:8000/build/wasm/arculator.html](http://localhost:8000/build/arculator.html) to see the default Emscripten front-end which should boot RISC OS 3.
 
+You can also build a native equivalent for debugging by running `make -j8 native`.
+
 We're working on a better front-end at the [Archimedes Live](https://github.com/pdjstone/archimedes-live) project. Join us!
