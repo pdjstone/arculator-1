@@ -195,9 +195,12 @@ int arc_init()
 	apd_init();
 	fdi_init();
 	hfe_init();
-	jfd_init();
 	mfm_init();
+#ifndef __EMSCRIPTEN__
+	// TODO: proper compile-time configuration of which disc formats to support
+	jfd_init();
 	scp_init();
+#endif
 	ddnoise_init();
 
 	wd1770_reset();

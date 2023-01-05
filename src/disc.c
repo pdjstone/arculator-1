@@ -71,7 +71,9 @@ loaders[]=
 	{"FDI", fdi_load,       -1},
 	{"APD", apd_load,       -1},
 	{"HFE", hfe_load,       -1},
+#ifndef __EMSCRIPTEN__
 	{"SCP", scp_load,       -1},
+#endif
 //        {"JFD", jfd_load,       -1},
 	{0,0,0}
 };
