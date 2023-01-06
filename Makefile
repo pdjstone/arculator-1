@@ -1,39 +1,58 @@
 # Replaces autotools for emscripten build.
 
+SHELL := bash
+BUILD_TAG := $(shell echo `git rev-parse --short HEAD`-`[[ -n $$(git status -s) ]] && echo 'dirty' || echo 'clean'` on `date --rfc-3339=seconds`)
+
 CC             := gcc
 FIX_WARNINGS   := $(addprefix -Wno-,deprecated-non-prototype unused-but-set-variable constant-conversion integer-overflow unused-variable uninitialized int-to-pointer-cast)
-CFLAGS         := -g3 -D_REENTRANT -DARCWEB -D_DEBUG -DDEBUG_LOG -Wall ${FIX_WARNINGS}
+CFLAGS         := -D_REENTRANT -DARCWEB -Wall ${FIX_WARNINGS} -DBUILD_TAG="${BUILD_TAG}"
 CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2
 LINKFLAGS      := -lz -lSDL2 -lopenal -lm -ldl
-LINKFLAGS_WASM :=-gsource-map --source-map-base http://localhost:8000/build/ -sALLOW_MEMORY_GROWTH=1 -sFORCE_FILESYSTEM
+LINKFLAGS_WASM := -sALLOW_MEMORY_GROWTH=1 -sFORCE_FILESYSTEM -sEXPORTED_RUNTIME_METHODS=[\"ccall\"]
 
-#-sEXPORTED_RUNTIME_METHODS=[\"ccall\"]
+ifdef DEBUG
+  CFLAGS += -D_DEBUG -DDEBUG_LOG -g3
+  LINKFLAGS_WASM += -gsource-map --source-map-base http://localhost:8000/build/
+  BUILD_TAG +=  (DEBUG)
+  $(info ❗BUILD_TAG="${BUILD_TAG}")
+else
+  CFLAGS += -O3
+  $(info ❗BUILD_TAG="${BUILD_TAG}")
+  $(info ❗Re-run make with DEBUG=1 if you want a debug build)
+endif
 
 DATA := roms/riscos311/ros311 roms/arcrom_ext cmos ddnoise arc.cfg
 
-OBJS := 82c711.o 82c711_fdc.o \
-	arm.o bmu.o cmos.o colourcard.o config.o cp15.o \
-	debugger.o debugger_swis.o ddnoise.o \
-	disc.o disc_adf.o disc_apd.o disc_fdi.o disc_hfe.o \
-	disc_jfd.o disc_mfm_common.o disc_scp.o \
-	ds2401.o eterna.o fdi2raw.o fpa.o g16.o g332.o \
-	hostfs.o ide.o ide_a3in.o ide_config.o ide_idea.o \
-	ide_riscdev.o ide_zidefs.o ide_zidefs_a3k.o \
-	input_sdl2.o ioc.o ioeb.o joystick.o keyboard.o \
-	lc.o main.o mem.o memc.o podules.o printer.o \
-	riscdev_hdfc.o romload.o sound.o soundopenal.o \
-	st506.o st506_akd52.o \
-	timer.o vidc.o video_sdl2.o wd1770.o \
-	wx-sdl2-joystick.o hostfs-unix.o podules-linux.o \
-	emscripten_main.o emscripten-console.o
-OBJS_NATIVE := $(addprefix build/native/,${OBJS})
-OBJS_WASM   := $(addprefix build/wasm/,${OBJS})
+OBJS := 82c711 82c711_fdc \
+	arm bmu cmos colourcard config cp15 \
+	debugger debugger_swis ddnoise \
+	disc disc_adf disc_apd disc_fdi disc_hfe \
+	disc_jfd disc_mfm_common disc_scp \
+	ds2401 eterna fdi2raw fpa g16 g332 \
+	hostfs ide ide_a3in ide_config ide_idea \
+	ide_riscdev ide_zidefs ide_zidefs_a3k \
+	input_sdl2 ioc ioeb joystick keyboard \
+	lc main mem memc podules printer \
+	riscdev_hdfc romload sound soundopenal \
+	st506 st506_akd52 timer vidc video_sdl2 wd1770 \
+	wx-sdl2-joystick hostfs-unix podules-linux \
+	emscripten_main emscripten-console
+OBJS_DOT_O  := $(addsuffix .o,${OBJS})
+OBJS_NATIVE := $(addprefix build/native/,${OBJS_DOT_O})
+OBJS_WASM   := $(addprefix build/wasm/,${OBJS_DOT_O})
 
-#all: build $(addprefix build/wasm/arculator.,wasm js html data data.js)
-
+######################################################################
 all:	native wasm
+
+clean:
+	rm -rf build
+
+serve: build/wasm/arculator.html
+	@echo "Now open >> http://${SERVE_IP}:${SERVE_PORT}/build/wasm/arculator.html << in your browser"
+	@python3 -mhttp.server -b ${SERVE_IP} ${SERVE_PORT}
+
+######################################################################
 native:	build/native/arculator
-wasm:	$(addprefix build/wasm/arculator.,html js wasm data data.js)
 
 build/native/arculator: ${OBJS_NATIVE}
 	${CC} ${OBJS_NATIVE} -o $@ ${LINKFLAGS}
@@ -41,6 +60,9 @@ build/native/arculator: ${OBJS_NATIVE}
 build/native/%.o: src/%.c
 	@mkdir -p $(@D)
 	${CC} -c ${CFLAGS} $< -o $@
+
+######################################################################
+wasm:	$(addprefix build/wasm/arculator.,html js wasm data data.js)
 
 build/wasm/arculator.wasm build/wasm/arculator.js: build/wasm/arculator.html
 build/wasm/arculator.html: ${OBJS_WASM}
@@ -55,13 +77,8 @@ build/wasm/%.o: src/%.c
 	@mkdir -p $(@D)
 	emcc -c ${CFLAGS} ${CFLAGS_WASM} $< -o $@
 
+######################################################################
 roms/arcrom_ext: roms/riscos311/ros311
 roms/riscos311/ros311:
 	curl -s http://b-em.bbcmicro.com/arculator/Arculator_V2.1_Linux.tar.gz | tar xz roms
 
-clean:
-	rm -rf build
-
-serve: build/wasm/arculator.html
-	@echo "Now open >> http://localhost:8000/build/wasm/arculator.html << in your browser"
-	@python3 -mhttp.server -d.
