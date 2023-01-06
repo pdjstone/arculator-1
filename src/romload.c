@@ -220,6 +220,10 @@ int loadrom()
 	for (c=0;c<file;c++)
 	{
 		f=fopen(romfns[c],"rb");
+		if (!f) {
+			perror(romfns[c]);
+			return -1;
+		}
 		fseek(f,-1,SEEK_END);
 		len=ftell(f)+1;
 		fseek(f,0,SEEK_SET);
@@ -293,6 +297,10 @@ void rom_load_arc_support_extrom(void)
 
 	append_filename(fn, exname, "roms/arcrom_ext", 511);
 	f = fopen(fn, "rb");
+	if (!f) {
+		perror("roms/arcrom_ext");
+		return;
+	}
 	fread(rom_arcrom, 0x10000, 1, f);
 	fclose(f);
 }
