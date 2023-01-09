@@ -1,11 +1,6 @@
-*.Po
-*.o
 roms/
 *.log
-*.Plo
-*.Pl
 .dirstamp
-autom4te.cache/
 .deps/
 *.wasm
 *.bin
@@ -18,11 +13,6 @@ autom4te.cache/
 *.la
 *.lai
 *.lo
-/emscripten_assets/
-/emscripten_out/
-roms.txt
-config.status
-libtool
-Makefile
-arculator
+*/roms.txt
+/build/
 src/arculatorweb

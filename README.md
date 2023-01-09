@@ -1,7 +1,29 @@
-# Arculator WASM
+Arculator WASM
+==============
 
-This is a fork of the Arculator Acorn Achimedes emulator, with tweaks that allow it to be compiled to WebAssembly using Emscripten and run in a web browser.
+A port of Arculator to WebAssembly using Emscripten.
 
-It is currently a work in progress. The compiled Arculator code works mostly flawlessly, but work remains to be done on the web UI to make it more useable.
+What works:
 
-# [Demo](http://pdjstone.github.io/arculator-wasm/arculator.html)
+* Graphics
+* Mouse
+* Keyboard
+* Sound
+* HostFS
+* Loading disks via web interface
+
+Not working:
+
+* Fullscreen
+* Podules
+
+To build and test the Emscripten version:
+
+* Install [Emscripten](https://emscripten.org/docs/getting_started/downloads.html) which contains the whole build environment
+* Run `make -j8 serve`
+* (or `make -j8 serve DEBUG=1` if you want a slower debug build)
+* Open [http://localhost:8000/build/wasm/arculator.html](http://localhost:8000/build/arculator.html) to see the default Emscripten front-end which should boot RISC OS 3.
+
+You can also build a native equivalent by running `make -j8 native DEBUG=1`.
+
+We're working on a better front-end at the [Archimedes Live](https://github.com/pdjstone/archimedes-live) project. Join us!
