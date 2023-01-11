@@ -21,6 +21,9 @@
 
 static const podule_callbacks_t *podule_callbacks;
 
+static void riscdev_ide_irq_raise(ide_t *ide);
+static void riscdev_ide_irq_clear(ide_t *ide);
+
 typedef struct riscdev_ide_t
 {
 	int page;
@@ -28,9 +31,6 @@ typedef struct riscdev_ide_t
 
 	ide_t ide;
 } riscdev_ide_t;
-
-static void riscdev_ide_irq_raise();
-static void riscdev_ide_irq_clear();
 
 static int riscdev_ide_init(struct podule_t *podule)
 {
@@ -47,7 +47,7 @@ static int riscdev_ide_init(struct podule_t *podule)
 	f = fopen(fn, "rb");
 	if (f)
 	{
-		fread(riscdev->rom, 0x4000, 1, f);
+		ignore_result(fread(riscdev->rom, 0x4000, 1, f));
 		fclose(f);
 	}
 	else

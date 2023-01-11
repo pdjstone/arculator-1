@@ -74,7 +74,7 @@ static int colourcard_init(struct podule_t *podule)
 	f = fopen(fn, "rb");
 	if (f)
 	{
-		fread(colourcard->rom, 0x20000, 1, f);
+		ignore_result(fread(colourcard->rom, 0x20000, 1, f));
 		fclose(f);
 	}
 	else

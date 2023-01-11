@@ -32,8 +32,8 @@ typedef struct idea_ide_t
 	ide_t ide;
 } idea_ide_t;
 
-static void idea_ide_irq_raise();
-static void idea_ide_irq_clear();
+static void idea_ide_irq_raise(ide_t *ide);
+static void idea_ide_irq_clear(ide_t *ide);
 
 static int idea_ide_init(struct podule_t *podule)
 {
@@ -50,7 +50,7 @@ static int idea_ide_init(struct podule_t *podule)
 	f = fopen(fn, "rb");
 	if (f)
 	{
-		fread(idea->rom, 0x8000, 1, f);
+		ignore_result(fread(idea->rom, 0x8000, 1, f));
 		fclose(f);
 	}
 	else

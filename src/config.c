@@ -46,7 +46,7 @@ char *get_filename(char *s)
 
 void append_filename(char *dest, const char *s1, const char *s2, int size)
 {
-	sprintf(dest, "%s%s", s1, s2);
+	snprintf(dest, size, "%.200s%.200s", s1, s2);
 }
 
 void append_slash(char *s, int size)
@@ -244,7 +244,7 @@ void config_load(int is_global, char *fn)
 		int c;
 		char buffer[256];
 
-		fgets(buffer, 255, f);
+		ignore_result(fgets(buffer, 255, f));
 		if (feof(f)) break;
 
 		c = 0;

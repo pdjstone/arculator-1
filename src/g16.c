@@ -67,7 +67,7 @@ static int g16_init(struct podule_t *podule)
 	f = fopen(fn, "rb");
 	if (f)
 	{
-		fread(g16->rom, 0x10000, 1, f);
+		ignore_result(fread(g16->rom, 0x10000, 1, f));
 		fclose(f);
 	}
 	else
@@ -111,7 +111,6 @@ static void g16_data_callback(uint8_t *data, int pixels, int hsync_length, int r
 	if (!g16->vsync_state)
 	{
 		int wp_nibble = 0;
-		int sup_pixels = 0;
 
 		for (x = 0; x < (pixels-1); x++)
 		{
@@ -121,7 +120,6 @@ static void g16_data_callback(uint8_t *data, int pixels, int hsync_length, int r
 					g16->ram[g16->wp & 0x7ffff] = (data[x] & 0xf) ^ 0xf;
 				else
 					g16->ram[g16->wp & 0x7ffff] |= ((data[x] & 0xf) ^ 0xf) << 4;
-				sup_pixels++;
 
 				wp_nibble = !wp_nibble;
 				if (!wp_nibble)

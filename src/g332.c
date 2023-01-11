@@ -186,7 +186,10 @@ uint64_t g332_poll(g332_t *g332)
 			if (cursor_line >= 0 && cursor_line < 64 && !(g332->ctrl_a & G332_CTRL_CURSOR_DISABLE))
 			{
 				int cursor_row = (g332->cursor_x >= 0) ? 0 : -g332->cursor_x;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
 				uint64_t cursor_data = *(uint64_t *)&g332->cursor_store[cursor_line*8];
+#pragma GCC diagnostic pop
 				int cursor_x;
 				uint32_t *p;
 

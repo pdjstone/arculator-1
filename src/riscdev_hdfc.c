@@ -60,7 +60,7 @@ static int hdfc_init(struct podule_t *podule)
 	f = fopen(fn, "rb");
 	if (f)
 	{
-		fread(hdfc->rom, 0x10000, 1, f);
+		ignore_result(fread(hdfc->rom, 0x10000, 1, f));
 		fclose(f);
 	}
 	else

@@ -109,14 +109,14 @@ static void adf_seek(int drive, int track)
 	adf[drive].track = track;
 	if (adf[drive].dblside)
 	{
-		fseek(adf[drive].f, track * adf[drive].sectors * adf[drive].size * 2, SEEK_SET);
-		fread(adf[drive].track_data[0], adf[drive].sectors * adf[drive].size, 1, adf[drive].f);
-		fread(adf[drive].track_data[1], adf[drive].sectors * adf[drive].size, 1, adf[drive].f);
+		ignore_result(fseek(adf[drive].f, track * adf[drive].sectors * adf[drive].size * 2, SEEK_SET));
+		ignore_result(fread(adf[drive].track_data[0], adf[drive].sectors * adf[drive].size, 1, adf[drive].f));
+		ignore_result(fread(adf[drive].track_data[1], adf[drive].sectors * adf[drive].size, 1, adf[drive].f));
 	}
 	else
 	{
 		fseek(adf[drive].f, track * adf[drive].sectors * adf[drive].size, SEEK_SET);
-		fread(adf[drive].track_data[0], adf[drive].sectors * adf[drive].size, 1, adf[drive].f);
+		ignore_result(fread(adf[drive].track_data[0], adf[drive].sectors * adf[drive].size, 1, adf[drive].f));
 	}
 }
 static void adf_writeback(int drive, int track)

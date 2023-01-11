@@ -562,11 +562,11 @@ static void vidc_poll(void *__p)
 //        int col=0;
 	int x,xx;
 	uint32_t temp;
-	uint32_t *p;
 	uint8_t *bp;
 //        char s[256];
 	int l = vidc.line;
-	int xoffset,xoffset2;
+	int xoffset;
+	int xoffset2 __attribute__((unused));
 	int do_double_scan = (!vidc.scanrate && !dblscan);
 
 	if (do_double_scan)
@@ -843,7 +843,6 @@ static void vidc_poll(void *__p)
 						{
 							for (xx = 0; xx < 16; xx++)
 								((uint32_t *)bp)[x+xx]=vidc.pal[temp>>(xx<<1)&3];
-							p+=16;
 						}
 						if (vidc.addr == vend + 4)
 							vidc.addr = vstart;
@@ -872,7 +871,6 @@ static void vidc_poll(void *__p)
 						{
 							for (c = 0; c < 8; c++)
 								((uint32_t *)bp)[x+c]=vidc.pal[(temp>>(c<<2))&0xF];
-							p+=8;
 						}
 						if (vidc.addr==vend+4) vidc.addr=vstart;
 					}
