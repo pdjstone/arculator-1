@@ -4,8 +4,7 @@ SHELL := bash
 BUILD_TAG := $(shell echo `git rev-parse --short HEAD`-`[[ -n $$(git status -s) ]] && echo 'dirty' || echo 'clean'` on `date --rfc-3339=seconds`)
 
 CC             := gcc
-FIX_WARNINGS   := $(addprefix -Wno-,deprecated-non-prototype unused-but-set-variable constant-conversion integer-overflow unused-variable uninitialized int-to-pointer-cast)
-CFLAGS         := -D_REENTRANT -DARCWEB -Wall ${FIX_WARNINGS} -DBUILD_TAG="${BUILD_TAG}"
+CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}"
 CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2
 LINKFLAGS      := -lz -lSDL2 -lopenal -lm -ldl
 LINKFLAGS_WASM := -sALLOW_MEMORY_GROWTH=1 -sFORCE_FILESYSTEM -sEXPORTED_RUNTIME_METHODS=[\"ccall\"]
