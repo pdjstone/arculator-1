@@ -256,7 +256,7 @@ void cmos_init()
 	systemtime.min = cur_time_tm->tm_min;
 	systemtime.hour = cur_time_tm->tm_hour;
 	systemtime.day = cur_time_tm->tm_mday;
-	systemtime.mon = cur_time_tm->tm_mon;
+	systemtime.mon = cur_time_tm->tm_mon + 1;
 	systemtime.year = cur_time_tm->tm_year + 1900;
 #endif
 
