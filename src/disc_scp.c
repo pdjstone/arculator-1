@@ -81,7 +81,7 @@ void scp_load(int drive, char *fn)
 		return;
 	writeprot[drive] = 1;
 
-	fread(&scp[drive].header, 16, 1, scp[drive].f);
+	ignore_result(fread(&scp[drive].header, 16, 1, scp[drive].f));
 
 	rpclog("SCP file %s:\n", fn);
 	rpclog(" ID=%c%c%c\n", scp[drive].header.id[0], scp[drive].header.id[1], scp[drive].header.id[2]);
@@ -94,7 +94,7 @@ void scp_load(int drive, char *fn)
 	rpclog(" Number of heads=%u\n", scp[drive].header.nr_heads);
 	rpclog(" Resolution=%u\n", scp[drive].header.resolution);
 
-	fread(&scp[drive].track_offsets, 4, 168, scp[drive].f);
+	ignore_result(fread(&scp[drive].track_offsets, 4, 168, scp[drive].f));
 
 	scp[drive].mfm.write_protected = writeprot[drive];
 	scp[drive].mfm.writeback = NULL;
@@ -139,12 +139,12 @@ static void scp_do_read_track(int drive, int track, int side)
 	}
 
 	fseek(scp[drive].f, track_offset, SEEK_SET);
-	fread(&track_data_header, sizeof(track_data_header), 1, scp[drive].f);
+	ignore_result(fread(&track_data_header, sizeof(track_data_header), 1, scp[drive].f));
 
 	for (int rev = 0; rev < MIN(scp[drive].header.nr_revolutions, SCP_MAX_REVOLUTIONS); rev++)
 	{
 		fseek(scp[drive].f, track_offset + track_data_header.revolutions[rev].data_offset, SEEK_SET);
-		fread(scp[drive].data_buffer[side][rev], track_data_header.revolutions[rev].track_length, 2, scp[drive].f);
+		ignore_result(fread(scp[drive].data_buffer[side][rev], track_data_header.revolutions[rev].track_length, 2, scp[drive].f));
 		scp[drive].track_length[side][rev] = track_data_header.revolutions[rev].track_length;
 	}
 }

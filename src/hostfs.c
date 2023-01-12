@@ -136,7 +136,7 @@ static char *cache_names = NULL;
 static HostFSState hostfs_state = HOSTFS_STATE_UNREGISTERED;
 
 #ifdef NDEBUG
-static inline void dbug_hostfs(const char *format, ...) { NOT_USED(format); }
+static inline void dbug_hostfs(const char *format, ...) {  }
 #else
 static void
 dbug_hostfs(const char *format, ...)
@@ -301,7 +301,10 @@ name_host_to_riscos(const char *object_name, size_t len, char *riscos_name)
       *riscos_name++ = '.';
       break;
     case 32:
-      *riscos_name++ = 160;
+      {
+        unsigned char *riscos_name_u = (unsigned char*) riscos_name;
+        *riscos_name_u++ = 160;
+      }
       break;
     case '#':
       *riscos_name++ = '?';
@@ -848,7 +851,7 @@ hostfs_getbytes(ARMul_State *state)
 
   fseek(f, (long) state->Reg[4], SEEK_SET);
 
-  fread(buffer, 1, state->Reg[3], f);
+  ignore_result(fread(buffer, 1, state->Reg[3], f));
 
   for (i = 0; i < state->Reg[3]; i++) {
     ARMul_StoreByte(state, ptr++, buffer[i]);

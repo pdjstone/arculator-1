@@ -9,6 +9,7 @@
 #endif
 
 #include <stdio.h>
+#include <string.h>
 #include "arc.h"
 #include "plat_video.h"
 #include "vidc.h"

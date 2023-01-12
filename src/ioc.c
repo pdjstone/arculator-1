@@ -267,7 +267,7 @@ void ioc_irqbc(uint8_t v)
 
 static void ioc_timer_callback(void *p)
 {
-	int timer_nr = (int)p;
+	long long timer_nr = (long long)p;
 
 	if (timer_nr < 2)
 		ioc_irqa(timer_nr ? IOC_IRQA_TIMER_1 : IOC_IRQA_TIMER_0);

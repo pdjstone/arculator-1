@@ -31,8 +31,8 @@ typedef struct zidefs_a3k_ide_t
 	ide_t ide;
 } zidefs_a3k_ide_t;
 
-static void zidefs_a3k_ide_irq_raise();
-static void zidefs_a3k_ide_irq_clear();
+static void zidefs_a3k_ide_irq_raise(ide_t *ide);
+static void zidefs_a3k_ide_irq_clear(ide_t *ide);
 
 static int zidefs_a3k_ide_init(struct podule_t *podule)
 {
@@ -49,7 +49,7 @@ static int zidefs_a3k_ide_init(struct podule_t *podule)
 	f = fopen(fn, "rb");
 	if (f)
 	{
-		fread(zidefs->rom, 0x4000, 1, f);
+		ignore_result(fread(zidefs->rom, 0x4000, 1, f));
 		fclose(f);
 	}
 	else

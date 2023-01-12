@@ -387,7 +387,7 @@ void callbackide(void *p)
 		}*/
 		rpclog("Seek to %08X\n",addr);
 		fseek(ide->hdfile[ide->drive],addr,SEEK_SET);
-		fread(ide->idebuffer,512,1,ide->hdfile[ide->drive]);
+		ignore_result(fread(ide->idebuffer,512,1,ide->hdfile[ide->drive]));
 		ide->pos=0;
 		ide->atastat = READY_STAT | DRQ_STAT | DSC_STAT;
 //                rpclog("Read sector callback %i %i %i offset %08X %i left %i\n",ide->sector,ide->cylinder,ide->head,addr,ide->secount,ide->spt[ide->drive]);

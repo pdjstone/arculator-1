@@ -198,7 +198,7 @@ void podules_init(void)
 				}
 				else
 				{
-					timer_add(&podules[c].timer, podule_run_timer, (void *)c, 1);
+					timer_add(&podules[c].timer, podule_run_timer, (void *)((long long)c), 1);
 					podules[c].last_callback_tsc = tsc;
 				}
 			}
@@ -353,7 +353,7 @@ uint32_t podule_memc_read_w(int num, uint32_t addr)
 
 static void podule_run_timer(void *p)
 {
-	int num = (int)p;
+	long long num = (long long)p;
 	podule_t *podule = &podules[num].podule;
 	uint64_t timeslice = tsc - podules[num].last_callback_tsc;
 	int ret = 0;

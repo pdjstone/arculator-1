@@ -47,7 +47,7 @@ int loadertictac()
 		for (d=0;d<4;d++) fclose(f[d]);
 		addr+=0x40000;
 	}
-	chdir(olddir);
+	ignore_result(chdir(olddir));
 	return 0;
 }
 
@@ -87,7 +87,7 @@ int loadpoizone()
 		for (d=0;d<4;d++) fclose(f[d]);
 		addr+=0x40000;
 	}
-	chdir(olddir);
+	ignore_result(chdir(olddir));
 	return 0;
 }
 
@@ -100,14 +100,12 @@ int ucase(char c)
 int loadrom()
 {
 	FILE *f;
-	int finished=0;
+	//int finished=0;
 	int file=0;
 	int c,d,e;
 	int len,pos=0;
 #ifdef WIN32
 	intptr_t find_file;
-#else
-	int find_file;
 #endif
 //        char s[256];
 	char fn[512];
@@ -123,12 +121,12 @@ int loadrom()
 //        rpclog("Loading ROM set %i\n",romset);
 	if (firstromload)
 	{
-		getcwd(olddir,511);
+		ignore_result(getcwd(olddir,511));
 		firstromload=0;
 	}
 	else
 	{
-		chdir(olddir);
+		ignore_result(chdir(olddir));
 	}
 	snprintf(s, sizeof(s), "roms/%s", config_get_romset_name(romset));
 	append_filename(fn, exname, s, sizeof(fn));
@@ -195,7 +193,7 @@ int loadrom()
 #endif
 	if (file==0)
 	{
-		chdir(olddir);
+		ignore_result(chdir(olddir));
 //                rpclog("No files found!\n");
 		return -1;
 	}
@@ -220,6 +218,10 @@ int loadrom()
 	for (c=0;c<file;c++)
 	{
 		f=fopen(romfns[c],"rb");
+		if (!f) {
+			perror(romfns[c]);
+			return -1;
+		}
 		fseek(f,-1,SEEK_END);
 		len=ftell(f)+1;
 		fseek(f,0,SEEK_SET);
@@ -227,13 +229,13 @@ int loadrom()
 		if ((pos + len) > 0x200000)
 			len = 0x200000 - pos;
 		if (len > 0)
-			fread(&romb[pos],len,1,f);
+			ignore_result(fread(&romb[pos],len,1,f));
 		fclose(f);
 		pos+=len;
 		if (pos >= 0x200000)
 			break;
 	}
-	chdir(olddir);
+	ignore_result(chdir(olddir));
 //        rpclog("Successfully loaded!\n");
 	return 0;
 }
@@ -279,7 +281,7 @@ void rom_load_5th_column(void)
 	f = fopen(fn, "rb");
 	if (f)
 	{
-		fread(rom_5th_column, 0x20000, 1, f);
+		ignore_result(fread(rom_5th_column, 0x20000, 1, f));
 		fclose(f);
 	}
 	else
@@ -293,6 +295,10 @@ void rom_load_arc_support_extrom(void)
 
 	append_filename(fn, exname, "roms/arcrom_ext", 511);
 	f = fopen(fn, "rb");
-	fread(rom_arcrom, 0x10000, 1, f);
+	if (!f) {
+		perror("roms/arcrom_ext");
+		return;
+	}
+	ignore_result(fread(rom_arcrom, 0x10000, 1, f));
 	fclose(f);
 }

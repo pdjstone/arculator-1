@@ -9,6 +9,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#define ignore_result(r) if ((r)) {  };
+
 /*Misc*/
 extern void rpclog(const char *format, ...);
 extern void error(const char *format, ...);

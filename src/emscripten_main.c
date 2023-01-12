@@ -20,7 +20,7 @@
 #include "video_sdl2.h"
 
 #ifndef __EMSCRIPTEN__
-#define EMSCRIPTEN_KEEPALIVE 
+#define EMSCRIPTEN_KEEPALIVE
 #endif
 
 static int winsizex = 0, winsizey = 0;
@@ -203,8 +203,8 @@ void arcloop()
                 arc_run(run_ms);
 
         SDL_UnlockMutex(main_thread_mutex);
-        static int timer_offset = 0;
         #ifndef __EMSCRIPTEN__
+        static int timer_offset = 0;
         timer_offset += (1000 / (fixed_fps == 0 ? 60 : fixed_fps)) - (int)ticks_since_last;
         if (timer_offset > 100 || timer_offset < -100)
         {
@@ -212,9 +212,9 @@ void arcloop()
         }
         else if (timer_offset > 0)
         {
-                SDL_Delay(timer_offset);     
+                SDL_Delay(timer_offset);
         }
-        
+
 
         if (updatemips)
         {
@@ -228,13 +228,13 @@ void arcloop()
                 updatemips=0;
         }
         #endif
-  
+
 }
 
 static int arc_main_thread()
 {
         rpclog("Arculator startup\n");
-      
+
         last_seconds = 0;
         arc_init();
 
@@ -242,17 +242,17 @@ static int arc_main_thread()
         {
                 fatal("Video renderer init failed");
         }
-        input_init(); 
+        input_init();
         //sdl_enable_mouse_capture();
-       
-        #ifdef __EMSCRIPTEN__  
+
+        #ifdef __EMSCRIPTEN__
         // if fixed_fps is 0, emscripten will use requestAnimationFrame
         emscripten_set_main_loop(arcloop, fixed_fps, 1);
         #else
-        while(!quited) {        
+        while(!quited) {
                 arcloop();
         }
-        #endif 
+        #endif
         return 0;
 }
 
@@ -282,9 +282,9 @@ void EMSCRIPTEN_KEEPALIVE arc_do_reset()
 void EMSCRIPTEN_KEEPALIVE arc_load_config_and_reset(char *config_name)
 {
         SDL_LockMutex(main_thread_mutex);
-      
+
         snprintf(machine_config_file, 256, "configs/%s.cfg", config_name);
-        strncpy(machine_config_name, config_name, 256);
+        strncpy(machine_config_name, config_name, 255);
         rpclog("arc_load_config_and_reset: machine_config_name=%s machine_config_file=%s\n", machine_config_name, machine_config_file);
         loadconfig();
         arc_reset();
@@ -318,7 +318,7 @@ void EMSCRIPTEN_KEEPALIVE arc_disc_eject(int drive)
         SDL_UnlockMutex(main_thread_mutex);
 }
 
-void EMSCRIPTEN_KEEPALIVE arc_fast_forward(int time_ms) 
+void EMSCRIPTEN_KEEPALIVE arc_fast_forward(int time_ms)
 {
         soundena = 0;
         skip_video_render = 1;
@@ -382,21 +382,21 @@ void EMSCRIPTEN_KEEPALIVE arc_enter_fullscreen()
         win_dofullscreen = 1;
 }
 
-int EMSCRIPTEN_KEEPALIVE main(int argc, char** argv) 
+int EMSCRIPTEN_KEEPALIVE main(int argc, char** argv)
 {
         rpclog("emscripten main - argc=%d\n", argc);
-        if (argc > 1) 
+        if (argc > 1)
         {
                 fixed_fps = atoi(argv[1]);
                 rpclog("setting fixed_fps=%d\n", fixed_fps);
         }
-        if (argc > 2) 
+        if (argc > 2)
         {
-                snprintf(machine_config_file, 256, "configs/%s.cfg", argv[2]);
-                strncpy(machine_config_name, argv[2], 256);
+                snprintf(machine_config_file, 255, "configs/%s.cfg", argv[2]);
+                strncpy(machine_config_name, argv[2], 255);
                 rpclog("machine_config_name=%s machine_config_file=%s\n", machine_config_name, machine_config_file);
         }
         al_init_main(0, NULL);
         main_thread_mutex = SDL_CreateMutex();
         arc_main_thread();
-} 
+}

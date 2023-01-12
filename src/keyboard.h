@@ -1,10 +1,10 @@
 void keyboard_init();
-void keyboard_poll();
+void keyboard_poll(void *p);
 uint8_t keyboard_read();
 void keyboard_write(uint8_t val);
 
-void key_do_rx_callback();
-void key_do_tx_callback();
+void key_do_rx_callback(void *p);
+void key_do_tx_callback(void *p);
 
 void resetmouse();
 void doosmouse();

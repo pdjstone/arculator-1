@@ -500,7 +500,7 @@ static void st506_callback(void *p)
 //                        rpclog("Reading from pos %08X - %i sectors left\n",ftell(st506->hdfile[st506->drive]),st506->oplen);
 			st506->oplen--;
 //                        rpclog("Read ST506buffer from %08X\n",ftell(hdfile));
-			fread(st506->buffer+16, 256, 1, st506->hdfile[st506->drive]);
+			ignore_result(fread(st506->buffer+16, 256, 1, st506->hdfile[st506->drive]));
 //                        if ((ftell(hdfile)-256)==0x2048C00) dumpst506buffer();
 			for (c = 16; c < 272; c += 2)
 			{
