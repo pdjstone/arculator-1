@@ -11,7 +11,8 @@ LINKFLAGS_WASM := -sALLOW_MEMORY_GROWTH=1 -sFORCE_FILESYSTEM -sEXPORTED_RUNTIME_
 
 ifdef DEBUG
   CFLAGS += -D_DEBUG -DDEBUG_LOG -g3
-  LINKFLAGS_WASM += -gsource-map --source-map-base http://localhost:8000/build/
+#  --source-map-base not needed if .map is in the same dir as .wasm
+  LINKFLAGS_WASM += -gsource-map
   BUILD_TAG +=  (DEBUG)
   $(info ❗BUILD_TAG="${BUILD_TAG}")
 else
