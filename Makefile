@@ -8,26 +8,25 @@ CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}"
 CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2
 LINKFLAGS      := -lz -lSDL2 -lopenal -lm -ldl
 LINKFLAGS_WASM := -sALLOW_MEMORY_GROWTH=1 -sFORCE_FILESYSTEM -sEXPORTED_RUNTIME_METHODS=[\"ccall\"]
-
+DATA           := ddnoise
 ifdef DEBUG
   CFLAGS += -D_DEBUG -DDEBUG_LOG -g3
 #  --source-map-base not needed if .map is in the same dir as .wasm
   LINKFLAGS_WASM += -gsource-map
   BUILD_TAG +=  (DEBUG)
   $(info ❗BUILD_TAG="${BUILD_TAG}")
+  DATA += roms/riscos311/ros311 roms/arcrom_ext cmos arc.cfg
 else
   CFLAGS += -O3
   $(info ❗BUILD_TAG="${BUILD_TAG}")
   $(info ❗Re-run make with DEBUG=1 if you want a debug build)
 endif
 
-DATA := roms/riscos311/ros311 roms/arcrom_ext cmos ddnoise arc.cfg
 
 OBJS := 82c711 82c711_fdc \
 	arm bmu cmos colourcard config cp15 \
 	debugger debugger_swis ddnoise \
-	disc disc_adf disc_apd disc_fdi disc_hfe \
-	disc_jfd disc_mfm_common disc_scp \
+	disc disc_adf disc_mfm_common \
 	ds2401 eterna fdi2raw fpa g16 g332 \
 	hostfs ide ide_a3in ide_config ide_idea \
 	ide_riscdev ide_zidefs ide_zidefs_a3k \

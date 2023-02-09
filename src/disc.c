@@ -68,10 +68,10 @@ loaders[]=
 	{"ADF", adf_arcdd_load, 2*80* 5*1024},
 	{"ADF", adf_archd_load, 2*80*10*1024},
 	{"ADL", adl_load,       2*80*16* 256},
+#ifndef __EMSCRIPTEN__
 	{"FDI", fdi_load,       -1},
 	{"APD", apd_load,       -1},
 	{"HFE", hfe_load,       -1},
-#ifndef __EMSCRIPTEN__
 	{"SCP", scp_load,       -1},
 #endif
 //        {"JFD", jfd_load,       -1},
