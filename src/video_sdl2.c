@@ -15,6 +15,11 @@
 #include "vidc.h"
 #include "video.h"
 #include "video_sdl2.h"
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#else
+#define EMSCRIPTEN_KEEPALIVE
+#endif
 
 static SDL_Texture *texture = NULL;
 static SDL_Renderer *renderer = NULL;
@@ -23,6 +28,7 @@ static SDL_Rect texture_rect;
 
 int selected_video_renderer;
 int skip_video_render = 0;
+int take_screenshot = 0;
 
 typedef struct sdl_render_driver_t
 {
@@ -38,6 +44,10 @@ static sdl_render_driver_t sdl_render_drivers[] =
 	{RENDERER_OPENGL, "opengl", 0},
 	{RENDERER_SOFTWARE, "software", 0}
 };
+
+void EMSCRIPTEN_KEEPALIVE arc_capture_screenshot() {
+	take_screenshot = 1;
+}
 
 int video_renderer_available(int id)
 {
@@ -118,7 +128,7 @@ int video_renderer_init(void *main_window)
 	if (main_window == NULL)
 	{
 		sdl_main_window = SDL_CreateWindow(
-			"Arculator",
+			"Archimedes Live!", // TODO: prevent Emscripten SDL from overriding window.title.
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
 			768,
@@ -237,6 +247,16 @@ void video_renderer_update(BITMAP *src, int src_x, int src_y, int dest_x, int de
 		texture_rect.w, texture_rect.h,
 		src_x, src_y, src->w);
 	SDL_UpdateTexture(texture, &texture_rect, &((uint32_t *)src->dat)[src_y * src->w + src_x], src->w * 4);
+#ifdef __EMSCRIPTEN__
+	if (take_screenshot) {
+		take_screenshot = 0;
+		SDL_Rect window_rect;
+		SDL_GetWindowSize(sdl_main_window, &window_rect.w, &window_rect.h);
+		EM_ASM({
+			save_screenshot($0,$1,$2,$3,$4,$5,$6,$7,$8);
+		}, src->dat, src->w, src->h, src_x, src_y, texture_rect.w, texture_rect.h, window_rect.w, window_rect.h);
+	}
+#endif
 }
 
 static void sdl_scale(int scale, SDL_Rect src, SDL_Rect *dst, int w, int h)
