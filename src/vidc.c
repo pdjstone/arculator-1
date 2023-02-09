@@ -508,7 +508,7 @@ void clearbitmap()
 
 void initvid()
 {
-	buffer = create_bitmap(4096, 2048);
+	buffer = create_bitmap(2048, 1024);
 	vidc.line = 0;
 	vidc.clock = 24000;
 }
