@@ -1,21 +1,21 @@
 Arculator WASM
 ==============
 
-A port of Arculator to WebAssembly using Emscripten.
+A port of Arculator (an [Acorn Archimedes](https://en.wikipedia.org/wiki/Acorn_Archimedes) emulator) to WebAssembly using Emscripten.
 
 What works:
 
 * Graphics
+* Sound
 * Mouse
 * Keyboard
-* Sound
-* HostFS
-* Loading disks via web interface
+* HostFS (via Emscripten MemFS)
+* Loading disc images (via MemFS)
 
-Not working:
+Not working or tested:
 
-* Fullscreen
 * Podules
+* Hard drives
 
 To build and test the Emscripten version:
 
