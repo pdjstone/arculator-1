@@ -135,7 +135,7 @@ static char *cache_names = NULL;
 /** Current registration state of HostFS module with backend code */
 static HostFSState hostfs_state = HOSTFS_STATE_UNREGISTERED;
 
-#ifdef NDEBUG
+#ifndef DEBUG_HOSTFS
 static inline void dbug_hostfs(const char *format, ...) {  }
 #else
 static void
