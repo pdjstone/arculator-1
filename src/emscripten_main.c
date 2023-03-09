@@ -264,6 +264,11 @@ void EMSCRIPTEN_KEEPALIVE arc_pause_main_thread()
         SDL_UnlockMutex(main_thread_mutex);
 }
 
+long long EMSCRIPTEN_KEEPALIVE arc_get_emulation_ms()
+{
+        return total_emulation_millis;
+}
+
 void EMSCRIPTEN_KEEPALIVE arc_resume_main_thread()
 {
         SDL_LockMutex(main_thread_mutex);

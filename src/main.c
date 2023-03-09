@@ -259,6 +259,7 @@ void arc_reset()
 	vidc_reset();
 	keyboard_init();
 	disc_reset();
+	ddnoise_init();
 	wd1770_reset();
 	c82c711_init();
 	c82c711_fdc_init();
@@ -329,7 +330,6 @@ void arc_set_cpu(int cpu, int memc)
 	mem_updatetimings();
 }
 
-static int ddnoise_millisec_count = 0;
 long long total_emulation_millis = 0;
 int fast_forward_to_time_ms = 0;
 
@@ -340,17 +340,11 @@ void arc_run(int millisecs)
 	mouse_poll_host();
 	keyboard_poll_host();
 	execarm(speed_mhz * 1000 * millisecs);
-	ddnoise_millisec_count += millisecs;
 	total_emulation_millis += millisecs;
 
 	if (mousehack) doosmouse();
 	frameco++;
 	
-	if (ddnoise_millisec_count >= 100)
-	{
-		ddnoise_millisec_count = 0;
-		ddnoise_mix();
-	}
 	if (cmos_changed)
 	{
 		cmos_changed--;
