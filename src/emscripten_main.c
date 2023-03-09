@@ -127,7 +127,7 @@ void arcloop()
         }
 
         /*Resize window to match screen mode*/
-        if (!fullscreen && win_doresize)
+        if (!fullscreen && fast_forward_to_time_ms == 0 && win_doresize)
         {
                 SDL_Rect rect;
 
@@ -193,6 +193,7 @@ void arcloop()
                         fast_forward_to_time_ms = 0;
                         soundena = 1;
                         skip_video_render = 0;
+                        win_doresize = 1;
                 }
                 run_ms = ticks_since_last < MAX_TICKS_PER_FRAME ? ticks_since_last : MAX_TICKS_PER_FRAME;
         }
