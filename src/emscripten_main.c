@@ -186,6 +186,7 @@ void arcloop()
         int run_ms = 0;
         if (fast_forward_to_time_ms != 0 && total_emulation_millis < fast_forward_to_time_ms) {
                 run_ms = MAX_TICKS_PER_FRAME;
+                soundena = 0;
                 //rpclog("fast forward to %d %d\n", fast_forward_to_time_ms, total_emulation_millis);
         } else {
                 if (fast_forward_to_time_ms != 0) {

@@ -146,7 +146,7 @@ static void pollsound_100ms(void *p)
 	timer_advance_u64(&sound_timer_100ms, 50 * 1000 * TIMER_USEC);
 
 	update_sound(2400);
-	if (sound_first_poll)
+	if (soundena && sound_first_poll)
 		sound_first_poll = 0;
 
 	sound_write_ptr = 0;
