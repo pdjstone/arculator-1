@@ -1,7 +1,7 @@
 Arculator WASM
 ==============
 
-A port of Arculator (an [Acorn Archimedes](https://en.wikipedia.org/wiki/Acorn_Archimedes) emulator) to WebAssembly using Emscripten.
+A port of [Arculator](https://github.com/sarah-walker-pcem/arculator) (an [Acorn Archimedes](https://en.wikipedia.org/wiki/Acorn_Archimedes) emulator) to WebAssembly using Emscripten.
 
 What works:
 
