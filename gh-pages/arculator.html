@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<title>Archimedes Live!</title>
+<script>
+let q = '';
+if (location.search != '') {
+    q = '#' + location.search.substr(1);
+}
+document.location = 'https://archi.medes.live' + q;
+</script>
+<noscript>
+    Arculator WASM is now <a href="https://archi.medes.live">Archimedes Live!</a>
+</noscript>
