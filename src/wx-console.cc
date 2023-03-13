@@ -34,6 +34,8 @@ public:
 
 	void OnTextEnter(wxCommandEvent &event)
 	{
+		pending_s_mutex.Lock();
+
 		if (pending_s.empty())
 		{
 			pending_s = GetValue();
@@ -49,6 +51,8 @@ public:
 
 			Clear();
 		}
+
+		pending_s_mutex.Unlock();
 	}
 
 	void OnKeyDown(wxKeyEvent &event)
@@ -81,12 +85,20 @@ public:
 
 	int GetInput(char *s)
 	{
+		pending_s_mutex.Lock();
+
 		if (pending_s.empty())
+		{
+			pending_s_mutex.Unlock();
 			return 0;
+		}
 
 		last_s = pending_s.Clone();
 		strcpy(s, pending_s);
 		pending_s.clear();
+
+		pending_s_mutex.Unlock();
+
 		return 1;
 	}
 
@@ -95,6 +107,8 @@ private:
 
 	wxString last_s;
 	wxString pending_s;
+
+	wxMutex pending_s_mutex;
 
 	std::deque<wxString> scrollback;
 	unsigned int scrollback_pos;
@@ -105,6 +119,9 @@ wxBEGIN_EVENT_TABLE(ConsoleInput, wxTextCtrl)
     EVT_KEY_DOWN(ConsoleInput::OnKeyDown)
 wxEND_EVENT_TABLE()
 
+wxDEFINE_EVENT(CONSOLE_INPUT_DISABLE_EVENT, wxCommandEvent);
+wxDEFINE_EVENT(CONSOLE_INPUT_ENABLE_EVENT, wxCommandEvent);
+wxDEFINE_EVENT(CONSOLE_WRITE_EVENT, wxCommandEvent);
 
 class ConsoleWindow: public wxFrame
 {
@@ -118,8 +135,8 @@ public:
 						wxDefaultSize, wxTE_READONLY | wxTE_MULTILINE | wxTE_DONTWRAP);
 
 
-		console_input->SetFont(wxSystemSettings::GetFont(wxSYS_ANSI_FIXED_FONT));
-		console_output->SetFont(wxSystemSettings::GetFont(wxSYS_ANSI_FIXED_FONT));
+		console_input->SetFont(wxFont(12, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+		console_output->SetFont(wxFont(12, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
 
 		main_sizer->Add(console_output, wxSizerFlags(1).Expand());
 		main_sizer->Add(console_input, wxSizerFlags().Expand());
@@ -132,8 +149,10 @@ public:
 		console_window = NULL;
 	}
 
-	void Write(wxString s)
+	void OnConsoleWrite(wxCommandEvent &event)
 	{
+		wxString s = event.GetString().Clone();
+
 		TextBuffer.Append(s);
 
 		while (1)
@@ -159,13 +178,14 @@ public:
 		Destroy();
 	}
 
-	void InputDisable()
+	void OnInputDisable(wxCommandEvent &event)
 	{
 		console_input->Disable();
 	}
-	void InputEnable()
+	void OnInputEnable(wxCommandEvent &event)
 	{
 		console_input->Enable();
+		console_input->SetFocus();
 	}
 
 private:
@@ -180,6 +200,9 @@ private:
 
 wxBEGIN_EVENT_TABLE(ConsoleWindow, wxFrame)
     EVT_CLOSE(ConsoleWindow::OnClose)
+    EVT_COMMAND(wxID_ANY, CONSOLE_INPUT_DISABLE_EVENT, ConsoleWindow::OnInputDisable)
+    EVT_COMMAND(wxID_ANY, CONSOLE_INPUT_ENABLE_EVENT, ConsoleWindow::OnInputEnable)
+    EVT_COMMAND(wxID_ANY, CONSOLE_WRITE_EVENT, ConsoleWindow::OnConsoleWrite)
 wxEND_EVENT_TABLE()
 
 void ShowConsoleWindow(wxWindow *parent)
@@ -204,7 +227,9 @@ extern "C" void console_output(char *s)
 	if (!console_window_enabled)
 		return;
 
-	console_window->Write(s);
+	wxCommandEvent *event = new wxCommandEvent(CONSOLE_WRITE_EVENT, wxID_ANY);
+	event->SetString(s);
+	wxQueueEvent((wxWindow *)console_window, event);
 }
 
 extern "C" int console_input_get(char *s)
@@ -232,7 +257,8 @@ extern "C" void console_input_disable()
 	if (!console_window_enabled)
 		return;
 
-	console_window->InputDisable();
+	wxCommandEvent *event = new wxCommandEvent(CONSOLE_INPUT_DISABLE_EVENT, wxID_ANY);
+	wxQueueEvent((wxWindow *)console_window, event);
 }
 
 extern "C" void console_input_enable()
@@ -240,5 +266,6 @@ extern "C" void console_input_enable()
 	if (!console_window_enabled)
 		return;
 
-	console_window->InputEnable();
+	wxCommandEvent *event = new wxCommandEvent(CONSOLE_INPUT_ENABLE_EVENT, wxID_ANY);
+	wxQueueEvent((wxWindow *)console_window, event);
 }
