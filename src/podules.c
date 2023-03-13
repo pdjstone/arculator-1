@@ -206,7 +206,7 @@ void podules_init(void)
 	}
 }
 
-uint32_t podule_validate_and_get_valid_flags(podule_header_t *header)
+uint32_t podule_validate_and_get_valid_flags(const podule_header_t *header)
 {
 	switch (header->version)
 	{
