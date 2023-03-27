@@ -193,6 +193,7 @@ void arcloop()
                         rpclog("finished fast forward - re-enabling sound and video\n");
                         fast_forward_to_time_ms = 0;
                         soundena = 1;
+                        al_init();
                         skip_video_render = 0;
                         win_doresize = 1;
                 }
@@ -289,12 +290,13 @@ void EMSCRIPTEN_KEEPALIVE arc_do_reset()
 void EMSCRIPTEN_KEEPALIVE arc_load_config_and_reset(char *config_name)
 {
         SDL_LockMutex(main_thread_mutex);
-
+        al_close();
         snprintf(machine_config_file, 256, "configs/%s.cfg", config_name);
         strncpy(machine_config_name, config_name, 255);
         rpclog("arc_load_config_and_reset: machine_config_name=%s machine_config_file=%s\n", machine_config_name, machine_config_file);
         loadconfig();
         total_emulation_millis=0;
+        al_init_main(0, NULL);
         arc_init();
         SDL_UnlockMutex(main_thread_mutex);
 }
