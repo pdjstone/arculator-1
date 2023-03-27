@@ -190,7 +190,7 @@ void arcloop()
                 //rpclog("fast forward to %d %d\n", fast_forward_to_time_ms, total_emulation_millis);
         } else {
                 if (fast_forward_to_time_ms != 0) {
-                        rpclog("finshed fast forward - re-enabling sound and video\n");
+                        rpclog("finished fast forward - re-enabling sound and video\n");
                         fast_forward_to_time_ms = 0;
                         soundena = 1;
                         skip_video_render = 0;
@@ -294,7 +294,8 @@ void EMSCRIPTEN_KEEPALIVE arc_load_config_and_reset(char *config_name)
         strncpy(machine_config_name, config_name, 255);
         rpclog("arc_load_config_and_reset: machine_config_name=%s machine_config_file=%s\n", machine_config_name, machine_config_file);
         loadconfig();
-        arc_reset();
+        total_emulation_millis=0;
+        arc_init();
         SDL_UnlockMutex(main_thread_mutex);
 }
 
