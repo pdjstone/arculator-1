@@ -41,6 +41,7 @@ extern void InitXmlResource();
 wxDEFINE_EVENT(WX_STOP_EMULATION_EVENT, wxCommandEvent);
 wxDEFINE_EVENT(WX_POPUP_MENU_EVENT, PopupMenuEvent);
 wxDEFINE_EVENT(WX_UPDATE_MENU_EVENT, UpdateMenuEvent);
+wxDEFINE_EVENT(WX_PRINT_ERROR_EVENT, wxCommandEvent);
 #ifdef _WIN32
 wxDEFINE_EVENT(WX_WIN_SEND_MESSAGE_EVENT, WinSendMessageEvent);
 #endif
@@ -95,11 +96,17 @@ Frame::Frame(App* app, const wxString& title, const wxPoint& pos,
 	Bind(WX_POPUP_MENU_EVENT, &Frame::OnPopupMenuEvent, this);
 	Bind(WX_UPDATE_MENU_EVENT, &Frame::OnUpdateMenuEvent, this);
 	Bind(WX_STOP_EMULATION_EVENT, &Frame::OnStopEmulationEvent, this);
+	Bind(WX_PRINT_ERROR_EVENT, &Frame::OnPrintErrorEvent, this);
 #ifdef _WIN32
 	Bind(WX_WIN_SEND_MESSAGE_EVENT, &Frame::OnWinSendMessageEvent, this);
 #endif
 
 	CenterOnScreen();
+}
+
+Frame::~Frame()
+{
+	main_frame = NULL;
 }
 
 void Frame::Start()
@@ -131,6 +138,11 @@ void Frame::OnStopEmulationEvent(wxCommandEvent &event)
 		arc_start_main_thread(this, this->menu);
 	else
 		Quit(0);
+}
+
+void Frame::OnPrintErrorEvent(wxCommandEvent &event)
+{
+	wxMessageBox(event.GetString(), "Arculator", wxOK | wxCENTRE | wxSTAY_ON_TOP | wxICON_ERROR, this);
 }
 
 void Frame::UpdateMenu(wxMenu *menu)
@@ -285,15 +297,23 @@ void Frame::OnMenuCommand(wxCommandEvent &event)
 	{
 		arc_disc_eject(3);
 	}
-	else if (event.GetId() >= XRCID("IDM_DISC_NOISE[0]") && event.GetId() <= XRCID("IDM_DISC_NOISE[4]"))
+	else if (event.GetId() == XRCID("IDM_DISC_NOISE[0]") || event.GetId() == XRCID("IDM_DISC_NOISE[1]") ||
+		 event.GetId() == XRCID("IDM_DISC_NOISE[2]") || event.GetId() == XRCID("IDM_DISC_NOISE[3]") ||
+		 event.GetId() == XRCID("IDM_DISC_NOISE[4]"))
 	{
 		wxMenuItem *item = ((wxMenu*)menu)->FindItem(event.GetId());
 		item->Check(true);
 
 		if (event.GetId() == XRCID("IDM_DISC_NOISE[0]"))
 			disc_noise_gain = DISC_NOISE_DISABLED;
+		else if (event.GetId() == XRCID("IDM_DISC_NOISE[1]"))
+			disc_noise_gain = -2 * 0;
+		else if (event.GetId() == XRCID("IDM_DISC_NOISE[2]"))
+			disc_noise_gain = -2 * 1;
+		else if (event.GetId() == XRCID("IDM_DISC_NOISE[3]"))
+			disc_noise_gain = -2 * 2;
 		else
-			disc_noise_gain = -2 * (event.GetId() - XRCID("IDM_DISC_NOISE[1]"));
+			disc_noise_gain = -2 * 3;
 	}
 	else if (event.GetId() == XRCID("IDM_SOUND_ENABLE"))
 	{
@@ -309,12 +329,35 @@ void Frame::OnMenuCommand(wxCommandEvent &event)
 		wxMenuItem *item = ((wxMenu*)menu)->FindItem(event.GetId());
 		item->Check(stereo);
 	}
-	else if (event.GetId() >= XRCID("IDM_SOUND_GAIN[0]") && event.GetId() <= XRCID("IDM_SOUND_GAIN[9]"))
+	else if (event.GetId() == XRCID("IDM_SOUND_GAIN[0]") || event.GetId() == XRCID("IDM_SOUND_GAIN[1]") ||
+		 event.GetId() == XRCID("IDM_SOUND_GAIN[2]") || event.GetId() == XRCID("IDM_SOUND_GAIN[3]") ||
+		 event.GetId() == XRCID("IDM_SOUND_GAIN[4]") || event.GetId() == XRCID("IDM_SOUND_GAIN[5]") ||
+		 event.GetId() == XRCID("IDM_SOUND_GAIN[6]") || event.GetId() == XRCID("IDM_SOUND_GAIN[7]") ||
+		 event.GetId() == XRCID("IDM_SOUND_GAIN[8]") || event.GetId() == XRCID("IDM_SOUND_GAIN[9]"))
 	{
 		wxMenuItem *item = ((wxMenu*)menu)->FindItem(event.GetId());
 		item->Check(true);
 
-		sound_gain = 2 * (event.GetId() - XRCID("IDM_SOUND_GAIN[0]"));
+		if (event.GetId() == XRCID("IDM_SOUND_GAIN[0]"))
+			sound_gain = 2 * 0;
+		else if (event.GetId() == XRCID("IDM_SOUND_GAIN[1]"))
+			sound_gain = 2 * 1;
+		else if (event.GetId() == XRCID("IDM_SOUND_GAIN[2]"))
+			sound_gain = 2 * 2;
+		else if (event.GetId() == XRCID("IDM_SOUND_GAIN[3]"))
+			sound_gain = 2 * 3;
+		else if (event.GetId() == XRCID("IDM_SOUND_GAIN[4]"))
+			sound_gain = 2 * 4;
+		else if (event.GetId() == XRCID("IDM_SOUND_GAIN[5]"))
+			sound_gain = 2 * 5;
+		else if (event.GetId() == XRCID("IDM_SOUND_GAIN[6]"))
+			sound_gain = 2 * 6;
+		else if (event.GetId() == XRCID("IDM_SOUND_GAIN[7]"))
+			sound_gain = 2 * 7;
+		else if (event.GetId() == XRCID("IDM_SOUND_GAIN[8]"))
+			sound_gain = 2 * 8;
+		else if (event.GetId() == XRCID("IDM_SOUND_GAIN[9]"))
+			sound_gain = 2 * 9;
 	}
 	else if (event.GetId() == XRCID("IDM_FILTER_ORIGINAL"))
 	{
@@ -427,12 +470,30 @@ void Frame::OnMenuCommand(wxCommandEvent &event)
 		video_linear_filtering = 1;
 		arc_renderer_reset();
 	}
-	else if (event.GetId() >= XRCID("IDM_VIDEO_SCALE[0]") && event.GetId() <= XRCID("IDM_VIDEO_SCALE[7]"))
+	else if (event.GetId() == XRCID("IDM_VIDEO_SCALE[0]") || event.GetId() == XRCID("IDM_VIDEO_SCALE[1]") ||
+		 event.GetId() == XRCID("IDM_VIDEO_SCALE[2]") || event.GetId() == XRCID("IDM_VIDEO_SCALE[3]") ||
+		 event.GetId() == XRCID("IDM_VIDEO_SCALE[4]") || event.GetId() == XRCID("IDM_VIDEO_SCALE[5]") ||
+		 event.GetId() == XRCID("IDM_VIDEO_SCALE[6]") || event.GetId() == XRCID("IDM_VIDEO_SCALE[7]"))
 	{
 		wxMenuItem *item = ((wxMenu*)menu)->FindItem(event.GetId());
 		item->Check(true);
 
-		video_scale = event.GetId() - XRCID("IDM_VIDEO_SCALE[0]");
+		if (event.GetId() == XRCID("IDM_VIDEO_SCALE[0]"))
+			video_scale = 0;
+		else if (event.GetId() == XRCID("IDM_VIDEO_SCALE[1]"))
+			video_scale = 1;
+		else if (event.GetId() == XRCID("IDM_VIDEO_SCALE[2]"))
+			video_scale = 2;
+		else if (event.GetId() == XRCID("IDM_VIDEO_SCALE[3]"))
+			video_scale = 3;
+		else if (event.GetId() == XRCID("IDM_VIDEO_SCALE[4]"))
+			video_scale = 4;
+		else if (event.GetId() == XRCID("IDM_VIDEO_SCALE[5]"))
+			video_scale = 5;
+		else if (event.GetId() == XRCID("IDM_VIDEO_SCALE[6]"))
+			video_scale = 6;
+		else if (event.GetId() == XRCID("IDM_VIDEO_SCALE[7]"))
+			video_scale = 7;
 	}
 	else if (event.GetId() == XRCID("IDM_VIDEO_FS_FULL"))
 	{
@@ -536,6 +597,20 @@ void Frame::OnUpdateMenuEvent(UpdateMenuEvent &event)
 	wxMenu *menu = event.GetMenu();
 
 	UpdateMenu(menu);
+}
+
+extern "C" void arc_print_error(const char *format, ...)
+{
+	wxCommandEvent *event = new wxCommandEvent(WX_PRINT_ERROR_EVENT, wxID_ANY);
+	char buf[1024];
+	va_list ap;
+
+	va_start(ap, format);
+	vsprintf(buf, format, ap);
+	va_end(ap);
+
+	event->SetString(wxString(buf));
+	wxQueueEvent((wxWindow *)main_frame, event);
 }
 
 #ifdef _WIN32

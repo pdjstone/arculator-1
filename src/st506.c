@@ -11,17 +11,28 @@
 
 static void st506_callback(void *p);
 
-#define BUSY            0x80
-#define PARAMREJECT     0x40
-#define COMEND          0x20
-#define SEEKEND         0x10
-#define DRIVEERROR      0x08
-#define ABNEND          0x04
+#define CMD_DELAY_US         5000 /*5ms*/
+#define INTERSECTOR_DELAY_US 500 /*1us*/
+
+#define STATUS_BUSY            0x80
+#define STATUS_PARAMREJECT     0x40
+#define STATUS_COMEND          0x20
+#define STATUS_SEEKEND         0x10
+#define STATUS_DRIVEERROR      0x08
+#define STATUS_ABNEND          0x04
+
+#define ERROR_TOV 0x58
+#define ERROR_IPH 0x3C
+#define ERROR_NSC 0x24
+#define ERROR_NRY 0x20
 
 int st506_present;
 static st506_t internal_st506;
 
-void st506_init(st506_t *st506, char *fn_pri, int pri_spt, int pri_hpc, char *fn_sec, int sec_spt, int sec_hpc, void (*irq_raise)(st506_t *st506), void (*irq_clear)(st506_t *st506), void *p)
+void st506_init(st506_t *st506,
+		char *fn_pri, int pri_spt, int pri_hpc, int pri_cyl,
+		char *fn_sec, int sec_spt, int sec_hpc, int sec_cyl,
+		void (*irq_raise)(st506_t *st506), void (*irq_clear)(st506_t *st506), void *p)
 {
 	st506->status = 0;
 	st506->rp = st506->wp = 0;
@@ -30,9 +41,11 @@ void st506_init(st506_t *st506, char *fn_pri, int pri_spt, int pri_hpc, char *fn
 	st506->hdfile[0] = fopen(fn_pri, "rb+");
 	st506->spt[0] = pri_spt;
 	st506->hpc[0] = pri_hpc;
+	st506->cyl[0] = pri_cyl;
 	st506->hdfile[1] = fopen(fn_sec, "rb+");
 	st506->spt[1] = sec_spt;
 	st506->hpc[1] = sec_hpc;
+	st506->cyl[1] = sec_cyl;
 	timer_add(&st506->timer, st506_callback, st506, 0);
 	st506->irq_raise = irq_raise;
 	st506->irq_clear = irq_clear;
@@ -45,11 +58,6 @@ void st506_close(st506_t *st506)
 	if (st506->hdfile[1])
 		fclose(st506->hdfile[1]);
 }
-
-#define TOV 0x58
-#define IPH 0x3C
-#define NSC 0x24
-#define NRY 0x20
 
 static void st506_updateinterrupts(st506_t *st506)
 {
@@ -71,7 +79,7 @@ static void st506_updateinterrupts(st506_t *st506)
 static void st506_error(st506_t *st506, uint8_t err)
 {
 //        rpclog("ST506 error - %02X\n",err);
-	st506->status = ABNEND | COMEND;
+	st506->status = STATUS_ABNEND | STATUS_COMEND;
 	st506->drq = 0;
 	st506_updateinterrupts(st506);
 	st506->ssb = err;
@@ -90,21 +98,22 @@ static void readdataerror(st506_t *st506)
 
 static int check_chs_params(st506_t *st506, int drive)
 {
-	if (st506->lcyl > 1023)
+	if (st506->lcyl > st506->nc[drive])
 	{
-		st506_error(st506, NSC);
+		st506_error(st506, ERROR_NSC);
 		readdataerror(st506);
 		return 1;
 	}
-	if (st506->lhead >= st506->hpc[drive])
+	if (st506->lhead > st506->nh[drive])
 	{
-		st506_error(st506, IPH);
+		st506_error(st506, ERROR_IPH);
 		readdataerror(st506);
 		return 1;
 	}
-	if (st506->lsect >= st506->spt[drive])
+	if (st506->lcyl >= st506->cyl[drive] || st506->lhead >= st506->hpc[drive] ||
+	    st506->lsect >= st506->spt[drive] || st506->lsect > st506->ns[drive])
 	{
-		st506_error(st506, TOV);
+		st506_error(st506, ERROR_TOV);
 		readdataerror(st506);
 		return 1;
 	}
@@ -145,7 +154,7 @@ uint8_t st506_readb(st506_t *st506, uint32_t a)
 			{
 				st506->drq = 0;
 				st506_updateinterrupts(st506);
-				timer_set_delay_u64(&st506->timer, 5000 * TIMER_USEC);
+				timer_set_delay_u64(&st506->timer, INTERSECTOR_DELAY_US * TIMER_USEC);
 			}
 //                        rpclog("Read HDC %08X %08X %07X %02X\n",a,temp,PC,ioc.irqb);
 			return temp;
@@ -178,14 +187,14 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
 		case 0: /*New command*/
 //                output=0;
 //                rpclog("New ST506 command %04X\n",v);
-		if ((st506->status) & BUSY && (v != 0xF0))
+		if ((st506->status) & STATUS_BUSY && (v != 0xF0))
 		{
 			rpclog("Command rejected\n");
 			return;
 		}
 		st506->drq = 0;
 		if (v != 0xF0)
-			st506->status = PARAMREJECT;
+			st506->status = STATUS_PARAMREJECT;
 		st506->wp = st506->rp = 0;
 		st506->command = v;
 		if (v != 8 && v != 0xF0)
@@ -201,21 +210,27 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
 			return;
 
 			case 0x10: /*Enable polling*/
-			st506->status &= ~PARAMREJECT;
+			st506->status &= ~STATUS_PARAMREJECT;
 			return;
 
 			case 0x18: /*Disable polling*/
-			st506->status &= ~PARAMREJECT;
+			st506->status &= ~STATUS_PARAMREJECT;
 			return;
 
 			case 0x28: /*Check drive*/
 			if (st506->param[0] != 1 && st506->param[0] != 2)
 			{
-				st506_error(st506, NRY);
+				st506_error(st506, ERROR_NRY);
 				readdataerror(st506);
 				return;
 			}
 			st506->drive = st506->param[0] - 1;
+			if (!st506->hdfile[st506->drive])
+			{
+				st506_error(st506, ERROR_NRY);
+				readdataerror(st506);
+				return;
+			}
 			temp = st506->param[0] & 3;
 			st506->status = 0;
 			st506->param[0] = 0;
@@ -230,11 +245,17 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
 			rpclog("Read data %02X %02X\n",st506->param[0],st506->param[1]);
 			if (st506->param[0] != 1 && st506->param[0] != 2)
 			{
-				st506_error(st506, NRY);
+				st506_error(st506, ERROR_NRY);
 				readdataerror(st506);
 				return;
 			}
 			st506->drive = st506->param[0] - 1;
+			if (!st506->hdfile[st506->drive])
+			{
+				st506_error(st506, ERROR_NRY);
+				readdataerror(st506);
+				return;
+			}
 			st506->lcyl = (st506->param[2] << 8) | st506->param[3];
 			st506->lhead = st506->param[4];
 			st506->lsect = st506->param[5];
@@ -244,18 +265,24 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
 				return;
 			fseek(st506->hdfile[st506->drive], (((((st506->lcyl*st506->hpc[st506->drive])+st506->lhead)*st506->spt[st506->drive])+st506->lsect)*256), SEEK_SET);
 //                        rpclog("Seeked to %08X\n",(((((st506->lcyl*8)+st506->lhead)*32)+st506->lsect)*256));
-			timer_set_delay_u64(&st506->timer, 5000 * TIMER_USEC);
+			timer_set_delay_u64(&st506->timer, CMD_DELAY_US * TIMER_USEC);
 			st506->status |= 0x80;
 			return;
 
 			case 0x48: /*Check data*/
 			if (st506->param[0] != 1 && st506->param[0] != 2)
 			{
-				st506_error(st506, NRY);
+				st506_error(st506, ERROR_NRY);
 				readdataerror(st506);
 				return;
 			}
 			st506->drive = st506->param[0] - 1;
+			if (!st506->hdfile[st506->drive])
+			{
+				st506_error(st506, ERROR_NRY);
+				readdataerror(st506);
+				return;
+			}
 			st506->lcyl = (st506->param[2] << 8) | st506->param[3];
 			st506->lhead = st506->param[4];
 			st506->lsect = st506->param[5];
@@ -264,18 +291,24 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
 			if (check_chs_params(st506, st506->drive))
 				return;
 			fseek(st506->hdfile[st506->drive], (((((st506->lcyl*st506->hpc[st506->drive])+st506->lhead)*st506->spt[st506->drive])+st506->lsect)*256), SEEK_SET);
-			timer_set_delay_u64(&st506->timer, 5000 * TIMER_USEC);
+			timer_set_delay_u64(&st506->timer, CMD_DELAY_US * TIMER_USEC);
 			st506->status |= 0x80;
 			return;
 
 			case 0x87: /*Write data*/
 			if (st506->param[0] != 1 && st506->param[0] != 2)
 			{
-				st506_error(st506, NRY);
+				st506_error(st506, ERROR_NRY);
 				readdataerror(st506);
 				return;
 			}
 			st506->drive = st506->param[0] - 1;
+			if (!st506->hdfile[st506->drive])
+			{
+				st506_error(st506, ERROR_NRY);
+				readdataerror(st506);
+				return;
+			}
 			st506->lcyl = (st506->param[2] << 8) | st506->param[3];
 			st506->lhead = st506->param[4];
 			st506->lsect = st506->param[5];
@@ -285,7 +318,7 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
 				return;
 			fseek(st506->hdfile[st506->drive], (((((st506->lcyl*st506->hpc[st506->drive])+st506->lhead)*st506->spt[st506->drive])+st506->lsect)*256), SEEK_SET);
 //                        rpclog("Seeked to %08X\n",(((((st506->lcyl*8)+st506->lhead)*32)+st506->lsect)*256));
-			timer_set_delay_u64(&st506->timer, 5000 * TIMER_USEC);
+			timer_set_delay_u64(&st506->timer, CMD_DELAY_US * TIMER_USEC);
 			st506->status |= 0x80;
 			st506->first = 1;
 			return;
@@ -293,11 +326,17 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
 			case 0xA3: /*Write Format*/
 			if (st506->param[0] != 1 && st506->param[0] != 2)
 			{
-				st506_error(st506, NRY);
+				st506_error(st506, ERROR_NRY);
 				readdataerror(st506);
 				return;
 			}
 			st506->drive = st506->param[0] - 1;
+			if (!st506->hdfile[st506->drive])
+			{
+				st506_error(st506, ERROR_NRY);
+				readdataerror(st506);
+				return;
+			}
 			st506->lcyl = st506->track[st506->drive];
 			st506->lhead = st506->param[1];
 			st506->lsect = 0;
@@ -306,7 +345,7 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
 			if (check_chs_params(st506, st506->drive))
 				return;
 			fseek(st506->hdfile[st506->drive], (((((st506->lcyl*st506->hpc[st506->drive])+st506->lhead)*st506->spt[st506->drive])+st506->lsect)*256), SEEK_SET);
-			timer_set_delay_u64(&st506->timer, 5000 * TIMER_USEC);
+			timer_set_delay_u64(&st506->timer, CMD_DELAY_US * TIMER_USEC);
 			st506->status |= 0x80;
 			st506->first = 1;
 			return;
@@ -314,33 +353,45 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
 			case 0xC0: /*Seek*/
 			if (st506->param[0] != 1 && st506->param[0] != 2)
 			{
-				st506_error(st506, NRY);
+				st506_error(st506, ERROR_NRY);
 				readdataerror(st506);
 				return;
 			}
 			st506->drive = st506->param[0] - 1;
+			if (!st506->hdfile[st506->drive])
+			{
+				st506_error(st506, ERROR_NRY);
+				readdataerror(st506);
+				return;
+			}
 			st506->track[st506->drive] = st506->param[3] | (st506->param[2] << 8);
-			rpclog("Seek drive %i to track %i\n",st506->drive, st506->track);
+			rpclog("Seek drive %i to track %i\n",st506->drive, st506->track[st506->drive]);
 			st506->param[0] = 0;
 			st506->param[1] = 0;
 			st506->param[2] = 0;
 			st506->param[3] = st506->cul;
-			st506->status |= COMEND;
-			st506->status |= SEEKEND;
+			st506->status |= STATUS_COMEND;
+			st506->status |= STATUS_SEEKEND;
 			st506_updateinterrupts(st506);
 			return;
 
 			case 0xC8: /*Recalibrate*/
 			if (st506->param[0] != 1 && st506->param[0] != 2)
 			{
-				st506_error(st506, NRY);
+				st506_error(st506, ERROR_NRY);
 				readdataerror(st506);
 				return;
 			}
 			st506->drive = st506->param[0] - 1;
+			if (!st506->hdfile[st506->drive])
+			{
+				st506_error(st506, ERROR_NRY);
+				readdataerror(st506);
+				return;
+			}
 			st506->track[st506->drive] = 0;
 //                        rpclog("Recalibrate : seek to track %i\n",st506->track);
-			st506->status |= SEEKEND;
+			st506->status |= STATUS_SEEKEND;
 			st506->param[0] = 0;
 			st506->param[1] = 0;
 			st506->param[2] = 0;
@@ -349,16 +400,28 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
 
 			case 0xE8: /*Specify*/
 //                        rpclog("Specify\nOM1 = %02X\nSHRL = %02X\nSectors = %i\nHeads = %i\nCylinders = %i\n",st506->param[1],st506->param[8],st506->param[7]+1,st506->param[6]+1,(st506->param[5]|((st506->param[4]&3)<<8))+1);
-			st506->status = PARAMREJECT;
+			st506->status = STATUS_PARAMREJECT;
 			st506->OM1 = st506->param[1];
 			st506->cul = st506->param[3];
 			st506->param[0] = 0;
 			st506->param[1] = 0;
+			if (st506->cul & 2)
+			{
+				st506->nc[0] = st506->param[5] | ((st506->param[4] & 3) << 8);
+				st506->nh[0] = st506->param[6];
+				st506->ns[0] = st506->param[7];
+			}
+			if (st506->cul & 4)
+			{
+				st506->nc[1] = st506->param[5] | ((st506->param[4] & 3) << 8);
+				st506->nh[1] = st506->param[6];
+				st506->ns[1] = st506->param[7];
+			}
 //                        rpclog("OM1=%02X\n",st506->OM1);
 			return;
 
 			case 0xF0: /*Abort*/
-			st506->status = (st506->status & PARAMREJECT) | COMEND;
+			st506->status = (st506->status & STATUS_PARAMREJECT) | STATUS_COMEND;
 			st506->param[0] = 0;
 			st506->param[1] = 4;
 			st506_updateinterrupts(st506);
@@ -382,7 +445,7 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
 //                        rpclog("Writing params - pointer %02X param %02X%02X\n",st506->wp,v>>8,v&0xFF);
 			st506->wp += 2;
 			if (st506->wp >= 16)
-				st506->status |= PARAMREJECT;
+				st506->status |= STATUS_PARAMREJECT;
 		}
 		return;
 
@@ -396,7 +459,7 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
 			{
 				st506->drq = 0;
 				st506_updateinterrupts(st506);
-				timer_set_delay_u64(&st506->timer, 5000 * TIMER_USEC);
+				timer_set_delay_u64(&st506->timer, INTERSECTOR_DELAY_US * TIMER_USEC);
 			}
 //                        rpclog("Write HDC %08X %08X %i %07X %i %02X  %02X %02X\n",a,temp,st506->p,PC,st506->drq,ioc.irqb,st506->status,st506->OM1);
 			return;
@@ -430,7 +493,7 @@ uint32_t st506_readl(st506_t *st506, uint32_t a)
 			{
 				st506->drq = 0;
 				st506_updateinterrupts(st506);
-				timer_set_delay_u64(&st506->timer, 5000 * TIMER_USEC);
+				timer_set_delay_u64(&st506->timer, INTERSECTOR_DELAY_US * TIMER_USEC);
 			}
 //                        rpclog("Read HDC %08X %08X %i %07X\n",a,temp,st506->rp,PC);
 			return temp;
@@ -481,22 +544,9 @@ static void st506_callback(void *p)
 		case 0x40: /*Read sector*/
 		if (st506->oplen)
 		{
-//                        if (st506->lsect>31)  { st506error(TOV); readdataerror(); return; }
-			st506->lsect++;
-			if (st506->lsect == st506->spt[st506->drive])
-			{
-				st506->lsect = 0;
-				st506->lhead++;
-				if (st506->lhead == st506->hpc[st506->drive])
-				{
-					st506->lhead = 0;
-					st506->lcyl++;
-#ifndef RELEASE_BUILD
-					if (st506->lcyl > 1023)
-						fatal("Hit limit\n");
-#endif
-				}
-			}
+			if (check_chs_params(st506, st506->drive))
+				break;
+
 //                        rpclog("Reading from pos %08X - %i sectors left\n",ftell(st506->hdfile[st506->drive]),st506->oplen);
 			st506->oplen--;
 //                        rpclog("Read ST506buffer from %08X\n",ftell(hdfile));
@@ -512,6 +562,20 @@ static void st506_callback(void *p)
 			st506->drq = 1;
 			st506_updateinterrupts(st506);
 //                        rpclog("HDC interrupt part\n");
+
+			st506->lsect++;
+			if (st506->lsect > st506->ns[st506->drive])
+			{
+				st506->lsect = 0;
+				st506->lhead++;
+			}
+
+			st506->param[2] = st506->lcyl >> 8;
+			st506->param[3] = st506->lcyl;
+			st506->param[4] = st506->lhead;
+			st506->param[5] = st506->lsect;
+			st506->param[6] = st506->oplen >> 8;
+			st506->param[7] = st506->oplen;
 		}
 		else
 		{
@@ -521,7 +585,7 @@ static void st506_callback(void *p)
 			st506->param[0] = st506->param[1] = 0;
 			st506->rp = st506->wp = 0;
 //                        rpclog("Finished read sector! %02X\n",st506->OM1);
-			st506->status |= COMEND | PARAMREJECT;
+			st506->status |= STATUS_COMEND | STATUS_PARAMREJECT;
 			st506->status &= ~0x80;
 			st506->drq = 0;
 			st506_updateinterrupts(st506);
@@ -533,24 +597,25 @@ static void st506_callback(void *p)
 //                rpclog("Check data %i\n",st506->oplen);
 		if (st506->oplen)
 		{
+			if (check_chs_params(st506, st506->drive))
+				break;
+			st506->oplen--;
+			timer_set_delay_u64(&st506->timer, INTERSECTOR_DELAY_US * TIMER_USEC);
+//                        rpclog("Check data next callback\n");
+
 			st506->lsect++;
-			if (st506->lsect == st506->spt[st506->drive])
+			if (st506->lsect > st506->ns[st506->drive])
 			{
 				st506->lsect = 0;
 				st506->lhead++;
-				if (st506->lhead == st506->hpc[st506->drive])
-				{
-					st506->lhead = 0;
-					st506->lcyl++;
-#ifndef RELEASE_BUILD
-					if (st506->lcyl > 1023)
-						fatal("Hit limit\n");
-#endif
-				}
 			}
-			st506->oplen--;
-			timer_set_delay_u64(&st506->timer, 5000 * TIMER_USEC);
-//                        rpclog("Check data next callback\n");
+
+			st506->param[2] = st506->lcyl >> 8;
+			st506->param[3] = st506->lcyl;
+			st506->param[4] = st506->lhead;
+			st506->param[5] = st506->lsect;
+			st506->param[6] = st506->oplen >> 8;
+			st506->param[7] = st506->oplen;
 		}
 		else
 		{
@@ -559,7 +624,7 @@ static void st506_callback(void *p)
 
 			st506->param[0] = st506->param[1] = 0;
 			st506->rp = st506->wp = 0;
-			st506->status |= COMEND | PARAMREJECT;
+			st506->status |= STATUS_COMEND | STATUS_PARAMREJECT;
 			st506->status &= ~0x80;
 			st506->drq = 0;
 			st506_updateinterrupts(st506);
@@ -579,21 +644,6 @@ static void st506_callback(void *p)
 
 		else
 		{
-			st506->lsect++;
-			if (st506->lsect == st506->spt[st506->drive])
-			{
-				st506->lsect = 0;
-				st506->lhead++;
-				if (st506->lhead == st506->hpc[st506->drive])
-				{
-					st506->lhead = 0;
-					st506->lcyl++;
-#ifndef RELEASE_BUILD
-					if (st506->lcyl > 1023)
-						fatal("Hit limit\n");
-#endif
-				}
-			}
 			st506->oplen--;
 			for (c = 16; c < 272; c += 2)
 			{
@@ -607,10 +657,25 @@ static void st506_callback(void *p)
 //                        rpclog("ST506 OPLEN %i\n",st506->oplen);
 			if (st506->oplen)
 			{
+				st506->lsect++;
+				if (st506->lsect > st506->ns[st506->drive])
+				{
+					st506->lsect = 0;
+					st506->lhead++;
+				}
+				if (check_chs_params(st506, st506->drive))
+					break;
 				st506->rp = 16;
 				st506->drq = 1;
 				st506_updateinterrupts(st506);
 //                                rpclog("Write HDC interrupt part\n");
+
+				st506->param[2] = st506->lcyl >> 8;
+				st506->param[3] = st506->lcyl;
+				st506->param[4] = st506->lhead;
+				st506->param[5] = st506->lsect;
+				st506->param[6] = st506->oplen >> 8;
+				st506->param[7] = st506->oplen;
 			}
 			else
 			{
@@ -620,7 +685,7 @@ static void st506_callback(void *p)
 				st506->param[0] = st506->param[1] = 0;
 				st506->rp = st506->wp = 0;
 //                                rpclog("Finished write sector! %02X\n",st506->OM1);
-				st506->status |= COMEND | PARAMREJECT;
+				st506->status |= STATUS_COMEND | STATUS_PARAMREJECT;
 				st506->status &= ~0x80;
 				st506->drq = 0;
 				st506_updateinterrupts(st506);
@@ -643,25 +708,17 @@ static void st506_callback(void *p)
 			c = 0;
 			while (c < 256 && st506->oplen)
 			{
-				st506->lsect++;
-				if (st506->lsect == st506->spt[st506->drive])
-				{
-					st506->lsect = 0;
-					st506->lhead++;
-					if (st506->lhead == st506->hpc[st506->drive])
-					{
-						st506->lhead = 0;
-						st506->lcyl++;
-						if (st506->lcyl > 1023)
-						{
-							error("Hit limit\n");
-							exit(-1);
-						}
-					}
-				}
+				if (check_chs_params(st506, st506->drive))
+					break;
 				st506->oplen--;
 				fwrite(st506->buffer+16, 256, 1, st506->hdfile[st506->drive]);
 				c+=4;
+				st506->lsect++;
+				if (st506->lsect > st506->ns[st506->drive])
+				{
+					st506->lsect = 0;
+					st506->lhead++;
+				}
 			}
 			if (st506->oplen)
 			{
@@ -676,7 +733,7 @@ static void st506_callback(void *p)
 
 				st506->param[0] = st506->param[1] = 0;
 				st506->rp = st506->wp = 0;
-				st506->status |= COMEND | PARAMREJECT;
+				st506->status |= STATUS_COMEND | STATUS_PARAMREJECT;
 				st506->status &= ~0x80;
 				st506->drq = 0;
 				st506_updateinterrupts(st506);
@@ -697,7 +754,8 @@ static void st506_internal_irq_clear(st506_t *st506)
 
 void st506_internal_init(void)
 {
-	st506_init(&internal_st506, hd_fn[0], hd_spt[0], hd_hpc[0], hd_fn[1], hd_spt[1], hd_hpc[1], st506_internal_irq_raise, st506_internal_irq_clear, NULL);
+	st506_init(&internal_st506, hd_fn[0], hd_spt[0], hd_hpc[0], hd_cyl[0], hd_fn[1], hd_spt[1], hd_hpc[1], hd_cyl[1],
+		   st506_internal_irq_raise, st506_internal_irq_clear, NULL);
 }
 void st506_internal_close(void)
 {

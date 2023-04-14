@@ -10,11 +10,13 @@
 #include <stddef.h>
 
 #define ignore_result(r) if ((r)) {  };
+#include "debugger.h"
 
 /*Misc*/
 extern void rpclog(const char *format, ...);
 extern void error(const char *format, ...);
 extern void fatal(const char *format, ...);
+void arc_print_error(const char *format, ...);
 
 #ifdef DEBUG_CMOS
 #define LOG_CMOS rpclog
@@ -123,8 +125,6 @@ extern void resetpagesize(int pagesize);
 
 #define readmemb(a)    ((modepritabler[memmode][memstat[((a) >> 12) & 0x3FFF]]) ? mempoint[((a) >> 12) & 0x3FFF][(a)] : readmemfb(a))
 #define readmeml(a)    ((modepritabler[memmode][memstat[((a) >> 12) & 0x3FFF]]) ? *(uint32_t *)&mempoint[((a) >> 12) & 0x3FFF][(a) & ~3] : readmemfl(a))
-#define writememb(a,v) do { if (modepritablew[memmode][memstat[((a) >> 12) & 0x3FFF]]) mempoint[((a) >> 12) & 0x3FFF][(a)] = v; else { writememfb(a, v); } } while (0)
-#define writememl(a,v) do { if (modepritablew[memmode][memstat[((a) >> 12) & 0x3FFF]]) *(uint32_t *)&mempoint[((a) >> 12) & 0x3FFF][(a) & ~3] = v; else { writememfl(a, v); } } while (0)
 #define readmemff(a)    ((modepritabler[memmode][memstat[((a) >> 12) & 0x3FFF]]) ? *(uint32_t *)&mempoint[((a) >> 12) & 0x3FFF][(a) & ~3] : readmemf(a))
 
 extern uint32_t readmemf(uint32_t a);
@@ -132,6 +132,28 @@ extern uint8_t readmemfb(uint32_t a);
 extern uint32_t readmemfl(uint32_t a);
 extern void writememfb(uint32_t a,uint8_t v);
 extern void writememfl(uint32_t a,uint32_t v);
+
+static inline void writememb(uint32_t a, uint8_t v)
+{
+	if (debugon)
+		debug_writememb(a, v);
+
+	if (modepritablew[memmode][memstat[((a) >> 12) & 0x3FFF]])
+		mempoint[((a) >> 12) & 0x3FFF][(a)] = v;
+	else
+		writememfb(a, v);
+}
+
+static inline void writememl(uint32_t a, uint32_t v)
+{
+	if (debugon)
+		debug_writememl(a, v);
+
+	if (modepritablew[memmode][memstat[((a) >> 12) & 0x3FFF]])
+		*(uint32_t *)&mempoint[((a) >> 12) & 0x3FFF][(a) & ~3] = v;
+	else
+		writememfl(a, v);
+}
 
 /*MEMC*/
 extern uint32_t vinit;

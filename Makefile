@@ -32,7 +32,7 @@ OBJS := 82c711 82c711_fdc \
 	ide_riscdev ide_zidefs ide_zidefs_a3k \
 	input_sdl2 ioc ioeb joystick keyboard \
 	lc main mem memc podules printer \
-	riscdev_hdfc romload sound soundopenal \
+	riscdev_hdfc romload sound sound_sdl2 \
 	st506 st506_akd52 timer vidc video_sdl2 wd1770 \
 	wx-sdl2-joystick hostfs-unix podules-linux \
 	emscripten_main emscripten-console

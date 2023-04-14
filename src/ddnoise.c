@@ -7,7 +7,7 @@
 #include "config.h"
 #include "disc.h"
 #include "ddnoise.h"
-#include "soundopenal.h"
+#include "plat_sound.h"
 #include "timer.h"
 
 int ddnoise_vol=3;
@@ -352,7 +352,7 @@ void ddnoise_mix(void *p)
 	}
 
 	if (soundena)
-		al_givebufferdd(ddbuffer);
+		sound_givebufferdd(ddbuffer);
 
 	oldmotoron=motoron;
 }

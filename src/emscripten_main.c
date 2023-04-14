@@ -193,7 +193,7 @@ void arcloop()
                         rpclog("finished fast forward - re-enabling sound and video\n");
                         fast_forward_to_time_ms = 0;
                         soundena = 1;
-                        al_init();
+                        sound_dev_init();
                         skip_video_render = 0;
                         win_doresize = 1;
                 }

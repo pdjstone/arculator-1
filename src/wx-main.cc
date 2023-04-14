@@ -13,7 +13,6 @@ extern "C"
 	#include "arc.h"
 	#include "config.h"
 	#include "podules.h"
-	#include "soundopenal.h"
 }
 
 int main(int argc, char **argv)
@@ -21,8 +20,6 @@ int main(int argc, char **argv)
 #ifndef _WIN32
 	XInitThreads();
 #endif
-
-	al_init_main(0, NULL);
 
 	strncpy(exname, argv[0], 511);
 	char *p = (char *)get_filename(exname);
@@ -46,12 +43,12 @@ int main(int argc, char **argv)
 
 	podule_build_list();
 	opendlls();
+#ifdef _WIN32
 	SDL_SetHint(SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1");
+#endif
 
 	wxApp::SetInstance(new App());
 	wxEntry(argc, argv);
-
-	al_close();
 
 	return 0;
 }

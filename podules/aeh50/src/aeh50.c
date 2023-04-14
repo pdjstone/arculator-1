@@ -246,6 +246,7 @@ static int aeh50_init(struct podule_t *podule)
 	if (!f)
 	{
 		aeh50_log("Failed to open EthernetII_ID_ROM.ROM!\n");
+		free(aeh50);
 		return -1;
 	}
 	fread(aeh50->rom, 0x4000, 1, f);
@@ -256,6 +257,13 @@ static int aeh50_init(struct podule_t *podule)
 
 	const char *network_device = podule_callbacks->config_get_string(podule, "network_device", NETWORK_DEVICE_DEFAULT);
 	aeh50->net = net_init(network_device, &aeh50->rom[0x100]);
+
+	if (!aeh50->net)
+	{
+		aeh50_log("Failed to open network device\n");
+		free(aeh50);
+		return -1;
+	}
 
 	aeh50->ne2000 = ne2000_init(aeh50_set_irq, aeh50, aeh50->net);
 
@@ -269,7 +277,7 @@ static void aeh50_close(struct podule_t *podule)
 
 	aeh50->net->close((struct net_t *)aeh50->net);
 
-	ne2000_close(&aeh50->ne2000);
+	ne2000_close(aeh50->ne2000);
 
 	free(aeh50);
 }
