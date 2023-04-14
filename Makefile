@@ -6,7 +6,7 @@ BUILD_TAG := $(shell echo `git rev-parse --short HEAD`-`[[ -n $$(git status -s) 
 CC             := gcc
 CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}"
 CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2
-LINKFLAGS      := -lz -lSDL2 -lopenal -lm -ldl
+LINKFLAGS      := -lz -lSDL2 -sUSE_SDL=2 -lm -ldl
 LINKFLAGS_WASM := -sALLOW_MEMORY_GROWTH=1 -sFORCE_FILESYSTEM -sEXPORTED_RUNTIME_METHODS=[\"ccall\"]
 DATA           := ddnoise
 ifdef DEBUG

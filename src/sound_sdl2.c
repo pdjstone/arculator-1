@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include "arc.h"
 #include "plat_sound.h"
 #include "disc.h"
 #include "sound.h"
@@ -19,9 +20,13 @@ void sound_dev_init(void)
 	audio_spec.samples = 1024;
 	audio_spec.callback = NULL;
 
+	SDL_Init(SDL_INIT_AUDIO);
 	audio_device = SDL_OpenAudioDevice(NULL, 0, &audio_spec, NULL, 0);
 	rpclog("audio_device=%u\n", audio_device);
-
+	if (audio_device == 0) {
+		rpclog("SDL_OpenAudioDevice error: %s\n", SDL_GetError());
+	}
+	
 	ddnoise_stream = SDL_NewAudioStream(AUDIO_S16SYS, 1, DDNOISE_FREQ, AUDIO_S16SYS, 2, OUTPUT_FREQ);
 
 	SDL_PauseAudioDevice(audio_device, 0);

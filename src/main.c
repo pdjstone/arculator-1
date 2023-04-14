@@ -156,9 +156,9 @@ int arc_init()
 	loadconfig();
 
 	initvid();
-
 	arc_set_cpu(arm_cpu_type, memc_type);
 	timer_reset();
+	total_emulation_millis=0;
 #if 0
 	initarculfs();
 #endif
