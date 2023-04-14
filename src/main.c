@@ -359,9 +359,11 @@ void arc_close()
 //        output=1;
 //        execarm(16000);
 //        vidc_dumppal();
+#ifndef __EMSCRIPTEN__
 	dumpregs();
 	cmos_save();
 	saveconfig();
+#endif
 	podules_close();
 	disc_close(0);
 	disc_close(1);
