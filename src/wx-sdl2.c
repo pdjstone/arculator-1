@@ -20,6 +20,8 @@ static int win_doresize = 0;
 static int win_dofullscreen = 0;
 static int win_dosetresize = 0;
 static int win_renderer_reset = 0;
+static int arc_turbo_mode = 0;
+static int turbo_save_soundena = 0;
 
 void updatewindowsize(int x, int y)
 {
@@ -183,8 +185,13 @@ static int arc_main_thread(void *p)
 
 		// Run for 10 ms of processor time
 		SDL_LockMutex(main_thread_mutex);
+		int run_ms = 10;
+		if (arc_turbo_mode) {
+			run_ms = 500;
+			skip_video_render_show_one_frame = 2;
+		}
 		if (!pause_main_thread)
-			arc_run();
+			arc_run(run_ms);
 		SDL_UnlockMutex(main_thread_mutex);
 
 		// Sleep to make it up to 10 ms of real time
@@ -345,4 +352,22 @@ void arc_set_resizeable()
 void arc_enter_fullscreen()
 {
 	win_dofullscreen = 1;
+}
+
+void arc_set_turbo_mode(int turbo)
+{
+	SDL_LockMutex(main_thread_mutex);
+	rpclog("arc_set_turbo_mode: turbo=%i\n", turbo);
+	if (turbo == 1) {
+		turbo_save_soundena = soundena;
+		soundena = 0;
+		skip_video_render = 1;
+		arc_turbo_mode = 1;
+	} else {
+		soundena = turbo_save_soundena;
+		skip_video_render = 0;
+		arc_turbo_mode = 0;
+	}	
+
+	SDL_UnlockMutex(main_thread_mutex);
 }

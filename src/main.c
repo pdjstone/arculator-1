@@ -253,6 +253,7 @@ void arc_reset()
 	vidc_reset();
 	keyboard_init();
 	disc_reset();
+	ddnoise_init();
 	wd1770_reset();
 	c82c711_init();
 	c82c711_fdc_init();
@@ -323,22 +324,18 @@ void arc_set_cpu(int cpu, int memc)
 	mem_updatetimings();
 }
 
-static int ddnoise_frames = 0;
-void arc_run()
+void arc_run(int millisecs)
 {
 	LOG_EVENT_LOOP("arc_run()\n");
 	joystick_poll_host();
 	mouse_poll_host();
 	keyboard_poll_host();
+	execarm(speed_mhz * 1000 * millisecs);
+
 	if (mousehack) doosmouse();
-	execarm((speed_mhz * 1000000) / 100);
-	frameco++;
-	ddnoise_frames++;
-	if (ddnoise_frames == 10)
-	{
-		ddnoise_frames = 0;
-		ddnoise_mix();
-	}
+
+	frameco += millisecs / 10;
+	
 	if (cmos_changed)
 	{
 		cmos_changed--;

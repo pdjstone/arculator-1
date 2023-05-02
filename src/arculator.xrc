@@ -30,6 +30,10 @@
 			<object class="wxMenuItem" name="IDM_FILE_RESET">
 				<label>_Hard reset</label>
 			</object>
+			<object class="wxMenuItem" name="IDM_TURBO_MODE">
+				<label>_Turbo mode</label>
+				<checkable>1</checkable>
+			</object>
 			<object class="separator"/>
 			<object class="wxMenuItem" name="IDM_FILE_EXIT">
 				<label>_Exit</label>

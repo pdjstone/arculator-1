@@ -204,6 +204,8 @@ extern int stereo;
 
 
 extern int soundena;
+extern int skip_video_render;
+extern int skip_video_render_show_one_frame;
 
 extern int fullscreen;
 extern int fullborders,noborders;
@@ -232,7 +234,7 @@ void updatewindowsize(int x, int y);
 
 int arc_init();
 void arc_reset();
-void arc_run();
+void arc_run(int millisecs);
 void arc_close();
 
 
@@ -240,6 +242,7 @@ void arc_start_main_thread(void *wx_window, void *wx_menu);
 void arc_stop_main_thread();
 void arc_pause_main_thread();
 void arc_resume_main_thread();
+void arc_set_turbo_mode(int turbo);
 
 void arc_do_reset();
 void arc_disc_change(int drive, char *fn);

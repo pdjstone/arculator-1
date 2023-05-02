@@ -265,6 +265,18 @@ void Frame::OnMenuCommand(wxCommandEvent &event)
 	{
 		arc_do_reset();
 	}
+	else if (event.GetId() == XRCID("IDM_TURBO_MODE"))
+	{
+		wxMenuItem *item = ((wxMenu*)menu)->FindItem(event.GetId());
+
+		if (item->IsChecked() == false) {
+			arc_set_turbo_mode(0);
+			item->Check(false);
+		} else {
+			arc_set_turbo_mode(1);
+			item->Check(true);
+		}
+	}
 	else if (event.GetId() == XRCID("IDM_DISC_CHANGE_0"))
 	{
 		ChangeDisc(0);

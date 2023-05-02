@@ -13,6 +13,8 @@
 int ddnoise_vol=3;
 int ddnoise_type=0;
 
+static emu_timer_t ddnoise_timer;
+
 typedef struct SAMPLE
 {
 	int16_t *data;
@@ -203,6 +205,11 @@ void ddnoise_init()
 {
 	char path[512];
 
+	timer_add(&ddnoise_timer, ddnoise_mix, NULL, 1);
+
+	if (seeksmp[0][0] != NULL) 
+		return;
+
 	append_filename(path, exname, "ddnoise/35/", sizeof(path));
 	rpclog("ddnoise path %s\n", path);
 
@@ -231,7 +238,7 @@ void ddnoise_init()
 	motorsmp[0] = load_wav(path, "motoron.wav");
 	motorsmp[1] = load_wav(path, "motor.wav");
 	motorsmp[2] = load_wav(path, "motoroff.wav");
-}
+}	
 
 void ddnoise_close()
 {
@@ -280,14 +287,14 @@ void ddnoise_seek(int len)
 //        rpclog("Start seek!\n");
 }
 
-void ddnoise_mix()
+void ddnoise_mix(void *p)
 {
 	int c;
-//        if (!f1) f1=fopen("f1.pcm","wb");
-//        if (!f2) f2=fopen("f2.pcm","wb");
+
+	timer_advance_u64(&ddnoise_timer, TIMER_USEC * 100000);
 
 	memset(ddbuffer, 0, 4410 * 2);
-//        fwrite(ddbuffer,4410*2,1,f1);
+
 	if (motoron && !oldmotoron)
 	{
 		ddnoise_mstat = 0;
@@ -328,7 +335,7 @@ void ddnoise_mix()
 				{
 					if (ddnoise_sstat > 0)
 					{
-//                                                rpclog("fdc_time set by ddnoise_mix\n");
+                        //rpclog("fdc_time set by ddnoise_mix\n");
 						timer_set_delay_u64(fdc_timer, 200 * TIMER_USEC);
 					}
 					ddnoise_spos = 0;
@@ -344,7 +351,8 @@ void ddnoise_mix()
 		}
 	}
 
-	sound_givebufferdd(ddbuffer);
+	if (soundena)
+		sound_givebufferdd(ddbuffer);
 
 	oldmotoron=motoron;
 }
