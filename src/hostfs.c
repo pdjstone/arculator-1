@@ -40,6 +40,10 @@
 #include "hostfs.h"
 #include "hostfs_internal.h"
 
+#ifdef __EMSCRIPTEN__
+#include "hostfs_emscripten.h"
+#endif
+
 #define HOSTFS_PROTOCOL_VERSION	3
 
 /* Windows mkdir() function only takes one argument name, and

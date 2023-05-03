@@ -11,6 +11,10 @@
 #include "hostfs.h"
 #include "hostfs_internal.h"
 
+#ifdef __EMSCRIPTEN__
+#include "hostfs_emscripten.h"
+#endif
+
 /**
  * Convert ADFS time-stamped Load-Exec addresses to the equivalent time_t.
  *
