@@ -11,6 +11,7 @@
 #include "ioc.h"
 #include "plat_input.h"
 #include "plat_video.h"
+#include "turbo.h"
 #include "vidc.h"
 #include "video.h"
 #include "video_sdl2.h"
@@ -188,7 +189,7 @@ static int arc_main_thread(void *p)
 		int run_ms = 10;
 		if (arc_turbo_mode) {
 			run_ms = 500;
-			skip_video_render_show_one_frame = 2;
+			skip_video_render = SKIP_VIDEO_DISPLAY_ONE_FRAME;
 		}
 		if (!pause_main_thread)
 			arc_run(run_ms);
@@ -361,7 +362,6 @@ void arc_set_turbo_mode(int turbo)
 	if (turbo == 1) {
 		turbo_save_soundena = soundena;
 		soundena = 0;
-		skip_video_render = 1;
 		arc_turbo_mode = 1;
 	} else {
 		soundena = turbo_save_soundena;

@@ -14,15 +14,7 @@
 #include "vidc.h"
 #include "video.h"
 #include "video_sdl2.h"
-
-#define CHECK_SKIP_VIDEO() \
-	if (skip_video_render) { \
-		if (skip_video_render_show_one_frame) { \
-			skip_video_render_show_one_frame--; \
-		} else { \
-			return; \
-		} \
-	}
+#include "turbo.h"
 
 static SDL_Texture *texture = NULL;
 static SDL_Renderer *renderer = NULL;
@@ -31,7 +23,6 @@ static SDL_Rect texture_rect;
 
 int selected_video_renderer;
 int skip_video_render = 0;
-int skip_video_render_show_one_frame = 0;
 
 typedef struct sdl_render_driver_t
 {
@@ -189,7 +180,10 @@ void video_renderer_close()
 /*Update display texture from memory bitmap src.*/
 void video_renderer_update(BITMAP *src, int src_x, int src_y, int dest_x, int dest_y, int w, int h)
 {
-	CHECK_SKIP_VIDEO()
+	if (CHECK_SKIP_VIDEO_UPDATE())
+	{
+		return;
+	}
 
 	LOG_VIDEO_FRAMES("video_renderer_update: src=%i,%i dest=%i,%i size=%i,%i\n", src_x,src_y, dest_x,dest_y, w,h);
 	texture_rect.x = dest_x;
@@ -307,8 +301,11 @@ static void sdl_scale(int scale, SDL_Rect src, SDL_Rect *dst, int w, int h)
 /*Render display texture to video window.*/
 void video_renderer_present(int src_x, int src_y, int src_w, int src_h, int dblscan)
 {
-	CHECK_SKIP_VIDEO()
-		
+	if (CHECK_SKIP_VIDEO_PRESENT())
+	{
+		return;
+	}
+
 	LOG_VIDEO_FRAMES("video_renderer_present: %d,%d + %d,%d\n", src_x, src_y, src_w, src_h);
 
 	SDL_Rect window_rect;

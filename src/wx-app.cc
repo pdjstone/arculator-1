@@ -34,6 +34,8 @@ extern "C"
 	#include "romload.h"
 	#include "sound.h"
 	#include "video.h"
+	#include "turbo.h"
+
 }
 
 extern void InitXmlResource();

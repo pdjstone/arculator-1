@@ -204,8 +204,6 @@ extern int stereo;
 
 
 extern int soundena;
-extern int skip_video_render;
-extern int skip_video_render_show_one_frame;
 
 extern int fullscreen;
 extern int fullborders,noborders;
