@@ -389,6 +389,11 @@ void EMSCRIPTEN_KEEPALIVE arc_enter_fullscreen()
         win_dofullscreen = 1;
 }
 
+void EMSCRIPTEN_KEEPALIVE arc_enable_sound(int enable) 
+{
+        soundena = enable;
+}
+
 int EMSCRIPTEN_KEEPALIVE main(int argc, char** argv)
 {
         rpclog("emscripten main - argc=%d\n", argc);
