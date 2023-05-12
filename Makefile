@@ -7,7 +7,7 @@ CC             := gcc
 CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}"
 CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2
 LINKFLAGS      := -lz -lSDL2 -sUSE_SDL=2 -lm -ldl
-LINKFLAGS_WASM := -sALLOW_MEMORY_GROWTH=1 -sFORCE_FILESYSTEM -sEXPORTED_RUNTIME_METHODS=[\"ccall\"]
+LINKFLAGS_WASM := -sALLOW_MEMORY_GROWTH=1 -sFORCE_FILESYSTEM -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js
 DATA           := ddnoise
 ifdef DEBUG
   CFLAGS += -D_DEBUG -DDEBUG_LOG -g3
@@ -17,7 +17,8 @@ ifdef DEBUG
   $(info ❗BUILD_TAG="${BUILD_TAG}")
   DATA += roms/riscos311/ros311 roms/arcrom_ext cmos arc.cfg
 else
-  CFLAGS += -O3
+  CFLAGS += -O3 -flto
+  LINKFLAGS += -flto
   $(info ❗BUILD_TAG="${BUILD_TAG}")
   $(info ❗Re-run make with DEBUG=1 if you want a debug build)
 endif
