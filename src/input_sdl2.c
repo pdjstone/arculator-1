@@ -71,7 +71,7 @@ void mouse_poll_host()
 	// printf("mouse %d, %d\n", mouse_x, mouse_y);
 }
 
-void mouse_get_mickeys(int *x, int *y)
+void mouse_get_rel(int *x, int *y)
 {
 	*x = mouse_x;
 	*y = mouse_y;

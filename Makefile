@@ -4,13 +4,13 @@ SHELL := bash
 BUILD_TAG := $(shell echo `git rev-parse --short HEAD`-`[[ -n $$(git status -s) ]] && echo 'dirty' || echo 'clean'` on `date --rfc-3339=seconds`)
 
 CC             := gcc
-CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}"
+CFLAGS         := -D_REENTRANT -Wall -Werror -DBUILD_TAG="${BUILD_TAG}"
 CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2
 LINKFLAGS      := -lz -lSDL2 -sUSE_SDL=2 -lm -ldl
-LINKFLAGS_WASM := -sALLOW_MEMORY_GROWTH=1 -sFORCE_FILESYSTEM -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js
+LINKFLAGS_WASM := -sALLOW_MEMORY_GROWTH=1 -sFORCE_FILESYSTEM -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js --js-library src/browser_keys.js
 DATA           := ddnoise
 ifdef DEBUG
-  CFLAGS += -D_DEBUG -DDEBUG_LOG -g3
+  CFLAGS += -D_DEBUG -DDEBUG_LOG -O3
 #  --source-map-base not needed if .map is in the same dir as .wasm
   LINKFLAGS_WASM += -gsource-map
   BUILD_TAG +=  (DEBUG)
@@ -27,11 +27,11 @@ endif
 OBJS := 82c711 82c711_fdc \
 	arm bmu cmos colourcard config cp15 \
 	debugger debugger_swis ddnoise \
-	disc disc_adf disc_mfm_common \
+	disc disc_adf disc_mfm_common disc_hfe \
 	ds2401 eterna fdi2raw fpa g16 g332 \
 	hostfs ide ide_a3in ide_config ide_idea \
 	ide_riscdev ide_zidefs ide_zidefs_a3k \
-	input_sdl2 ioc ioeb joystick keyboard \
+	input_emscripten ioc ioeb joystick keyboard \
 	lc main mem memc podules printer \
 	riscdev_hdfc romload sound sound_sdl2 \
 	st506 st506_akd52 timer vidc video_sdl2 wd1770 \

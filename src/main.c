@@ -182,7 +182,7 @@ int arc_init()
 	sound_init();
 
 	fullscreen=0;
-	//mousehack=0;
+
 	reinitvideo();
 	sound_dev_init();
 //        joystick_init();
@@ -191,7 +191,6 @@ int arc_init()
 	disc_init();
 	disc_reset();
 	adf_init();
-
 	mfm_init();
 #ifndef __EMSCRIPTEN__
 	// TODO: proper compile-time configuration of which disc formats to support
@@ -199,7 +198,6 @@ int arc_init()
 	scp_init();
 	apd_init();
 	fdi_init();
-	hfe_init();
 #endif
 	ddnoise_init();
 
@@ -341,7 +339,8 @@ void arc_run(int millisecs)
 	execarm(speed_mhz * 1000 * millisecs);
 	total_emulation_millis += millisecs;
 
-	if (mousehack) doosmouse();
+	if (mouse_mode == MOUSE_MODE_ABSOLUTE) 
+		doosmouse();
 
 	frameco++;
 	
