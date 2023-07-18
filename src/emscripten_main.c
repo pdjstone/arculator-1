@@ -63,71 +63,8 @@ static SDL_mutex *main_thread_mutex = NULL;
 static time_t last_seconds = 0;
 void arcloop()
 {
-        struct timeval tp;
-
-        if (gettimeofday(&tp, NULL) == -1)
-        {
-                perror("gettimeofday");
-                fatal("gettimeofday failed\n");
-        }
-        else if (!last_seconds)
-        {
-                last_seconds = tp.tv_sec;
-                rpclog("start time = %d\n", last_seconds);
-        }
-        else if (last_seconds != tp.tv_sec)
-        {
-                updateins();
-                last_seconds = tp.tv_sec;
-        }
-
-        SDL_Event e;
-
-        while (SDL_PollEvent(&e) != 0)
-        {
-                if (e.type == SDL_QUIT)
-                {
-                        arc_stop_main_thread();
-                }
-                if (e.type == SDL_MOUSEBUTTONUP)
-                {
-                        if (e.button.button == SDL_BUTTON_LEFT && !mousecapture)
-                        {
-                                rpclog("Mouse click -- enabling mouse capture\n");
-                                sdl_enable_mouse_capture();
-                        }
-                        else if (e.button.button == SDL_BUTTON_RIGHT && !mousecapture)
-                        {
-                                //arc_popup_menu();
-                        }
-                }
-                if (e.type == SDL_WINDOWEVENT)
-                {
-                        switch (e.window.event)
-                        {
-                                case SDL_WINDOWEVENT_FOCUS_LOST:
-                                if (mousecapture)
-                                {
-                                        rpclog("Focus lost -- disabling mouse capture\n");
-                                        sdl_disable_mouse_capture();
-                                }
-                                break;
-
-                                default:
-                                break;
-                        }
-                }
-                if ((key[KEY_LCONTROL] || key[KEY_RCONTROL])
-                        && key[KEY_END]
-                        && !fullscreen && mousecapture)
-                {
-                        rpclog("CTRL-END pressed -- disabling mouse capture\n");
-                        sdl_disable_mouse_capture();
-                }
-        }
-
         /*Resize window to match screen mode*/
-        if (!fullscreen && fast_forward_to_time_ms == 0 && win_doresize)
+        if (win_doresize && fast_forward_to_time_ms == 0)
         {
                 SDL_Rect rect;
 
@@ -141,33 +78,6 @@ void arcloop()
                         SDL_SetWindowSize(sdl_main_window, winsizex, winsizey);
                         SDL_SetWindowPosition(sdl_main_window, rect.x, rect.y);
                 }
-        }
-
-        /*Toggle fullscreen with RWIN-Enter (Alt-Enter, Cmd-Enter),
-                or enter by selecting Fullscreen from the menu.*/
-        if (win_dofullscreen ||
-                (key[KEY_RWIN] && key[KEY_ENTER] && !fullscreen)
-        )
-        {
-                win_dofullscreen = 0;
-
-                SDL_RaiseWindow(sdl_main_window);
-                SDL_SetWindowFullscreen(sdl_main_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-                sdl_enable_mouse_capture();
-                fullscreen = 1;
-        } else if (fullscreen && (
-                /*Exit fullscreen with Ctrl-End*/
-                ((key[KEY_LCONTROL] || key[KEY_RCONTROL]) && key[KEY_END])
-                /*Toggle with RWIN-Enter*/
-                || (key[KEY_RWIN] && key[KEY_ENTER])
-        ))
-        {
-                SDL_SetWindowFullscreen(sdl_main_window, 0);
-                sdl_disable_mouse_capture();
-
-                fullscreen=0;
-                if (fullborders) updatewindowsize(800,600);
-                else             updatewindowsize(672,544);
         }
 
         if (win_renderer_reset)
@@ -205,31 +115,7 @@ void arcloop()
                 arc_run(run_ms);
 
         SDL_UnlockMutex(main_thread_mutex);
-        #ifndef __EMSCRIPTEN__
-        static int timer_offset = 0;
-        timer_offset += (1000 / (fixed_fps == 0 ? 60 : fixed_fps)) - (int)ticks_since_last;
-        if (timer_offset > 100 || timer_offset < -100)
-        {
-                timer_offset = 0;
-        }
-        else if (timer_offset > 0)
-        {
-                SDL_Delay(timer_offset);
-        }
-
-
-        if (updatemips)
-        {
-                char s[80];
-                rpclog("ticks since last=%d; timer_offset=%d total_emulation_ms=%d\n", ticks_since_last, timer_offset, total_emulation_millis);
-                //int pct = (int)((inssec / (TARGET_FPS * 1.0)) * 100);
-                sprintf(s, "Arculator %s - %.2f MIPS", VERSION_STRING, inssecf);
-                vidc_framecount = 0;
-                if (!fullscreen)
-                        SDL_SetWindowTitle(sdl_main_window, s);
-                updatemips=0;
-        }
-        #endif
+       
 
 }
 
