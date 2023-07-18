@@ -193,13 +193,13 @@ int arc_init()
 	adf_init();
 
 	mfm_init();
+	hfe_init();
 #ifndef __EMSCRIPTEN__
 	// TODO: proper compile-time configuration of which disc formats to support
 	jfd_init();
 	scp_init();
 	apd_init();
 	fdi_init();
-	hfe_init();
 #endif
 	ddnoise_init();
 
