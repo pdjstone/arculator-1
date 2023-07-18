@@ -1341,6 +1341,10 @@ static const char *stereo_images[8] =
 	"Centre    ", "67% right ", "83% right ", "100% right"
 };
 
+int vidc_cursor_visible() {
+	return vidc.cys < vidc.cye;
+}
+
 void vidc_debug_print(char *s)
 {
 	sprintf(s, "VIDC registers :\n"
