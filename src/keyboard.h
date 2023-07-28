@@ -11,4 +11,4 @@ void doosmouse();
 void setmousepos(uint32_t a);
 void getunbufmouse(uint32_t a);
 void getosmouse();
-void setmouseparams(uint32_t a);
+void setmousebounds(uint32_t a);

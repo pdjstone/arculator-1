@@ -22,6 +22,7 @@ void vidc_reset();
 
 uint32_t vidc_get_current_vaddr(void);
 uint32_t vidc_get_current_caddr(void);
+int vidc_cursor_visible();
 
 void vidc_debug_print(char *s);
 

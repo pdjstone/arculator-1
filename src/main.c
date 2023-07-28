@@ -330,7 +330,8 @@ void arc_run()
 	joystick_poll_host();
 	mouse_poll_host();
 	keyboard_poll_host();
-	if (mousehack) doosmouse();
+	if (mouse_mode == MOUSE_MODE_ABSOLUTE) 
+		doosmouse();
 	execarm((speed_mhz * 1000000) / 100);
 	frameco++;
 	ddnoise_frames++;
