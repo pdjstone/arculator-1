@@ -108,6 +108,7 @@ int redrawpalette=0;
 
 int oldflash;
 
+ScreenGeometry screen_geom;
 
 struct
 {
@@ -1197,6 +1198,7 @@ static void vidc_poll(void *__p)
 				if (vidc.scanrate || !dblscan)
 				{
 					LOG_VIDEO_FRAMES("PRESENT: normal display\n");
+					update_screen_geometry(0, 0, hd_end-hd_start, height);
 					updatewindowsize(hd_end-hd_start, height);
 					video_renderer_update(buffer, hd_start, vidc.disp_y_min, 0, 0, hd_end-hd_start, height);
 					video_renderer_present(0, 0, hd_end-hd_start, height, 0);
@@ -1204,6 +1206,7 @@ static void vidc_poll(void *__p)
 				else
 				{
 					LOG_VIDEO_FRAMES("PRESENT: line doubled");
+					update_screen_geometry(0, 0, hd_end-hd_start, height * 2);
 					updatewindowsize(hd_end-hd_start, height * 2);
 					video_renderer_update(buffer, hd_start, vidc.disp_y_min, 0, 0, hd_end-hd_start, height);
 					video_renderer_present(0, 0, hd_end-hd_start, height, 1);
@@ -1214,16 +1217,25 @@ static void vidc_poll(void *__p)
 				LOG_VIDEO_FRAMES("BLIT: fullborders|fullscreen\n");
 				int hb_start = vidc.hbstart;
 				int hb_end = vidc.hbend;
+				int hd_start = (vidc.hbstart > vidc.hdstart) ? vidc.hbstart : vidc.hdstart;
+				int hd_end = (vidc.hbend < vidc.hdend) ? vidc.hbend : vidc.hdend;
+				int disp_width = hd_end - hd_start;
+				int disp_height = vidc.disp_y_max - vidc.disp_y_min;
+				int hb_width = (vidc.hbstart > vidc.hdstart) ? 0 : vidc.hdstart - vidc.hbstart;
+				int vb_height = (vidc.y_min > vidc.disp_y_min) ? 0 : vidc.disp_y_min - vidc.y_min;
 
 				if (!(vidcr[VIDC_CR] & 2))
 				{
 					hb_start *= 2;
 					hb_end *= 2;
+					disp_width *= 2;
+					hb_width *= 2;
 				}
 
 				if (vidc.scanrate || !dblscan)
 				{
 					LOG_VIDEO_FRAMES("UPDATE AND PRESENT: fullborders|fullscreen no doubling\n");
+					update_screen_geometry(hb_width, vb_height, disp_width, disp_height);
 					updatewindowsize(hb_end-hb_start, vidc.y_max-vidc.y_min);
 					video_renderer_update(buffer, hb_start, vidc.y_min, 0, 0, hb_end-hb_start, vidc.y_max-vidc.y_min);
 					video_renderer_present(0, 0, hb_end-hb_start, vidc.y_max-vidc.y_min, 0);
@@ -1231,6 +1243,7 @@ static void vidc_poll(void *__p)
 				else
 				{
 					LOG_VIDEO_FRAMES("UPDATE AND PRESENT: fullborders|fullscreen + doubling\n");
+					update_screen_geometry(hb_width, vb_height * 2, disp_width, disp_height * 2);
 					updatewindowsize(hb_end-hb_start, (vidc.y_max-vidc.y_min) * 2);
 					video_renderer_update(buffer, hb_start, vidc.y_min, 0, 0, hb_end-hb_start, vidc.y_max-vidc.y_min);
 					video_renderer_present(0, 0, hb_end-hb_start, vidc.y_max-vidc.y_min, 1);
@@ -1371,6 +1384,46 @@ uint32_t vidc_get_current_vaddr(void)
 uint32_t vidc_get_current_caddr(void)
 {
 	return vidc.caddr;
+}
+
+int vidc_cursor_visible() {
+	return vidc.cys < vidc.cye;
+}
+
+void update_screen_geometry(uint32_t lb, uint32_t tb, uint32_t sw, uint32_t sh) 
+{
+	if (lb != screen_geom.left_border || tb != screen_geom.top_border ||
+		sw != screen_geom.screen_width || sh != screen_geom.screen_height) 
+	{
+		screen_geom.left_border = lb;
+		screen_geom.top_border = tb;
+		screen_geom.screen_width = sw;
+		screen_geom.screen_height = sh; 
+		rpclog("update_screen_geometry lb=%d tb=%d sw=%d sh=%d\n", lb, tb, sw, sh);
+	}
+}
+
+
+void window_coords_to_os_coords(uint32_t wx, uint32_t wy, short *os_x, short *os_y) 
+{
+	int x, y;
+	/*
+
+	 vs = 0 // 1/2x
+	 vs = 1 // 1x
+	 vs = 2 // 1.5x
+	 vs = 3 // 2x
+	*/
+	wx = (wx / (video_scale + 1)) * 2;
+	wy = (wy / (video_scale + 1)) * 2;
+	x = (wx < screen_geom.left_border) ? 0 : wx - screen_geom.left_border;
+	y = (wy < screen_geom.top_border) ? 0 : wy - screen_geom.top_border;
+	y = screen_geom.screen_height - y;
+	x *= 2;
+	y *= 2;
+	
+	*os_x = (short)x;
+	*os_y = (short)y;
 }
 
 static const int pixel_rates[4] = {8, 12, 16, 24};

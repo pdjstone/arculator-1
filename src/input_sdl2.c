@@ -29,6 +29,7 @@ void mouse_capture_enable()
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	SDL_SetWindowGrab(sdl_main_window, SDL_TRUE);
 	mouse_capture = 1;
+	mouse_mode = MOUSE_MODE_RELATIVE;
 }
 
 void mouse_capture_disable()
@@ -37,11 +38,12 @@ void mouse_capture_disable()
 	mouse_capture = 0;
 	SDL_SetWindowGrab(sdl_main_window, SDL_FALSE);
 	SDL_SetRelativeMouseMode(SDL_FALSE);
+	mouse_mode = MOUSE_MODE_ABSOLUTE;
 }
 
 void mouse_poll_host()
 {
-	if (mouse_capture)
+	if (mouse_capture && mouse_mode == MOUSE_MODE_RELATIVE)
 	{
 		SDL_Rect rect;
 		uint32_t mb = SDL_GetRelativeMouseState(&mouse[0], &mouse[1]);
@@ -65,6 +67,8 @@ void mouse_poll_host()
 
 		SDL_GetWindowSize(sdl_main_window, &rect.w, &rect.h);
 		SDL_WarpMouseInWindow(sdl_main_window, rect.w/2, rect.h/2);
+	} else if (mouse_mode == MOUSE_MODE_ABSOLUTE) {
+		SDL_GetMouseState(&mouse_x, &mouse_y);
 	}
 	else
 	{
@@ -73,11 +77,18 @@ void mouse_poll_host()
 	// printf("mouse %d, %d\n", mouse_x, mouse_y);
 }
 
-void mouse_get_mickeys(int *x, int *y)
+void mouse_get_rel(int *x, int *y)
 {
 	*x = mouse_x;
 	*y = mouse_y;
 	mouse_x = mouse_y = 0;
+}
+
+void mouse_get_abs(int *x, int *y, int *b)
+{
+	*x = mouse_x;
+	*y = mouse_y;
+	*b = mouse_buttons;
 }
 
 int mouse_get_buttons()

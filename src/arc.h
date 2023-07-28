@@ -193,8 +193,13 @@ extern int fdctype;
 extern int readflash[4];
 
 
-/*Causes a databort during RISC OS 3.11 startup*/
-#define mousehack 0
+/* normal mouse input using relative movements send via keyboard controller */
+#define MOUSE_MODE_RELATIVE 1
+
+/* absolute mouse coordinates poked directly into OS memory, and mouse SWIs intercepted */
+#define MOUSE_MODE_ABSOLUTE 2
+
+extern int mouse_mode;
 
 extern char exname[512];
 

@@ -8,11 +8,17 @@
 #include "plat_input.h"
 #include "keytable.h"
 #include "timer.h"
+#include "video.h"
 
 static emu_timer_t keyboard_timer;
 static emu_timer_t keyboard_rx_timer;
 static emu_timer_t keyboard_tx_timer;
-static int mouse_b, mouse_x, mouse_y;
+
+int mouse_mode = MOUSE_MODE_ABSOLUTE;
+
+// is a locked (i.e. relative movements) mouse required? 
+int mouse_lock_needed = 0;
+int mouse_pointer_linked = 1;
 
 int mousecapture=0;
 int ml,mr,mt,mb;
@@ -352,6 +358,9 @@ void keyboard_init()
 	timer_add(&keyboard_timer, keyboard_poll, NULL, 1);
 	timer_add(&keyboard_rx_timer, key_do_rx_callback, NULL, 0);
 	timer_add(&keyboard_tx_timer, key_do_tx_callback, NULL, 0);
+
+	mouseena = 0;
+	keyena = 0;
 }
 
 FILE *klog;
@@ -459,9 +468,9 @@ void keyboard_poll(void *p)
 		return;
 	}
 
-	if (mouseena && !mousehack/* && mousecapture*/)// && (!mousehack || fullscreen))
+	if (mouseena && mouse_mode == MOUSE_MODE_RELATIVE/* && mousecapture*/)// && (!mousehack || fullscreen))
 	{
-		mouse_get_mickeys(&mx,&my);
+		mouse_get_rel(&mx,&my);
 //                if (mousecapture && !fullscreen)
 //                        position_mouse(320,256);
 
@@ -511,30 +520,26 @@ void keyboard_poll(void *p)
 
 void doosmouse()
 {
-	short temp;
-	if (!mousehack || fullscreen) return;
+	short xpos, ypos;
+	int mx, my, b;
+
+	if (mouse_mode == MOUSE_MODE_RELATIVE || fullscreen || !mouseena) 
+		return;
+
 	LOG_KB_MOUSE("doosmouse\n");
-	temp=1024-((mouse_y-offsety)<<1);
-//        if (temp<0) temp=0;
-	if (temp<mt) temp=mt;
-	if (temp>mb) temp=mb;
-//        ymouse=temp;
-	writememl(0x5B8,temp);
-	temp=(mouse_x-offsetx)<<1;
-	if (temp>mr) temp=mr;
-	if (temp<ml) temp=ml;
-//        xmouse=temp;
-	writememl(0x5B4,temp);
-/*        *armregs[0]=mouse_x;
-	if (mouse_x>639) *armregs[0]=639;
-	*armregs[1]=mouse_y>>1;
-	temp=0;
-	if (mouse_b&1) temp|=1;
-	if (mouse_b&2) temp|=4;
-	if (mouse_b&4) temp|=2;
-	if (key[KEY_MENU]) temp|=2;
-	*armregs[2]=temp;
-	*armregs[3]=0;*/
+	mouse_get_abs(&mx, &my, &b);
+
+	window_coords_to_os_coords(mx, my, &xpos, &ypos);
+ 
+	if (ypos<mt) ypos=mt;
+	if (ypos>mb) ypos=mb;
+	writememl(0x5B8,ypos);
+
+	if (xpos>mr) xpos=mr;
+	if (xpos<ml) xpos=ml;
+	writememl(0x5B4,xpos);
+	
+	//rpclog("doosmouse x=%d, y=%d, my=%d, offsety=%d, mouseena=%d\n", xpos, ypos, my, offsety, mouseena);
 }
 
 void setmousepos(uint32_t a)
@@ -550,49 +555,61 @@ void setmousepos(uint32_t a)
 
 void getunbufmouse(uint32_t a)
 {
-	short temp;
+	short xpos,ypos;
+	int mx, my, b;
+	mouse_get_abs(&mx,&my, &b);
 	LOG_KB_MOUSE("getunbufmouse\n");
-	temp=1024-((mouse_y-offsety)<<1);
-	if (temp<mt) temp=mt;
-	if (temp>mb) temp=mb;
-	writememb(a+1,temp&0xFF);
-	writememb(a+2,(temp>>8)&0xFF);
-	temp=(mouse_x-offsetx)<<1;
-	if (temp>mr) temp=mr;
-	if (temp<ml) temp=ml;
-	writememb(a+3,temp&0xFF);
-	writememb(a+4,(temp>>8)&0xFF);
+	
+	rpclog("getunbufmouse mouseena=%d\n", mouseena);
+	ypos=(my+offsety)<<1;
+	if (ypos<mt) ypos=mt;
+	if (ypos>mb) ypos=mb;
+	writememb(a+1,ypos&0xFF);
+	writememb(a+2,(ypos>>8)&0xFF);
+	xpos=(mx-offsetx)<<1;
+	if (xpos>mr) xpos=mr;
+	if (xpos<ml) xpos=ml;
+	writememb(a+3,xpos&0xFF);
+	writememb(a+4,(xpos>>8)&0xFF);
 }
 
 void getosmouse()
 {
-	long temp;
+	long xpos, ypos, buttons;
+	int mx, my, mouse_b;
+	mouse_get_abs(&mx,&my,&mouse_b);
 	LOG_KB_MOUSE("getosmouse\n");
-	temp=1024-((mouse_y-offsety)<<1);
-	if (temp<mt) temp=mt;
-	if (temp>mb) temp=mb;
-	armregs[1]=temp;
-	temp=(mouse_x-offsetx)<<1;
-	if (temp>mr) temp=mr;
-	if (temp<ml) temp=ml;
-	armregs[0]=temp;
-	temp=0;
-	if (mouse_b&1) temp|=4;
-	if (mouse_b&2) temp|=1;
-	if (mouse_b&4) temp|=2;
-	if (key[KEY_MENU]) temp|=2;
-	armregs[2]=temp;
+	
+	ypos=(my+offsety)<<1;
+	if (ypos<mt) ypos=mt;
+	if (ypos>mb) ypos=mb;
+	armregs[1]=ypos;
+	xpos=(mx-offsetx)<<1;
+	if (xpos>mr) xpos=mr;
+	if (xpos<ml) xpos=ml;
+	armregs[0]=xpos;
+	buttons=0;
+	if (mouse_b&1) buttons|=4;
+	if (mouse_b&2) buttons|=1;
+	if (mouse_b&4) buttons|=2;
+	
+	armregs[2]=buttons;
 	armregs[3]=0;
+	 
+	rpclog("getosmouse %d,%d,%d mousena=%d\n", xpos, ypos, buttons, mouseena);
 	LOG_KB_MOUSE("%08X %08X %08X\n",armregs[0],armregs[1],armregs[2]);
 }
 
-void setmouseparams(uint32_t a)
+void setmousebounds(uint32_t a)
 {
-	LOG_KB_MOUSE("setmouseparams\n");
-	ml=readmemb(a+1)|(readmemb(a+2)<<8);
-	mt=readmemb(a+3)|(readmemb(a+4)<<8);
-	mr=readmemb(a+5)|(readmemb(a+6)<<8);
-	mb=readmemb(a+7)|(readmemb(a+8)<<8);
+	LOG_KB_MOUSE("setmousebounds\n");
+	
+	ml=(short)(readmemb(a+1)|(readmemb(a+2)<<8));
+	mt=(short)(readmemb(a+3)|(readmemb(a+4)<<8));
+	mr=(short)(readmemb(a+5)|(readmemb(a+6)<<8));
+	mb=(short)(readmemb(a+7)|(readmemb(a+8)<<8));
+
+	rpclog("setmousebounds (%d,%d) (%d,%d)\n", ml, mt, mr, mb);
 }
 
 void resetmouse()
