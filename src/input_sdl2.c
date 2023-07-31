@@ -15,6 +15,7 @@ int mouse[3];
 
 static void mouse_init()
 {
+	SDL_ShowCursor(SDL_DISABLE);
 }
 
 static void mouse_close()
@@ -41,36 +42,37 @@ void mouse_capture_disable()
 
 void mouse_poll_host()
 {
+	uint32_t mb;
 	if (mouse_capture && mouse_mode == MOUSE_MODE_RELATIVE)
 	{
 		SDL_Rect rect;
-		uint32_t mb = SDL_GetRelativeMouseState(&mouse[0], &mouse[1]);
-
-		mouse_buttons = 0;
-		if (mb & SDL_BUTTON(SDL_BUTTON_LEFT))
-		{
-			mouse_buttons |= 1;
-		}
-		if (mb & SDL_BUTTON(SDL_BUTTON_RIGHT))
-		{
-			mouse_buttons |= 2;
-		}
-		if (mb & SDL_BUTTON(SDL_BUTTON_MIDDLE))
-		{
-			mouse_buttons |= 4;
-		}
+		mb = SDL_GetRelativeMouseState(&mouse[0], &mouse[1]);
 
 		mouse_x += mouse[0];
 		mouse_y += mouse[1];
 
 		SDL_GetWindowSize(sdl_main_window, &rect.w, &rect.h);
 		SDL_WarpMouseInWindow(sdl_main_window, rect.w/2, rect.h/2);
-	} else if (mouse_mode == MOUSE_MODE_ABSOLUTE) {
-		SDL_GetMouseState(&mouse_x, &mouse_y);
+	} else if (mouse_mode == MOUSE_MODE_ABSOLUTE) 
+	{
+		mb = SDL_GetMouseState(&mouse_x, &mouse_y);
 	}
 	else
 	{
 		mouse_x = mouse_y = mouse_buttons = 0;
+	}
+	mouse_buttons = 0;
+	if (mb & SDL_BUTTON(SDL_BUTTON_LEFT))
+	{
+		mouse_buttons |= 1;
+	}
+	if (mb & SDL_BUTTON(SDL_BUTTON_RIGHT))
+	{
+		mouse_buttons |= 2;
+	}
+	if (mb & SDL_BUTTON(SDL_BUTTON_MIDDLE))
+	{
+		mouse_buttons |= 4;
 	}
 	// printf("mouse %d, %d\n", mouse_x, mouse_y);
 }
