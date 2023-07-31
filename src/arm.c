@@ -2536,14 +2536,15 @@ static void opSWI(uint32_t opcode)
 	if (debugon)
 		debug_trap(DEBUG_TRAP_SWI, opcode);
 
+	if ((opcode&0x1FFFF)==7 && armregs[0]==0x15 && (readmemb(armregs[1])==1))
+	{
+		setmousebounds(armregs[1]);
+	}
+
 	if (mouse_mode == MOUSE_MODE_ABSOLUTE)
 	{
-		// SWI 7 == OS_Word
-		if ((opcode&0x1FFFF)==7 && armregs[0]==0x15 && (readmemb(armregs[1])==1))
-		{
-			setmousebounds(armregs[1]);
-		}
-		else if ((opcode&0x1FFFF)==7 && armregs[0]==0x15 && (readmemb(armregs[1])==4))
+		
+		if ((opcode&0x1FFFF)==7 && armregs[0]==0x15 && (readmemb(armregs[1])==4))
 		{
 			//getunbufmouse(armregs[1]);
 		}
