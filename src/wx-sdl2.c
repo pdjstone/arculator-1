@@ -92,14 +92,14 @@ static int arc_main_thread(void *p)
 //                                quited = 1;
 				arc_stop_emulation();
 			}
-			if (e.type == SDL_MOUSEBUTTONUP)
+			if (e.type == SDL_MOUSEBUTTONUP && !mousecapture && mouse_mode == MOUSE_MODE_RELATIVE)
 			{
-				if (e.button.button == SDL_BUTTON_LEFT && !mousecapture)
+				if (e.button.button == SDL_BUTTON_LEFT)
 				{
 					rpclog("Mouse click -- enabling mouse capture\n");
 					sdl_enable_mouse_capture();
 				}
-				else if (e.button.button == SDL_BUTTON_RIGHT && !mousecapture)
+				else if (e.button.button == SDL_BUTTON_RIGHT)
 				{
 					arc_popup_menu();
 				}
