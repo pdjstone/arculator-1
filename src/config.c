@@ -1,4 +1,4 @@
-/*Arculator 2.1 by Sarah Walker
+/*Arculator 2.2 by Sarah Walker
   Configuration system*/
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,7 +46,15 @@ char *get_filename(char *s)
 
 void append_filename(char *dest, const char *s1, const char *s2, int size)
 {
+<<<<<<< HEAD
 	snprintf(dest, size, "%.200s%.200s", s1, s2);
+=======
+	char *tmp_s1 = strdup(s1);
+	char *tmp_s2 = strdup(s2);
+	snprintf(dest, size, "%s%s", tmp_s1, tmp_s2);
+	free(tmp_s1);
+	free(tmp_s2);
+>>>>>>> sync-upstream
 }
 
 void append_slash(char *s, int size)
@@ -326,10 +334,11 @@ void config_new()
 	fclose(f);
 }
 
+static const char blank[] = "";
+
 static section_t *find_section(const char *name, int is_global)
 {
 	section_t *current_section;
-	char blank[] = "";
 	list_t *head = is_global ? &global_config_head : &machine_config_head;
 
 	current_section = (section_t *)head->next;

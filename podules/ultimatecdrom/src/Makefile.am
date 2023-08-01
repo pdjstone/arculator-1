@@ -8,6 +8,13 @@ lib_LTLIBRARIES = libultimatecdrom.la
 noinst_SCRIPTS =
 CLEANFILES =
 
+if OS_WINDOWS
+CLEANFILES += $(noinst_SCRIPTS)
+noinst_SCRIPTS += ../ultimatecdrom.dll
+../ultimatecdrom.dll: libultimatecdrom.la
+	cp .libs/libultimatecdrom-0.dll ../ultimatecdrom.dll
+libultimatecdrom_la_LDFLAGS = -no-undefined
+endif
 if OS_LINUX
 CLEANFILES += $(noinst_SCRIPTS)
 noinst_SCRIPTS += ../ultimatecdrom.so
@@ -35,7 +42,7 @@ if OS_MACOSX
 libultimatecdrom_la_SOURCES += ../../common/cdrom/cdrom-osx-ioctl.c
 endif
 
-libultimatecdrom_la_CFLAGS = -I../../../src -I../../common/cdrom -I../../common/sound
+libultimatecdrom_la_CFLAGS = $(SDL_CFLAGS) -I../../../src -I../../common/cdrom -I../../common/sound
 libultimatecdrom_la_LIBADD = @LIBS@
 
 endif

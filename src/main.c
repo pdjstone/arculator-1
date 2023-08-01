@@ -1,4 +1,4 @@
-/*Arculator 2.1 by Sarah Walker
+/*Arculator 2.2 by Sarah Walker
   Main init/close/run functions*/
 #include <stdio.h>
 #include <stdint.h>
@@ -192,6 +192,7 @@ int arc_init()
 	disc_reset();
 	adf_init();
 	mfm_init();
+	hfe_init();
 #ifndef __EMSCRIPTEN__
 	// TODO: proper compile-time configuration of which disc formats to support
 	jfd_init();

@@ -8,6 +8,13 @@ lib_LTLIBRARIES = liboak_scsi.la
 noinst_SCRIPTS =
 CLEANFILES =
 
+if OS_WINDOWS
+CLEANFILES += $(noinst_SCRIPTS)
+noinst_SCRIPTS += ../oak_scsi.dll
+../oak_scsi.dll: liboak_scsi.la
+	cp .libs/liboak_scsi-0.dll ../oak_scsi.dll
+liboak_scsi_la_LDFLAGS = -no-undefined
+endif
 if OS_LINUX
 CLEANFILES += $(noinst_SCRIPTS)
 noinst_SCRIPTS += ../oak_scsi.so
@@ -35,7 +42,7 @@ if OS_MACOSX
 liboak_scsi_la_SOURCES += ../../common/cdrom/cdrom-osx-ioctl.c
 endif
 
-liboak_scsi_la_CFLAGS = -I../../../src -I../../common/cdrom -I../../common/eeprom -I../../common/sound -I../../common/scsi
+liboak_scsi_la_CFLAGS = $(SDL_CFLAGS) -I../../../src -I../../common/cdrom -I../../common/eeprom -I../../common/sound -I../../common/scsi
 liboak_scsi_la_LIBADD = @LIBS@
 
 endif
