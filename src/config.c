@@ -46,15 +46,11 @@ char *get_filename(char *s)
 
 void append_filename(char *dest, const char *s1, const char *s2, int size)
 {
-<<<<<<< HEAD
-	snprintf(dest, size, "%.200s%.200s", s1, s2);
-=======
 	char *tmp_s1 = strdup(s1);
 	char *tmp_s2 = strdup(s2);
 	snprintf(dest, size, "%s%s", tmp_s1, tmp_s2);
 	free(tmp_s1);
 	free(tmp_s2);
->>>>>>> sync-upstream
 }
 
 void append_slash(char *s, int size)
