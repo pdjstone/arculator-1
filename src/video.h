@@ -31,6 +31,7 @@ extern ScreenGeometry screen_geom;
 
 void update_screen_geometry(uint32_t lb, uint32_t tb, uint32_t sw, uint32_t sh);
 void window_coords_to_os_coords(uint32_t wx, uint32_t wy, short *os_x, short *os_y);
+void os_coords_to_window_coords(short os_x, short os_y, uint32_t *wx, uint32_t *wy);
 
 enum
 {

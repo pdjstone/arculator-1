@@ -63,7 +63,7 @@ int firstfull=1;
 int memsize=4096;
 float inssecf;  /*Millions of instructions executed in the last second*/
 int inssec;            /*Speed ratio percentage (100% = realtime emulation), updated by updateins()*/
-int updatemips;        /*1 if MIPS counter has not been updated since last updateins() call*/
+int update_status_text;        /*1 window status text has not been updated since last updateins() call*/
 static int frameco=0;  /*Number of 1/100 second executions (arm_run() calls) since last updateins()*/
 char exname[512];
 
@@ -77,7 +77,7 @@ void updateins()
 	frameco=0;
 	jtotal=jint;
 	jint=0;
-	updatemips=1;
+	update_status_text=1;
 }
 
 FILE *rlog = NULL;

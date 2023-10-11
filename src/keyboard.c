@@ -468,6 +468,9 @@ void keyboard_poll(void *p)
 		return;
 	}
 
+	if (mouse_lock_needed && vidc_cursor_visible() && mouse_pointer_linked)
+		set_mouse_lock_needed(0);
+
 	if (mouseena && mouse_mode == MOUSE_MODE_RELATIVE/* && mousecapture*/)// && (!mousehack || fullscreen))
 	{
 		mouse_get_rel(&mx,&my);
@@ -544,13 +547,14 @@ void doosmouse()
 
 void setmousepos(uint32_t a)
 {
-	uint16_t temp,temp2;
+	uint16_t x,y;
 	LOG_KB_MOUSE("setmousepos\n");
-	temp=readmemb(a+1)|(readmemb(a+2)<<8);
-	temp=temp>>1;
-	temp2=readmemb(a+3)|(readmemb(a+4)<<8);
-	temp2=(1024-temp2)>>1;
-//        position_mouse(temp,temp2);
+	x=readmemb(a+1)|(readmemb(a+2)<<8);
+	//temp=temp>>1;
+	y=readmemb(a+3)|(readmemb(a+4)<<8);
+	//temp2=(1024-temp2)>>1;
+	//position_mouse(x,y);
+	set_mouse_lock_needed(!vidc_cursor_visible() || !mouse_pointer_linked);
 }
 
 void getunbufmouse(uint32_t a)
@@ -612,9 +616,37 @@ void setmousebounds(uint32_t a)
 	rpclog("setmousebounds (%d,%d) (%d,%d)\n", ml, mt, mr, mb);
 }
 
+void setmousecursor(uint32_t a)
+{
+	int pointer_shape = a & 0xf;
+	int linked = !(a & 0x80);
+	mouse_pointer_linked = linked;
+	rpclog("setmousecursor shape=%d linked=%d\n", pointer_shape, linked);
+}
+
 void resetmouse()
 {
 	ml=mt=0;
 	mr=0x4FF;
 	mb=0x3FF;
 }
+
+void set_mouse_lock_needed(int needed)
+{
+	if (needed && !mouse_lock_needed) {
+		int x,y;
+		mouse_mode = MOUSE_MODE_RELATIVE;
+		mouse_get_rel(&x, &y); // read relative mouse to zero and existing value
+		rpclog("need to grab mouse lock - mousecapture=%d\n", mousecapture);
+	} else if (!needed && mouse_lock_needed) {
+		rpclog("mouse lock no longer needed\n");
+		mouse_mode = MOUSE_MODE_ABSOLUTE;
+		mouse_capture_disable();
+		mousecapture=0;
+		// TODO: when we release the mouse/show the host mouse, SDL sets it to 
+		// be in the centre of the window. Should we set it to be somewhere else,
+		// e.g. where guest mouse is?
+	}
+	mouse_lock_needed = needed;
+}
+

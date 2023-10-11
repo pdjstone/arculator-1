@@ -219,13 +219,13 @@ void mainthread(LPVOID param)
 			else             updatewindowsize(672,544);
 		}
 
-		if (updatemips)
+		if (update_status_text)
 		{
 			char s[80];
 			sprintf(s, "Arculator %s - %i%% - %s", VERSION_STRING, inssec, mousecapture ? "Press CTRL-END to release mouse" : "Click to capture mouse");
 			vidc_framecount = 0;
 			if (!fullscreen) SetWindowText(ghwnd, s);
-			updatemips=0;
+			update_status_text=0;
 		}
 	}
 
@@ -268,7 +268,7 @@ static void arc_main_thread(LPVOID wx_menu)
 			ClipCursor(&oldclip);
 			mouse_capture_disable();
 			mousecapture=0;
-			updatemips=1;
+			update_status_text=1;
 		}
 	}
 
@@ -427,7 +427,7 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			arcclip.bottom-=GetSystemMetrics(SM_CXFIXEDFRAME)+10;
 			ClipCursor(&arcclip);
 			mousecapture=1;
-			updatemips=1;
+			update_status_text=1;
 			mouse_capture_enable();
 		}
 		break;
