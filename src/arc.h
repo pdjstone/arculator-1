@@ -79,7 +79,7 @@ void arc_print_error(const char *format, ...);
 extern void arc_set_cpu(int cpu, int memc);
 extern void updatewindowsize(int x, int y);
 
-extern int updatemips,inssec;
+extern int update_status_text,inssec;
 
 /*ARM*/
 extern uint32_t armregs[16];

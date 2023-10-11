@@ -1382,11 +1382,25 @@ void window_coords_to_os_coords(uint32_t wx, uint32_t wy, short *os_x, short *os
 	x = (wx < screen_geom.left_border) ? 0 : wx - screen_geom.left_border;
 	y = (wy < screen_geom.top_border) ? 0 : wy - screen_geom.top_border;
 	y = screen_geom.screen_height - y;
-	x *= 2;
+	x *= 2; // FIXME: not all modes use this scale factor
 	y *= 2;
 	
 	*os_x = (short)x;
 	*os_y = (short)y;
+}
+
+void os_coords_to_window_coords(short os_x, short os_y, uint32_t *wx, uint32_t *wy)
+{
+	int x, y;
+	x = os_x / 2;
+	y = os_y / 2;
+	y = screen_geom.screen_height - y;
+	x += screen_geom.left_border;
+	y += screen_geom.top_border;
+	x = (x * (video_scale + 1)) / 2;
+	y = (y * (video_scale + 1)) / 2;
+	*wx = x;
+	*wy = y;
 }
 
 static const int pixel_rates[4] = {8, 12, 16, 24};

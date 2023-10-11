@@ -2546,15 +2546,21 @@ static void opSWI(uint32_t opcode)
 		
 		if ((opcode&0x1FFFF)==7 && armregs[0]==0x15 && (readmemb(armregs[1])==4))
 		{
+			// OS_Word 21,4 - Read unbuffered mouse position
 			//getunbufmouse(armregs[1]);
 		}
 		else if ((opcode&0x1FFFF)==7 && armregs[0]==0x15 && (readmemb(armregs[1])==3))
 		{
+			// OS_Word 21,3 - Set mouse position
 			setmousepos(armregs[1]);
 		}
 		else if ((opcode&0x1FFFF)==7 && armregs[0]==0x15 && (readmemb(armregs[1])==5))
 		{
+			// OS_Word 21,5 - Set pointer position
 			setmousepos(armregs[1]);
+		} else if ((opcode&0x1FFFF)==6 && armregs[0]==106) {
+			// OS_Byte 106 - Select pointer/activate mouse
+			setmousecursor(armregs[1]);
 		}
 	}
 

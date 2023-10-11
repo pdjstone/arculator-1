@@ -27,6 +27,14 @@ void mouse_capture_enable()
 	rpclog("Mouse captured\n");
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	SDL_SetWindowGrab(sdl_main_window, SDL_TRUE);
+	
+
+	// The SDL docs state that calling SDL_SetRelativeMouseMode 
+	// "will flush any pending mouse motion" however this doesn't
+	// always seem to be the case on Linux, as the first call
+	// to mouse_poll_host after entering relative mode will often
+	// give a spurious delta. So this call ensures the flush happens
+	SDL_GetRelativeMouseState(NULL, NULL);
 	mouse_capture = 1;
 	mouse_mode = MOUSE_MODE_RELATIVE;
 }
@@ -37,12 +45,11 @@ void mouse_capture_disable()
 	mouse_capture = 0;
 	SDL_SetWindowGrab(sdl_main_window, SDL_FALSE);
 	SDL_SetRelativeMouseMode(SDL_FALSE);
-	mouse_mode = MOUSE_MODE_ABSOLUTE;
 }
 
 void mouse_poll_host()
 {
-	uint32_t mb;
+	uint32_t mb = 0;
 	if (mouse_capture && mouse_mode == MOUSE_MODE_RELATIVE)
 	{
 		SDL_Rect rect;
@@ -127,3 +134,19 @@ void input_close()
 	keyboard_close();
 	mouse_close();
 }
+
+
+/*
+This kind of works (tested on Linux) but some games that continually re-position
+the mouse cursor make it difficult or impossible to move the host cursor out of the 
+Arculator window. 
+*/
+/*
+void position_mouse(uint16_t os_x, uint16_t os_y) 
+{
+	uint32_t wx, wy;
+	os_coords_to_window_coords(os_x, os_y, &wx, &wy);
+	rpclog("position_mouse OS(%d,%d) -> Window(%d,%d)\n", os_x, os_y, wx, wy);
+	SDL_WarpMouseInWindow(sdl_main_window, wx, wy);
+
+}*/
