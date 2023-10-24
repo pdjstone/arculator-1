@@ -9,6 +9,7 @@
 #include "keytable.h"
 #include "timer.h"
 #include "video.h"
+#include "vidc.h"
 
 static emu_timer_t keyboard_timer;
 static emu_timer_t keyboard_rx_timer;
@@ -548,10 +549,10 @@ void doosmouse()
 void setmousepos(uint32_t a)
 {
 	uint16_t x,y;
-	LOG_KB_MOUSE("setmousepos\n");
 	x=readmemb(a+1)|(readmemb(a+2)<<8);
 	//temp=temp>>1;
 	y=readmemb(a+3)|(readmemb(a+4)<<8);
+	LOG_KB_MOUSE("setmousepos x=%d y=%d\n");
 	//temp2=(1024-temp2)>>1;
 	//position_mouse(x,y);
 	set_mouse_lock_needed(!vidc_cursor_visible() || !mouse_pointer_linked);
@@ -631,7 +632,7 @@ void resetmouse()
 	mb=0x3FF;
 }
 
-void set_mouse_lock_needed(int needed)
+void set_mouse_lock_needed(uint32_t needed)
 {
 	if (needed && !mouse_lock_needed) {
 		int x,y;
