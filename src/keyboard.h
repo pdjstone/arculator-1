@@ -12,4 +12,5 @@ void setmousepos(uint32_t a);
 void getunbufmouse(uint32_t a);
 void getosmouse();
 void setmousebounds(uint32_t a);
+void setmousecursor(uint32_t a);
 void set_mouse_lock_needed(uint32_t needed);

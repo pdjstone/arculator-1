@@ -417,7 +417,7 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 		}
 		break;
 		case WM_LBUTTONUP:
-		if (!mousecapture && !fullscreen && !pause_main_thread)
+		if (!mousecapture && !fullscreen && !pause_main_thread && mouse_mode == MOUSE_MODE_RELATIVE)
 		{
 			GetClipCursor(&oldclip);
 			GetWindowRect(hwnd,&arcclip);
