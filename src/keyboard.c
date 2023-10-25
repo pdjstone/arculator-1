@@ -548,12 +548,10 @@ void doosmouse()
 
 void setmousepos(uint32_t a)
 {
-	uint16_t x,y;
-	x=readmemb(a+1)|(readmemb(a+2)<<8);
-	//temp=temp>>1;
-	y=readmemb(a+3)|(readmemb(a+4)<<8);
-	LOG_KB_MOUSE("setmousepos x=%d y=%d\n");
-	//temp2=(1024-temp2)>>1;
+	//uint16_t x,y;
+	//x=readmemb(a+1)|(readmemb(a+2)<<8);
+	//y=readmemb(a+3)|(readmemb(a+4)<<8);
+	//LOG_KB_MOUSE("setmousepos x=%d y=%d\n", x, y);
 	//position_mouse(x,y);
 	set_mouse_lock_needed(!vidc_cursor_visible() || !mouse_pointer_linked);
 }

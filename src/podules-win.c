@@ -52,8 +52,8 @@ void opendlls(void)
 	}
 	while (1)
 	{
-		const podule_header_t *(*podule_probe)(const podule_callbacks_t *callbacks, char *path);
-		const podule_header_t *header;
+		podule_header_t *(*podule_probe)(const podule_callbacks_t *callbacks, char *path);
+		podule_header_t *header;
 		char dll_name[256];
 		dll_t *dll = malloc(sizeof(dll_t));
 		memset(dll, 0, sizeof(dll_t));

@@ -4,6 +4,7 @@
 #include "plat_sound.h"
 #include "disc.h"
 #include "sound.h"
+#include "arc.h"
 
 #define DDNOISE_FREQ 44100
 #define OUTPUT_FREQ 48000
