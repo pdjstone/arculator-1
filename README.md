@@ -19,7 +19,8 @@ Not working or tested:
 
 To build and test the Emscripten version:
 
-* Install [Emscripten](https://emscripten.org/docs/getting_started/downloads.html) which contains the whole build environment
+* Install [Emscripten](https://emscripten.org/docs/getting_started/downloads.html) which contains all the tools to build the WebAssembly version.
+* Activate Emscripten with e.g. `EMSDK_QUIET=1 source ~/emsdk/emsdk_env.sh`
 * Run `make -j8 serve`
 * (or `make -j8 serve DEBUG=1` if you want a slower debug build)
 * Open [http://localhost:8000/build/wasm/arculator.html](http://localhost:8000/build/arculator.html) to see the default Emscripten front-end which should boot RISC OS 3.
