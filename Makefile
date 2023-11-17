@@ -1,21 +1,23 @@
 # Replaces autotools for emscripten build.
 
+SERVE_IP   ?= localhost
+SERVE_PORT ?= 3010
+
 SHELL := bash
 BUILD_TAG := $(shell echo `git rev-parse --short HEAD`-`[[ -n $$(git status -s) ]] && echo 'dirty' || echo 'clean'` on `date --rfc-3339=seconds`)
 
 CC             := gcc
 CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}"
 CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2
-LINKFLAGS      := -lz -lSDL2 -sUSE_SDL=2 -lm -ldl
-LINKFLAGS_WASM := -sALLOW_MEMORY_GROWTH=1 -sFORCE_FILESYSTEM -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js
-DATA           := ddnoise
+LINKFLAGS      := -lz -lSDL2 -lm -ldl
+LINKFLAGS_WASM := -sUSE_SDL=2 -sALLOW_MEMORY_GROWTH=1 -sFORCE_FILESYSTEM -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js
+DATA           := ddnoise roms/riscos311/ros311 roms/arcrom_ext cmos arc.cfg
 ifdef DEBUG
   CFLAGS += -D_DEBUG -DDEBUG_LOG -g3
 #  --source-map-base not needed if .map is in the same dir as .wasm
   LINKFLAGS_WASM += -gsource-map
   BUILD_TAG +=  (DEBUG)
   $(info ❗BUILD_TAG="${BUILD_TAG}")
-  DATA += roms/riscos311/ros311 roms/arcrom_ext cmos arc.cfg
 else
   CFLAGS += -O3 -flto
   LINKFLAGS += -flto
@@ -23,12 +25,12 @@ else
   $(info ❗Re-run make with DEBUG=1 if you want a debug build)
 endif
 
-
 OBJS := 82c711 82c711_fdc \
 	arm bmu cmos colourcard config cp15 \
 	debugger debugger_swis ddnoise \
-	disc disc_adf disc_mfm_common disc_hfe \
-	ds2401 eterna fdi2raw fpa g16 g332 \
+	disc disc_adf disc_apd disc_fdi disc_mfm_common \
+        disc_hfe disc_jfd disc_scp ds2401 eterna fdi2raw \
+        fpa g16 g332 \
 	hostfs ide ide_a3in ide_config ide_idea \
 	ide_riscdev ide_zidefs ide_zidefs_a3k \
 	input_sdl2 ioc ioeb joystick keyboard \
@@ -36,10 +38,12 @@ OBJS := 82c711 82c711_fdc \
 	riscdev_hdfc romload sound sound_sdl2 \
 	st506 st506_akd52 timer vidc video_sdl2 wd1770 \
 	wx-sdl2-joystick hostfs-unix podules-linux \
-	emscripten_main emscripten-console hostfs_emscripten
-OBJS_DOT_O  := $(addsuffix .o,${OBJS})
+        emscripten_main emscripten-console
+
+OBJS_DOT_O := $(addsuffix .o,${OBJS})
+
+OBJS_WASM   := $(addprefix build/wasm/,${OBJS_DOT_O}) build/wasm/hostfs_emscripten.o
 OBJS_NATIVE := $(addprefix build/native/,${OBJS_DOT_O})
-OBJS_WASM   := $(addprefix build/wasm/,${OBJS_DOT_O})
 
 ######################################################################
 all:	native wasm
