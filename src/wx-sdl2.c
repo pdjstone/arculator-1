@@ -113,11 +113,12 @@ static int arc_main_thread(void *p)
 					rpclog("Mouse click -- enabling mouse capture\n");
 					sdl_enable_mouse_capture();
 				}
-				else if (e.button.button == SDL_BUTTON_RIGHT && (mouse_mode == MOUSE_MODE_RELATIVE || key[KEY_LCONTROL] || key[KEY_RCONTROL]))
-				{
-					arc_popup_menu();
-				}
 			}
+			if (e.button.button == SDL_BUTTON_RIGHT && (mouse_mode == MOUSE_MODE_RELATIVE || key[KEY_LCONTROL] || key[KEY_RCONTROL]))
+			{
+				arc_popup_menu();
+			}
+			
 			if (e.type == SDL_WINDOWEVENT)
 			{
 				switch (e.window.event)
