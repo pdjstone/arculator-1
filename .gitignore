@@ -16,3 +16,5 @@ roms/
 */roms.txt
 /build/
 src/arculatorweb
+emscripten_assets/
+emscripten_out/
