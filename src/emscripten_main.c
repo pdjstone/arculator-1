@@ -136,7 +136,9 @@ static int arc_main_thread()
         sdl_enable_mouse_capture();
 
         // if fixed_fps is 0, emscripten will use requestAnimationFrame
+#ifdef __EMSCRIPTEN__
         emscripten_set_main_loop(arcloop, fixed_fps, 1);
+#endif
         signal(SIGINT, arc_stop_main_thread); // shouldn't be here probably, and not thread-safe but otherwise we can't quit
         while(!quited) {
             SDL_Event e;
