@@ -133,12 +133,10 @@ static int arc_main_thread()
                 fatal("Video renderer init failed");
         }
         input_init();
-        //sdl_enable_mouse_capture();
+        sdl_enable_mouse_capture();
 
-        #ifdef __EMSCRIPTEN__
         // if fixed_fps is 0, emscripten will use requestAnimationFrame
         emscripten_set_main_loop(arcloop, fixed_fps, 1);
-        #else
         signal(SIGINT, arc_stop_main_thread); // shouldn't be here probably, and not thread-safe but otherwise we can't quit
         while(!quited) {
             SDL_Event e;
@@ -181,7 +179,6 @@ static int arc_main_thread()
 
             arcloop();
         }
-        #endif
         return 0;
 }
 
