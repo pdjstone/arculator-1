@@ -515,6 +515,12 @@ void config_save(int is_global, char *fn)
 	section_t *current_section;
 	list_t *head = is_global ? &global_config_head : &machine_config_head;
 
+    if (f == NULL)
+    {
+        rpclog("failed to save config file '%s'\n", fn);
+        return;
+    }
+
 	current_section = (section_t *)head->next;
 
 	while (current_section)
