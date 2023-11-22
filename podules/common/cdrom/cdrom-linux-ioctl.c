@@ -13,7 +13,11 @@
 #include "cdrom.h"
 #include "podule_api.h"
 
-#define pclog
+#ifndef pclog
+static void pclog(char *s, ...)
+{
+}
+#endif
 
 static char cdrom_path[256];
 
@@ -319,7 +323,7 @@ static int ioctl_medium_changed(void)
 {
 	struct cdrom_tochdr toc_hdr;
 	struct cdrom_tocentry toc_entry;
-	uint32_t new_capacity;
+	//uint32_t new_capacity;
 	int err;
 
 	pclog("ioctl_medium_changed: ioctl_fd=%i\n", ioctl_fd);
@@ -431,7 +435,11 @@ static int ioctl_readsector(uint8_t *b, int sector, int count)
 		return -1;
 
 	lseek(ioctl_fd, sector*2048, SEEK_SET);
-	read(ioctl_fd, b, count*2048);
+	size_t s = read(ioctl_fd, b, count*2048);
+    if (s < 0) {
+        pclog("ioctl_readsector: read failed\n");
+        return -1;
+    }
 
 	return 0;
 }
@@ -765,7 +773,7 @@ podule_config_selection_t *cdrom_devices_config(void)
 	char *cdrom_dev_text = malloc(65536);
 	int nr_drives = 0;
 	char s[32];
-	int c;
+	//int c;
 	DIR *dirp;
 	struct dirent *dp;
 
@@ -805,7 +813,7 @@ podule_config_selection_t *cdrom_devices_config(void)
 		{
 			if (!strncmp(dp->d_name, "cdrom", 5) || !strncmp(dp->d_name, "sr", 2))
 			{
-				snprintf(s, sizeof(s), "/dev/%s", dp->d_name);
+				snprintf(s, sizeof(s), "/dev/%.22s", dp->d_name);
 				strcpy(cdrom_dev_text, s);
 				sel_p->description = cdrom_dev_text;
 				cdrom_dev_text += strlen(cdrom_dev_text)+1;

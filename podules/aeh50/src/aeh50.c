@@ -126,6 +126,7 @@ static uint8_t aeh50_read_b(struct podule_t *podule, podule_io_type type, uint32
 
 		return 0xff;
 	}
+    return 0;
 }
 
 static uint16_t aeh50_read_w(struct podule_t *podule, podule_io_type type, uint32_t addr)
@@ -240,7 +241,7 @@ static int aeh50_init(struct podule_t *podule)
 	aeh50_t *aeh50 = malloc(sizeof(aeh50_t));
 	memset(aeh50, 0, sizeof(aeh50_t));
 
-	sprintf(rom_fn, "%sEthernetII_ID_ROM.ROM", podule_path);
+	sprintf(rom_fn, "%.100sEthernetII_ID_ROM.ROM", podule_path);
 	aeh50_log("aeh50 ROM %s\n", rom_fn);
 	f = fopen(rom_fn, "rb");
 	if (!f)

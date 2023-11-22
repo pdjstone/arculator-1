@@ -393,7 +393,7 @@ static int atapi_event_status(uint8_t *buffer)
  * @param len Length of destination buffer to fill in. Strings shorter than
  *            this length will be padded with spaces.
  */
-static void ide_padstr(char *str, const char *src, int len)
+/*static void ide_padstr(char *str, const char *src, int len)
 {
 	int i, v;
 
@@ -405,7 +405,7 @@ static void ide_padstr(char *str, const char *src, int len)
 		}
 		str[i ^ 1] = v;
 	}
-}
+}*/
 
 static void ide_padstr8(uint8_t *buf, int buf_size, const char *src)
 {
@@ -745,12 +745,12 @@ static int scsi_cd_command(uint8_t *cdb, void *p)
 	}
 
 	/*If our state has been set to errored, clear it, and return.*/
-/*	if (is_error)
+	if (is_error)
 	{
-		scsi_log("Clear error state\n");
-		is_error = 0;
-		return SCSI_PHASE_STATUS;
-	}*/
+		scsi_log("Error state\n");
+		/*is_error = 0;
+		return SCSI_PHASE_STATUS;*/
+	}
 
 	if ((atapi_cmd_table[cdb[0]] & CHECK_READY) && !atapi->ready())
 	{
@@ -1563,7 +1563,7 @@ atapi_out:
 		case GPCMD_TOSHIBA_READ_SUBCODE_Q:
 		{
 			uint8_t buf[12];
-			int c;
+			//int c;
 
 			alloc_length = cdb[1] & 0x1f;
 

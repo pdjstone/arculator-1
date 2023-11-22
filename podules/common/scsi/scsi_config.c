@@ -34,7 +34,7 @@ static const podule_callbacks_t *podule_callbacks;
 
 static int changed_blocks(void *window_p, const struct podule_config_item_t *item, void *new_data)
 {
-	char *new_s = new_data;
+	//char *new_s = new_data;
 	char *temp_s;
 	char size_s[80];
 	int blocks;
@@ -58,7 +58,7 @@ static int changed_blocks(void *window_p, const struct podule_config_item_t *ite
 
 static int changed_size(void *window_p, const struct podule_config_item_t *item, void *new_data)
 {
-	char *new_s = new_data;
+	//char *new_s = new_data;
 	char *temp_s;
 	char size_s[80];
 	int blocks;
@@ -201,6 +201,7 @@ static int config_new_drive(void *window_p, const struct podule_config_item_t *i
 	return 0;
 }
 
+/*
 static void drive_load_open(void *window_p)
 {
 	char temp_s[80];
@@ -219,9 +220,9 @@ static int drive_load_close(void *window_p)
 	new_blocks = atoi(temp_s);
 
 	return 1;
-}
+}*/
 
-static podule_config_t scsi_load_drive_config =
+/*static podule_config_t scsi_load_drive_config =
 {
 	.title = "Drive geometry",
 	.init = drive_load_open,
@@ -246,7 +247,7 @@ static podule_config_t scsi_load_drive_config =
 			.type = -1
 		}
 	}
-};
+};*/
 
 static int config_load_drive(void *window_p, const struct podule_config_item_t *item, void *new_data)
 {
@@ -257,7 +258,7 @@ static int config_load_drive(void *window_p, const struct podule_config_item_t *
 	{
 		FILE *f;
 		int filesize;
-		int log2secsize, density;
+		//int log2secsize, density;
 		char temp_s[256];
 
 //                rpclog("Filename: %s\n", fn);

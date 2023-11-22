@@ -135,11 +135,7 @@ static void scsi_hd_illegal(scsi_hd_data *data)
 	data->ascq = 0;
 }
 
-#define add_data_len(v)                 \
-	if (i < len)                    \
-		scsi_add_data(v, data); \
-	i++;
-
+#define add_data_len(v) { if (i < len) scsi_add_data(v, data); i++; }
 
 static int scsi_hd_command(uint8_t *cdb, void *p)
 {

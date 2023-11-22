@@ -123,23 +123,6 @@ void oak_scsi_log(const char *format, ...)
 #endif
 }
 
-void fatal(const char *format, ...)
-{
-   	char buf[1024];
-   	va_list ap;
-
-//	return;
-
-	if (!oak_scsi_logf)
-		oak_scsi_logf = fopen("oak_scsi_log.txt", "wt");
-
-   	va_start(ap, format);
-   	vsprintf(buf, format, ap);
-   	va_end(ap);
-   	fputs(buf, oak_scsi_logf);
-   	fflush(oak_scsi_logf);
-   	exit(-1);
-}
 
 
 void scsi_log(const char *format, ...)
@@ -257,7 +240,7 @@ static uint16_t oak_scsi_memc_readw(podule_t *podule, uint32_t addr)
 
 static void oak_scsi_ioc_writeb(podule_t *podule, uint32_t addr, uint8_t val)
 {
-	oak_scsi_t *oak_scsi = podule->p;
+	//oak_scsi_t *oak_scsi = podule->p;
 
 //        oak_scsi_log("Write oak_scsi B %04X %02X\n", addr, val);
 }
@@ -352,7 +335,7 @@ static int oak_scsi_init(struct podule_t *podule)
 	oak_scsi_t *oak_scsi = malloc(sizeof(oak_scsi_t));
 	memset(oak_scsi, 0, sizeof(oak_scsi_t));
 
-	sprintf(rom_fn, "%sOAK 91 SCSI 1V16 - 128.BIN", podule_path);
+    sprintf(rom_fn, "%.100sOAK 91 SCSI 1V16 - 128.BIN", podule_path);
 	oak_scsi_log("SCSIROM %s\n", rom_fn);
 	f = fopen(rom_fn, "rb");
 	if (!f)
@@ -360,16 +343,25 @@ static int oak_scsi_init(struct podule_t *podule)
 		oak_scsi_log("Failed to open SCSIROM!\n");
 		return -1;
 	}
-	fread(oak_scsi->rom, 0x10000, 1, f);
+	size_t s = fread(oak_scsi->rom, 0x10000, 1, f);
+    if (s < 0) {
+        oak_scsi_log("Failed to read SCSIROM!\n");
+        return -1;
+    }
 	fclose(f);
 
-	sprintf(rom_fn, "%soak_scsi.nvr", podule_path);
-	f = fopen(rom_fn, "rb");
+    sprintf(rom_fn, "%.100soak_scsi.nvr", podule_path);
+    f = fopen(rom_fn, "rb");
 	if (f)
 	{
-		fread(oak_scsi->eeprom.buffer, 32, 1, f);
-		fclose(f);
-	}
+		size_t s = fread(oak_scsi->eeprom.buffer, 32, 1, f);
+        fclose(f);
+        if (s < 0)
+        {
+            oak_scsi_log("Failed to read EEPROM!\n");
+            return -1;
+        }
+    }
 	else
 		memcpy(oak_scsi->eeprom.buffer, oak_eeprom_default, 32);
 
@@ -391,7 +383,7 @@ static void oak_scsi_write_eeprom(oak_scsi_t *oak_scsi)
 
 	oak_scsi->eeprom.dirty = 0;
 
-	sprintf(fn, "%soak_scsi.nvr", podule_path);
+	sprintf(fn, "%.100soak_scsi.nvr", podule_path);
 	f = fopen(fn, "wb");
 	if (f)
 	{
@@ -465,7 +457,7 @@ const podule_header_t *podule_probe(const podule_callbacks_t *callbacks, char *p
 {
 	oak_scsi_log("podule_probe %p path=%s\n", &oak_scsi_podule_header, path);
 
-	podule_callbacks = callbacks;
+    podule_callbacks = callbacks;
 	strcpy(podule_path, path);
 
 	scsi_config_init(callbacks);
