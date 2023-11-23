@@ -17,6 +17,7 @@
 #include "plat_sound.h"
 #include "plat_input.h"
 #include "plat_video.h"
+#include "podules.h"
 #include "vidc.h"
 #include "video.h"
 #include "video_sdl2.h"
@@ -323,6 +324,7 @@ void EMSCRIPTEN_KEEPALIVE arc_enable_sound(int enable)
 int EMSCRIPTEN_KEEPALIVE main(int argc, char** argv)
 {
         rpclog("emscripten main - argc=%d\n", argc);
+        opendlls();
         if (argc > 1)
         {
                 fixed_fps = atoi(argv[1]);
@@ -336,6 +338,7 @@ int EMSCRIPTEN_KEEPALIVE main(int argc, char** argv)
         }
         main_thread_mutex = SDL_CreateMutex();
         arc_main_thread();
+	return 0;
 }
 
 void arc_print_error(const char *format, ...) {
