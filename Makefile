@@ -19,12 +19,13 @@ CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}"
 CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2
 LINKFLAGS      := -lz -lSDL2 -lm
 LINKFLAGS_WASM := -sUSE_SDL=2 -sALLOW_MEMORY_GROWTH=1 -sFORCE_FILESYSTEM -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js
-DATA           := ddnoise roms/riscos311/ros311 roms/arcrom_ext podules/ultimatecdrom/ultimatecdrom.rom  cmos arc.cfg
+DATA           := ddnoise 
 ifdef DEBUG
   CFLAGS += -D_DEBUG -DDEBUG_LOG -O0 -g3
   LINKFLAGS_WASM += -gsource-map
   BUILD_TAG +=  (DEBUG)
   $(info ❗BUILD_TAG="${BUILD_TAG}")
+  DATA += roms/riscos311/ros311 roms/arcrom_ext cmos arc.cfg
 else
   CFLAGS += -O3 -flto
   LINKFLAGS += -flto
