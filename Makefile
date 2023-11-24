@@ -175,6 +175,10 @@ build/wasm/podules/ultimatecdrom/%.o: podules/ultimatecdrom/src/%.c
 	  -Dpodule_path=$(*F)_podule_path \
 	  $<
 
+# Not sure why we need this, but for now
+arc.cfg:
+	touch arc.cfg
+
 ######################################################################
 roms/arcrom_ext: roms/riscos311/ros311
 roms/riscos311/ros311:
