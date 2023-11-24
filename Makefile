@@ -3,11 +3,13 @@
 SERVE_IP   ?= localhost
 SERVE_PORT ?= 3010
 
+# Only "LINUX" tested for now
 INCLUDE_LINUX := 1
 #INCLUDE_MACOS := 1
 #INCLUDE_WIN32 := 1
 
-BUILD_PODULES = ultimatecdrom common_sound common_cdrom common_eeprom common_scsi
+# Enable if you like, will fix this so dependencies are more automatic
+#BUILD_PODULES := ultimatecdrom common_sound common_cdrom common_eeprom common_scsi
 
 ######################################################################
 
