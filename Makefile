@@ -80,9 +80,13 @@ all:	native wasm
 clean:
 	rm -rf build
 
-serve: build/wasm/arculator.html
-	@echo "Now open >> http://${SERVE_IP}:${SERVE_PORT}/build/wasm/arculator.html << in your browser"
-	@python3 -mhttp.server -b ${SERVE_IP} ${SERVE_PORT}
+serve: build/wasm/arculator.html build/wasm/arculator.data.js build/native/nweb
+	@echo ">>>>>>> http://${SERVE_IP}:${SERVE_PORT}/build/wasm/arculator.html <<<<<<<<"
+	@./build/native/nweb ${SERVE_PORT} .
+
+build/native/nweb: src/nweb.c
+	@mkdir -p $(@D)
+	${CC} -Wall -Werror -o $@ $^
 
 ######################################################################
 
