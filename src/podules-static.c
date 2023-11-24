@@ -13,8 +13,11 @@ typedef const podule_header_t* (*podule_probe_t)(const podule_callbacks_t *callb
 PODULE_PROBE_PROTOTYPE(ultimatecdrom)
 #endif
 
-static void init(char* name, podule_probe_t probe)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
+static void init(char *name, podule_probe_t probe)
 {
+#pragma GCC diagnostic pop
     char path[256];
     const podule_header_t *header;
 
