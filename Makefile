@@ -50,8 +50,7 @@ OBJS := 82c711 82c711_fdc \
 	riscdev_hdfc romload sound sound_sdl2 \
 	st506 st506_akd52 timer vidc video_sdl2 wd1770 \
 	wx-sdl2-joystick \
-    emscripten_main emscripten-console emscripten_podule_config podules-static \
-	toml
+    emscripten_main emscripten-console emscripten_podule_config podules-static
 
 ifdef INCLUDE_LINUX
   OBJS += hostfs-unix
