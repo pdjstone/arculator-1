@@ -66,9 +66,9 @@ int hdd_read_sectors(hdd_file_t *hdd, int offset, int nr_sectors, void *buffer)
 	addr = (uint64_t)offset * 512;
 
 	fseeko64(hdd->f, addr, SEEK_SET);
-	fread(buffer, transfer_sectors*512, 1, hdd->f);
+	size_t s = fread(buffer, transfer_sectors*512, 1, hdd->f);
 
-	if (nr_sectors != transfer_sectors)
+	if (s != 1 || nr_sectors != transfer_sectors)
 		return 1;
 	return 0;
 }

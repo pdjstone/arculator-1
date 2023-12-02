@@ -15,6 +15,8 @@ int mouse[3];
 
 static void mouse_init()
 {
+    SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
+    SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
 static void mouse_close()

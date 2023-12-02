@@ -10,7 +10,6 @@
 #include "podule_api.h"
 
 void aka31_log(const char *format, ...);
-void fatal(const char *format, ...);
 
 void aka31_sbic_int();
 void aka31_sbic_int_clear();

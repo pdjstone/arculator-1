@@ -87,7 +87,7 @@ static void in_query()
 
 							if (snd_ctl_pcm_info(ctl, info) == 0)
 							{
-								int status;
+								//int status;
 
 								printf("%s: PCM device=%i:%i:%i\n", shortname, card, device,sub);
 
@@ -113,7 +113,7 @@ static void in_query()
 
 void *sound_in_init(void *p, void (*sound_in_buffer)(void *p, void *buffer, int samples), void (*log)(const char *format, ...), const podule_callbacks_t *podule_callbacks, podule_t *podule)
 {
-	int c;
+	//int c;
 	const char *device;
 	int device_nr = 0;
 	unsigned int rate = 48000;
@@ -195,6 +195,7 @@ void *wave_in_callback(void *p)
 		else
 			usleep(IN_SLEEP_TIME);
 	}
+    return NULL;
 }
 
 void sound_in_start(void *p)

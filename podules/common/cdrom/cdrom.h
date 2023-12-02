@@ -1,6 +1,9 @@
 #ifndef CDROM_IOCTL_H
 #define CDROM_IOCTL_H
 
+#include <stdint.h>
+#include <stddef.h>
+
 /*ATAPI stuff*/
 typedef struct ATAPI
 {

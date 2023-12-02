@@ -40,7 +40,7 @@ podule_config_selection_t *sound_in_devices_config(void)
 	podule_config_selection_t *sel;
 	podule_config_selection_t *sel_p;
 	char *in_dev_text = malloc(65536);
-	int c;
+	//int c;
 
 	nr_devs = 0;
 	sel = malloc(sizeof(podule_config_selection_t) * (nr_devs+2));

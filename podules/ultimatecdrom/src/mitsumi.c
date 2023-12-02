@@ -264,11 +264,11 @@ static void mitsumi_command_run(mitsumi_t *mitsumi)
 		{
 			int toc_len;
 			int offset;
-			uint32_t size;
+			//uint32_t size;
 
 			atapi->medium_changed();
 			toc_len = atapi->readtoc_raw(mitsumi->toc, 2048);
-			size = atapi->size();
+			//size = atapi->size();
 
 			offset = (mitsumi->read_toc_track*11) + 4;
 			if (offset >= toc_len)

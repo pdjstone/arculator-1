@@ -81,7 +81,7 @@ typedef struct cdrom_t
 static uint8_t cdrom_read_b(struct podule_t *podule, podule_io_type type, uint32_t addr)
 {
 	cdrom_t *cdrom = podule->p;
-	uint8_t temp = 0xff;
+	//uint8_t temp = 0xff;
 
 	if (type != PODULE_IO_TYPE_IOC)
 		return 0xff; /*Only IOC accesses supported*/
@@ -148,7 +148,7 @@ static int cdrom_init(struct podule_t *podule)
 	cdrom_t *cdrom = malloc(sizeof(cdrom_t));
 	memset(cdrom, 0, sizeof(cdrom_t));
 
-	sprintf(rom_fn, "%sultimatecdrom.rom", podule_path);
+	sprintf(rom_fn, "%.100sultimatecdrom.rom", podule_path);
 	cdlog("Ultimate CD-ROM ROM %s\n", rom_fn);
 	f = fopen(rom_fn, "rb");
 	if (!f)
@@ -156,7 +156,11 @@ static int cdrom_init(struct podule_t *podule)
 		cdlog("Failed to open ULTIMATECDROM.ROM!\n");
 		return -1;
 	}
-	fread(cdrom->rom, 0x20000, 1, f);
+	size_t s = fread(cdrom->rom, 0x20000, 1, f);
+    if (s < 0) {
+        cdlog("Failed to read ULTIMATECDROM.ROM!\n");
+        return -1;
+    }
 	fclose(f);
 
 	drive_path = podule_callbacks->config_get_string(podule, "drive_path", "");
@@ -213,7 +217,7 @@ static const podule_header_t cdrom_podule_header =
 
 const podule_header_t *podule_probe(const podule_callbacks_t *callbacks, char *path)
 {
-	char dev_name[256];
+	//char dev_name[256];
 
 	podule_callbacks = callbacks;
 	strcpy(podule_path, path);

@@ -30,8 +30,8 @@
 
 void ncr5380_init(ncr5380_t *ncr, podule_t *podule, const podule_callbacks_t *podule_callbacks, struct scsi_bus_t *bus)
 {
-	memset(ncr, 0, sizeof(ncr));
-	ncr->podule = podule;
+    memset(ncr, 0, sizeof(ncr5380_t));
+    ncr->podule = podule;
 	ncr->bus = bus;
 	scsi_bus_init(ncr->bus, podule, podule_callbacks);
 }
@@ -160,6 +160,7 @@ uint8_t ncr5380_read(ncr5380_t *ncr, uint32_t addr)
 		default:
 		scsi_fatal("Bad NCR5380 read %06x\n", addr);
 	}
+    return 0;
 }
 
 void ncr5380_dack(ncr5380_t *ncr)

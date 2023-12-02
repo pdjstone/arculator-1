@@ -515,6 +515,12 @@ void config_save(int is_global, char *fn)
 	section_t *current_section;
 	list_t *head = is_global ? &global_config_head : &machine_config_head;
 
+    if (f == NULL)
+    {
+        rpclog("failed to save config file '%s'\n", fn);
+        return;
+    }
+
 	current_section = (section_t *)head->next;
 
 	while (current_section)
@@ -683,7 +689,9 @@ void loadconfig()
 	int c;
 
 	append_filename(config_file, exname, "arc.cfg", 511);
-	rpclog("config_file=%s\n", config_file);
+    // if no machine is selected / config can't be found, default to all settings in one config
+    append_filename(machine_config_file, exname, "arc.cfg", 511);
+    rpclog("config_file=%s\n", config_file);
 	config_load(CFG_GLOBAL, config_file);
 	config_dump(CFG_GLOBAL);
 	config_load(CFG_MACHINE, machine_config_file);

@@ -1,6 +1,7 @@
 #ifndef PODULES_H
 #define PODULES_H
 
+#include <stdint.h>
 #include "podule_api.h"
 #include "timer.h"
 
