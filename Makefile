@@ -1,7 +1,7 @@
 ######################################################################
 
 SERVE_IP   ?= localhost
-SERVE_PORT ?= 3010
+SERVE_PORT ?= 3020
 
 # Only "LINUX" tested for now
 INCLUDE_LINUX := 1
@@ -78,6 +78,9 @@ all:	native wasm
 
 clean:
 	rm -rf build
+
+serve: wasm web/serve.js
+	node web/serve.js ${SERVE_IP} ${SERVE_PORT}
 
 ######################################################################
 
