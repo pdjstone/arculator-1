@@ -17,10 +17,10 @@ SHELL     := bash
 BUILD_TAG := $(shell echo `git rev-parse --short HEAD`-`[[ -n $$(git status -s) ]] && echo 'dirty' || echo 'clean'` on `date --rfc-3339=seconds`)
 
 CC             ?= gcc
-CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}" -Isrc
-CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2
-LINKFLAGS      := -lz -lSDL2 -lm
-LINKFLAGS_WASM := -sUSE_SDL=2 -sALLOW_MEMORY_GROWTH=1 -sFORCE_FILESYSTEM -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js
+CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}" -Isrc -Ibuild/generated-src
+CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2 -Ibuild/generated-src
+LINKFLAGS      := -lz -lSDL2 -lm -lGL -lGLU
+LINKFLAGS_WASM := -sUSE_SDL=2 -sALLOW_MEMORY_GROWTH=1 -sTOTAL_MEMORY=32768000 -sFORCE_FILESYSTEM -sUSE_WEBGL2=1 -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js -lz
 DATA           := ddnoise 
 ifdef DEBUG
   CFLAGS += -D_DEBUG -DDEBUG_LOG -O0 -g3
@@ -48,7 +48,7 @@ OBJS := 82c711 82c711_fdc \
 	input_sdl2 ioc ioeb joystick keyboard \
 	lc main mem memc podules printer \
 	riscdev_hdfc romload sound sound_sdl2 \
-	st506 st506_akd52 timer vidc video_sdl2 wd1770 \
+	st506 st506_akd52 timer vidc video_sdl2gl wd1770 \
 	wx-sdl2-joystick \
     emscripten_main emscripten-console emscripten_podule_config podules-static
 
@@ -79,9 +79,14 @@ all:	native wasm
 clean:
 	rm -rf build
 
-serve: build/wasm/arculator.html
-	@echo "Now open >> http://${SERVE_IP}:${SERVE_PORT}/build/wasm/arculator.html << in your browser"
-	@python3 -mhttp.server -b ${SERVE_IP} ${SERVE_PORT}
+######################################################################
+
+build/native/video_sdl2gl.o: build/generated-src/video.vert.c build/generated-src/video.frag.c
+build/wasm/video_sdl2gl.o: build/generated-src/video.vert.c build/generated-src/video.frag.c
+
+build/generated-src/%.c: src/%.glsl
+	@mkdir -p $(@D)
+	xxd -i $< $@
 
 ######################################################################
 
