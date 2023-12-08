@@ -1,7 +1,27 @@
-/*Arculator 2.2 by Sarah Walker
-
-  SDL2 + OpenGL video handling 
-*/
+/* Arculator SDL + OpenGL video
+ *
+ * Originally written for Arculator 2.2
+ * 
+ * This back-end started as a copy of video_sdl2.c. It conforms to
+ * the expectations of the emulated VIDC, and is expected to keep
+ * track of the latest data for the screen in a single big texture.
+ * 
+ * The VIDC maintains its own memory and then calls these two
+ * functions at 50Hz. I'm not sure why they're separate because they
+ * always seem to be called together:
+ * 
+ *   * "update" which takes new bitmap data from the
+ *     emulated VIDC and updates the texture with it;
+ *   * "present" which tells the back-end to display the given 
+ *     subsection of the texture.
+ * 
+ * The texture is hardwired at 2048×1024.
+ * 
+ * The performance of this seems pretty bad as the display gets scaled
+ * up. "present" is called synchronously at 50Hz, so if it performs badly,
+ * the emulation is held up resulting in a lagging pointer, choppy sound
+ * etc.  (this is no different to the previous SDL2 back-end)
+ */
 
 #define GL_GLEXT_PROTOTYPES
 #include <SDL2/SDL.h>
@@ -86,6 +106,31 @@ void EMSCRIPTEN_KEEPALIVE arc_capture_video(int record) {
         }                                                           \
     } while (0)
 
+/* I'm not sure I get how the SDL window handling logic is supposed to work 
+ * under Emscripten. Fundamentally the <canvas> element isn't much like a 
+ * desktop window.  So it feels reasonable to stop treating it like one and
+ * punch through SDL where necessary.
+ */
+
+#ifdef __EMSCRIPTEN__
+/* FIXME: will obviously crash if your document has no <canvas id="canvas ...> "*/
+EM_JS(int, get_canvas_width, (), { return document.getElementById("canvas").width; });
+EM_JS(int, get_canvas_height, (), { return document.getElementById("canvas").height; });
+#else
+int get_canvas_width()
+{
+    int w;
+    SDL_GetWindowSize(sdl_main_window, &w, NULL);
+    return w;
+}
+int get_canvas_height()
+{
+    int h;
+    SDL_GetWindowSize(sdl_main_window, NULL, &h);
+    return h;
+}
+#endif
+
 /* Object id for our shader program */
 GLuint shaderProgram;
 /* Uniform index for the "zoom" vec4 */
@@ -121,10 +166,24 @@ int video_renderer_init(void *unused)
         "Arculator",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        1024,
-        768,
-        SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+#ifdef __EMSCRIPTEN__
+        get_canvas_width(),
+        get_canvas_height(),
+#else
+        1024, 768,
+#endif
         /* HIDPI seems counter-productive, am I missing anything here? */
+        SDL_WINDOW_OPENGL |
+#ifndef __EMSCRIPTEN__
+        /* Another SDL cut-through: under Emscripten, this activates unhelpful 
+         * code that keeps resetting the canvas size, even if we change that
+         * size externally.
+         */
+        SDL_WINDOW_RESIZABLE
+#else
+        0
+#endif
+    );
 
     if (!sdl_main_window)
 	{
@@ -359,7 +418,7 @@ void video_renderer_update(BITMAP *src, int src_x, int src_y, int dest_x, int de
 	}
 #endif
 
-    /* I'm not sure why this function is separate from video_renferer_present; 
+    /* I'm not sure why this function is separate from video_renderer_present; 
      * as far as I can tell they are always called together 
      */
 }
@@ -373,9 +432,14 @@ void video_renderer_present(int src_x, int src_y, int src_w, int src_h, int dbls
     LOG_VIDEO_FRAMES("video_renderer_present: %d,%d + %d,%d\n", src_x, src_y, src_w, src_h);
 
     /* Adjust viewport so we display 4:3 as best we can in the window */
-
     SDL_Rect window, viewport;
-	SDL_GetWindowSize(sdl_main_window, &window.w, &window.h);
+    window.w = get_canvas_width();
+    window.h = get_canvas_height();
+    if (window.w == 0 || window.h == 0) {
+        /* This seems to happen for one frame when switching to or from full screen mode in Emscripten */
+        rpclog("window w=%d h=%d, skipping render\n", window.w, window.h);
+        return;
+    }
     viewport = window;
     float aspect = window.w / window.h;
     if (aspect > 4.0f/3.0f) {

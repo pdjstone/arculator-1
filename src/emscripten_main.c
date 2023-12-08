@@ -27,7 +27,6 @@
 #endif
 
 static int winsizex = 0, winsizey = 0;
-static int win_doresize = 0;
 static int win_dofullscreen = 0;
 static int win_dosetresize = 0;
 static int win_renderer_reset = 0;
@@ -39,7 +38,6 @@ static int fixed_fps = 0;
 void updatewindowsize(int x, int y)
 {
         winsizex = x; winsizey = y;
-        win_doresize = 1;
 }
 
 void EMSCRIPTEN_KEEPALIVE sdl_enable_mouse_capture()
@@ -66,23 +64,6 @@ static SDL_mutex *main_thread_mutex = NULL;
 static time_t last_seconds = 0;
 void arcloop()
 {
-        /*Resize window to match screen mode*/
-        if (win_doresize && fast_forward_to_time_ms == 0)
-        {
-                SDL_Rect rect;
-
-                win_doresize = 0;
-
-                SDL_GetWindowSize(sdl_main_window, &rect.w, &rect.h);
-                if (rect.w != winsizex || rect.h != winsizey)
-                {
-                        rpclog("Resizing window to %d, %d\n", winsizex, winsizey);
-                        SDL_GetWindowPosition(sdl_main_window, &rect.x, &rect.y);
-                        SDL_SetWindowSize(sdl_main_window, winsizex, winsizey);
-                        SDL_SetWindowPosition(sdl_main_window, rect.x, rect.y);
-                }
-        }
-
         if (win_renderer_reset)
         {
                 win_renderer_reset = 0;
@@ -107,7 +88,6 @@ void arcloop()
                         fast_forward_to_time_ms = 0;
                         soundena = 1;
                         skip_video_render = 0;
-                        win_doresize = 1;
                 }
                 run_ms = ticks_since_last < MAX_TICKS_PER_FRAME ? ticks_since_last : MAX_TICKS_PER_FRAME;
         }
@@ -162,11 +142,11 @@ static int arc_main_thread()
                     switch (e.window.event)
                     {
                     case SDL_WINDOWEVENT_FOCUS_LOST:
-                        if (mousecapture)
-                        {
-                            rpclog("Focus lost -- disabling mouse capture\n");
-                            sdl_disable_mouse_capture();
-                        }
+                            if (mousecapture)
+                            {
+                                rpclog("Focus lost -- disabling mouse capture\n");
+                                sdl_disable_mouse_capture();
+                            }
                         break;
 
                     default:
