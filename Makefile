@@ -141,9 +141,8 @@ build/native/podules/ultimatecdrom/%.o: podules/ultimatecdrom/src/%.c
 wasm:	$(addprefix build/wasm/arculator.,html js wasm data data.js)
 
 build/wasm/arculator.wasm build/wasm/arculator.js: build/wasm/arculator.html
-build/wasm/arculator.html: ${OBJS_WASM}
-	emcc ${LINKFLAGS_WASM} ${OBJS_WASM} -o $@
-	sed -e "s/<script async/<script async type=\"text\/javascript\" src=\"arculator.data.js\"><\/script>&/" build/wasm/arculator.html >build/wasm/arculator_fix.html && mv build/wasm/arculator_fix.html build/wasm/arculator.html
+build/wasm/arculator.html: ${OBJS_WASM} web/shell.html
+	emcc ${LINKFLAGS_WASM} ${OBJS_WASM} --shell-file web/shell.html -o $@
 
 build/wasm/arculator.data.js: build/wasm/arculator.data
 build/wasm/arculator.data: ${DATA}
