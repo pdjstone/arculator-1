@@ -13,7 +13,8 @@
 #include "debugger.h"
 
 /*Misc*/
-extern void rpclog(const char *format, ...);
+#define rpclog(...) rpclog_impl(__FILE__, __LINE__, __VA_ARGS__)
+extern void rpclog_impl(char *file, int line, const char *format, ...);
 extern void error(const char *format, ...);
 extern void fatal(const char *format, ...);
 void arc_print_error(const char *format, ...);

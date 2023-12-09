@@ -81,7 +81,7 @@ void updateins()
 }
 
 FILE *rlog = NULL;
-void rpclog(const char *format, ...)
+void rpclog_impl(char* file, int line, const char *format, ...)
 {
 #ifdef DEBUG_LOG
    char buf[1024];
@@ -101,8 +101,8 @@ void rpclog(const char *format, ...)
    vsprintf(buf, format, ap);
    va_end(ap);
 
-   fprintf(stderr, "[%08i]: %s", (uint32_t)(tsc >> 32), buf);
-   fprintf(rlog, "[%08i]: %s", (uint32_t)(tsc >> 32), buf);
+   fprintf(stderr, "%s:%d [%08i]: %s", file, line, (uint32_t)(tsc >> 32), buf);
+   fprintf(rlog, "%s:%d [%08i]: %s", file, line, (uint32_t)(tsc >> 32), buf);
    
    fflush(rlog);
 #endif
