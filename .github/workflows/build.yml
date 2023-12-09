@@ -12,11 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build
-        run: docker run -v $(pwd):/src -u $(id -u):$(id -g) emscripten/emsdk make -j8 DEBUG=1 wasm
+        run: docker run -v $(pwd):/src -u $(id -u):$(id -g) emscripten/emsdk sh -c "apt update && apt -yy install xxd && make -j8 DEBUG=1 wasm"
   native:
     name: "Build native"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Build
-        run: docker run -v $(pwd):/src debian sh -c "apt update && apt -yy install gcc make libsdl2-dev libz-dev && make -C /src -j8 DEBUG=1 native"
+        run: docker run -v $(pwd):/src debian sh -c "apt update && apt -yy install gcc xxd make libsdl2-dev libz-dev && make -C /src -j8 DEBUG=1 native"
