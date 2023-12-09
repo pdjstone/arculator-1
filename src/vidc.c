@@ -403,8 +403,6 @@ void vidc_redopalette(void)
 void writevidc(uint32_t v)
 {
 //        char s[80];
-	RGB r;
-	int c,d;
 	LOG_VIDC_REGISTERS("Write VIDC %08X (addr %02X<<2 or %02X/%02X, data %06X) with R15=%08X (PC=%08X)\n",
 		v, v>>26, v>>24, (v>>24) & 0xFC, v & 0xFFFFFFul, armregs[15], PC);
 	if (((v>>24)&~0x1F)==0x60)
