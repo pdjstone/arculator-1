@@ -17,6 +17,11 @@ void main()
     // pan and zoom into the texture wherever we're told by the VIDC
     vec2 zoomed = izoom.xy / size + TexCoord * (izoom.zw / size);
 
-    // VIDC gives us BGRA, so flip it to RGBA that the texture is set up for
+    // We've copied the VIDC memory directly into the texture, 
+    // which is BGRA with alpha at 0.
+    //
+    // So flip it to RGBA which is the portable format the texture is set up for,
+    // and force the alpha to 1.0.
     FragColor = texture(texture1, zoomed).bgra;
+    FragColor.a = 1.0;
 }
