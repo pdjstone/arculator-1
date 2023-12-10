@@ -124,7 +124,7 @@
 
         var Module = {
              onRuntimeInitialized: function () {
-                window.addEventListener('resize', function () {
+                var resize = function() {
                     var canvas = document.getElementById('canvas');
                     var container = document.getElementsByClassName('emscripten_border')[0];
                     var width = container.clientWidth;
@@ -132,12 +132,16 @@
                     if (canvas.width != width ||
                         canvas.height != height) {
                         canvas.width = width
-                        canvas.style.width = width+"px";
+                        canvas.style.width = width + "px";
                         canvas.height = height
-                        canvas.style.height = height+"px";
+                        canvas.style.height = height + "px";
                         canvas = document.getElementById('canvas');
                     }
+                };
+                window.addEventListener('resize', function () {
+                    resize();
                 });
+                resize();
             },
             print: (function () {
                 var element = document.getElementById('output');
