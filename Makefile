@@ -11,6 +11,9 @@ INCLUDE_LINUX := 1
 # Enable if you like, will fix this so dependencies are more automatic
 #BUILD_PODULES := ultimatecdrom common_sound common_cdrom common_eeprom common_scsi
 
+# Enable if you want to build a "full fat" version that includes ROMs, config and CMOS
+# FULL_FAT := 1
+
 ######################################################################
 
 SHELL     := bash
@@ -21,18 +24,22 @@ CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}"
 CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2 -Ibuild/generated-src
 LINKFLAGS      := -lz -lSDL2 -lm -lGL -lGLU
 LINKFLAGS_WASM := -sUSE_SDL=2 -sALLOW_MEMORY_GROWTH=1 -sTOTAL_MEMORY=32768000 -sFORCE_FILESYSTEM -sUSE_WEBGL2=1 -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js -lz
-DATA           := ddnoise 
+DATA           := ddnoise
 ifdef DEBUG
   CFLAGS += -D_DEBUG -DDEBUG_LOG -O0 -g3
   LINKFLAGS_WASM += -gsource-map
   BUILD_TAG +=  (DEBUG)
   $(info ❗BUILD_TAG="${BUILD_TAG}")
-  DATA += roms/riscos311/ros311 roms/arcrom_ext cmos arc.cfg
+  FULL_FAT = 1
 else
   CFLAGS += -O3 -flto
   LINKFLAGS += -flto
   $(info ❗BUILD_TAG="${BUILD_TAG}")
   $(info ❗Re-run make with DEBUG=1 if you want a debug build)
+endif
+
+ifdef FULL_FAT
+  DATA += roms/riscos311/ros311 roms/arcrom_ext cmos arc.cfg
 endif
 
 ######################################################################
