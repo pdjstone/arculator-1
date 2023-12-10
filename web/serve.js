@@ -11,7 +11,7 @@ const fs = require("fs")
 const addr = process.argv[2] || 'localhost'
 const port = process.argv[3] || '3020'
 const root = process.cwd()
-const MAKE_WASM = "make -j8 DEBUG=1 wasm"
+const MAKE_WASM = "make " + process.env['MAKEFLAGS'] +" wasm"
 
 var mimeTypes = {
     '.html': 'text/html',
@@ -55,17 +55,19 @@ function handle(req, res) {
     if (req.url == "/" || req.url.startsWith("/build/wasm/arculator.html")) {
         var now = new Date();
         try {
+            console.log("🛠️  "+MAKE_WASM)
             var output = execSync(MAKE_WASM)
             // don't care about output if it worked
         }
         catch (error) {
             res.writeHead(500, { "Content-Type": "text/plain" });
             res.end(error.message);
-            console.log(`error: ${error.message}`);
+            console.log(`❌ Build failed`);
+            console.log(`   error: ${error.message}`);
             return;
         }
         var duration = new Date() - now;
-        console.log(`Build took ${duration}ms`)
+        console.log(`✅ Build took ${duration}ms`)
     }
 
     if (req.url == "/") {
