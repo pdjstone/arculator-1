@@ -432,10 +432,12 @@ void video_renderer_present(int src_x, int src_y, int src_w, int src_h, int dbls
     video.viewport.x = video.viewport.y = 0;
     video.viewport.w = video.window.w;
     video.viewport.h = video.window.h;
-    float aspect = video.window.w / video.window.h;
+    float aspect = (float) video.window.w / (float) video.window.h;
     if (aspect > 4.0f/3.0f) {
         video.viewport.w = video.viewport.h * 4.0f / 3.0f;
-    } else if (aspect < 4.0f/3.0f) {
+    }
+    else if (aspect < 4.0f / 3.0f)
+    {
         video.viewport.h = video.viewport.w * 3.0f / 4.0f;
     }
     video.viewport.x = (video.window.w - video.viewport.w) / 2;
