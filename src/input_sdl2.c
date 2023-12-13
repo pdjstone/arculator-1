@@ -24,21 +24,24 @@ static void mouse_close()
 {
 }
 
-void mouse_capture_enable()
+int mouse_capture_enable()
 {
-	rpclog("Mouse captured\n");
-	SDL_SetRelativeMouseMode(SDL_TRUE);
-	SDL_SetWindowGrab(sdl_main_window, SDL_TRUE);
-	
+    if (SDL_SetRelativeMouseMode(SDL_TRUE) < 0) {
+        rpclog("Could not set relative mouse mode: %s\n", SDL_GetError());
+        return -1;
+    }
 
-	// The SDL docs state that calling SDL_SetRelativeMouseMode 
+    // The SDL docs state that calling SDL_SetRelativeMouseMode 
 	// "will flush any pending mouse motion" however this doesn't
 	// always seem to be the case on Linux, as the first call
 	// to mouse_poll_host after entering relative mode will often
 	// give a spurious delta. So this call ensures the flush happens
 	SDL_GetRelativeMouseState(NULL, NULL);
+
 	mouse_capture = 1;
 	mouse_mode = MOUSE_MODE_RELATIVE;
+
+    return 0;
 }
 
 void mouse_capture_disable()

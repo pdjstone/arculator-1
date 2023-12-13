@@ -42,15 +42,14 @@ void updatewindowsize(int x, int y)
 
 void EMSCRIPTEN_KEEPALIVE sdl_enable_mouse_capture()
 {
-        mouse_capture_enable();
-        SDL_SetWindowGrab(sdl_main_window, SDL_TRUE);
+        if (mouse_capture_enable() != 0)
+                return;
         mousecapture = 1;
         update_status_text = 1;
 }
 
 void EMSCRIPTEN_KEEPALIVE sdl_disable_mouse_capture()
 {
-        SDL_SetWindowGrab(sdl_main_window, SDL_FALSE);
         mouse_capture_disable();
         mousecapture = 0;
         update_status_text = 1;
