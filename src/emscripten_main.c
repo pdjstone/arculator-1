@@ -60,6 +60,47 @@ static volatile int pause_main_thread = 0;
 
 static SDL_mutex *main_thread_mutex = NULL;
 
+void process_event()
+{
+    SDL_Event e;
+    while (SDL_PollEvent(&e) != 0)
+    {
+        if (e.type == SDL_QUIT)
+        {
+            quited = 1;
+        }
+        if (e.type == SDL_MOUSEBUTTONUP)
+        {
+            if (e.button.button == SDL_BUTTON_LEFT && !mousecapture && mouse_mode == MOUSE_MODE_RELATIVE)
+            {
+                rpclog("Mouse click -- enabling mouse capture\n");
+                sdl_enable_mouse_capture();
+            }
+        }
+        if (e.type == SDL_WINDOWEVENT)
+        {
+            switch (e.window.event)
+            {
+            case SDL_WINDOWEVENT_FOCUS_LOST:
+                if (mousecapture)
+                {
+                    rpclog("Focus lost -- disabling mouse capture\n");
+                    sdl_disable_mouse_capture();
+                }
+                break;
+
+            default:
+                break;
+            }
+        }
+        if ((key[KEY_LCONTROL] || key[KEY_RCONTROL]) && key[KEY_END] && !fullscreen && mousecapture)
+        {
+            rpclog("CTRL-END pressed -- disabling mouse capture\n");
+            sdl_disable_mouse_capture();
+        }
+    }
+}
+
 static time_t last_seconds = 0;
 void arcloop()
 {
@@ -97,8 +138,10 @@ void arcloop()
                 arc_run(run_ms);
 
         SDL_UnlockMutex(main_thread_mutex);
-       
+        process_event();
 
+        if (quited)
+            exit(0);
 }
 
 static int arc_main_thread()
@@ -118,49 +161,12 @@ static int arc_main_thread()
         // if fixed_fps is 0, emscripten will use requestAnimationFrame
 #ifdef __EMSCRIPTEN__
         emscripten_set_main_loop(arcloop, fixed_fps, 1);
-#endif
+#else
         signal(SIGINT, arc_stop_main_thread); // shouldn't be here probably, and not thread-safe but otherwise we can't quit
-        while(!quited) {
-            SDL_Event e;
-            while (SDL_PollEvent(&e) != 0)
-            {
-                if (e.type == SDL_QUIT)
-                {
-                    quited = 1;
-                }
-                if (e.type == SDL_MOUSEBUTTONUP)
-                {
-                    if (e.button.button == SDL_BUTTON_LEFT && !mousecapture)
-                    {
-                        rpclog("Mouse click -- enabling mouse capture\n");
-                        sdl_enable_mouse_capture();
-                    }
-                }
-                if (e.type == SDL_WINDOWEVENT)
-                {
-                    switch (e.window.event)
-                    {
-                    case SDL_WINDOWEVENT_FOCUS_LOST:
-                            if (mousecapture)
-                            {
-                                rpclog("Focus lost -- disabling mouse capture\n");
-                                sdl_disable_mouse_capture();
-                            }
-                        break;
-
-                    default:
-                        break;
-                    }
-                }
-                if ((key[KEY_LCONTROL] || key[KEY_RCONTROL]) && key[KEY_END] && !fullscreen && mousecapture)
-                {
-                    rpclog("CTRL-END pressed -- disabling mouse capture\n");
-                    sdl_disable_mouse_capture();
-                }
-            }
-
+        while (1)
             arcloop();
-        }
+#endif
+
         return 0;
 }
 
