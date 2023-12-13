@@ -5,19 +5,18 @@
 #include "arc.h"
 #include "plat_input.h"
 #include "video_sdl2.h"
+#include "video.h"
 
 static int mouse_buttons;
 static int mouse_x = 0, mouse_y = 0;
 
 static int mouse_capture = 0;
 
-int mouse[3];
-
 static void mouse_init()
 {
     //SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
-    //SDL_SetRelativeMouseMode(SDL_TRUE);
 	SDL_ShowCursor(SDL_DISABLE);
+    mouse_mode = MOUSE_MODE_ABSOLUTE;
 }
 
 static void mouse_close()
@@ -46,25 +45,42 @@ int mouse_capture_enable()
 
 void mouse_capture_disable()
 {
-	rpclog("Mouse released\n");
-	mouse_capture = 0;
-	SDL_SetWindowGrab(sdl_main_window, SDL_FALSE);
 	SDL_SetRelativeMouseMode(SDL_FALSE);
+    mouse_capture = 0;
+    rpclog("Mouse released\n");
 }
 
 void mouse_poll_host()
 {
 	uint32_t mb = 0;
-	if (mouse_capture && mouse_mode == MOUSE_MODE_RELATIVE)
+    
+	if (mouse_mode == MOUSE_MODE_RELATIVE)
 	{
-		SDL_Rect rect;
-		mb = SDL_GetRelativeMouseState(&mouse[0], &mouse[1]);
+		//SDL_Rect rect;
+        int dx, dy;
+        mb = SDL_GetRelativeMouseState(&dx, &dy);
+        if (!mousecapture) {
+            int32_t x0, y0, x1, y1;
+            SDL_GetMouseState(&x1, &y1);
+            x0 = x1 - dx;
+            y0 = y1 - dy;
+            short os0x, os0y, os1x, os1y;
+            window_coords_to_os_coords(video_window_info(), x0, y0, &os0x, &os0y);
+            window_coords_to_os_coords(video_window_info(), x1, y1, &os1x, &os1y);
+            int osdx =   os1x - os0x;
+            int osdy = -(os1y - os0y);
+            if (osdx != 0 || osdy != 0)
+                rpclog("mouse delta %d, %d\n", osdx, osdy);
+            mouse_x += osdx;
+            mouse_y += osdy;
+        } else {
+            // FIXME: In relative mode, these come straight from the OS
+            mouse_x += dx;
+            mouse_y += dy;
+        }
 
-		mouse_x += mouse[0];
-		mouse_y += mouse[1];
-
-		SDL_GetWindowSize(sdl_main_window, &rect.w, &rect.h);
-		SDL_WarpMouseInWindow(sdl_main_window, rect.w/2, rect.h/2);
+		//SDL_GetWindowSize(sdl_main_window, &rect.w, &rect.h);
+		//SDL_WarpMouseInWindow(sdl_main_window, rect.w/2, rect.h/2);
 	} else if (mouse_mode == MOUSE_MODE_ABSOLUTE) 
 	{
 		mb = SDL_GetMouseState(&mouse_x, &mouse_y);

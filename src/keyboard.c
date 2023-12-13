@@ -533,8 +533,8 @@ void doosmouse()
 	LOG_KB_MOUSE("doosmouse\n");
 	mouse_get_abs(&mx, &my, &b);
 
-	window_coords_to_os_coords(mx, my, &xpos, &ypos);
- 
+    window_coords_to_os_coords(video_window_info(), mx, my, &xpos, &ypos);
+
 	if (ypos<mt) ypos=mt;
 	if (ypos>mb) ypos=mb;
 	writememl(0x5B8,ypos);

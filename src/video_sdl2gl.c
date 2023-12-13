@@ -48,8 +48,7 @@
 
 // other SDL code references this
 SDL_Window *sdl_main_window = NULL;
-
-static SDL_GLContext context;
+static SDL_GLContext context = NULL;
 static GLuint screenTexture;
 
 // FIXME: vestigial bits left in to avoid changes to other files
@@ -106,30 +105,25 @@ void EMSCRIPTEN_KEEPALIVE arc_capture_video(int record) {
         }                                                           \
     } while (0)
 
-/* I'm not sure I get how the SDL window handling logic is supposed to work 
- * under Emscripten. Fundamentally the <canvas> element isn't much like a 
- * desktop window.  So it feels reasonable to stop treating it like one and
- * punch through SDL where necessary.
- */
+video_window_info_t video_window_info() {
 
+    video_window_info_t info;
 #ifdef __EMSCRIPTEN__
-/* FIXME: will obviously crash if your document has no <canvas id="canvas ...> "*/
-EM_JS(int, get_canvas_width, (), { return document.getElementById("canvas").width; });
-EM_JS(int, get_canvas_height, (), { return document.getElementById("canvas").height; });
+    /* I'm not sure I get how the SDL window handling logic is supposed to work
+     * under Emscripten. Fundamentally the <canvas> element isn't much like a
+     * desktop window.  So it feels reasonable to stop treating it like one and
+     * punch through SDL where necessary.
+     */
+    info.window.w = EM_ASM_INT(return document.getElementById("canvas").width);
+    info.window.h = EM_ASM_INT(return document.getElementById("canvas").height);
 #else
-int get_canvas_width()
-{
-    int w;
-    SDL_GetWindowSize(sdl_main_window, &w, NULL);
-    return w;
-}
-int get_canvas_height()
-{
-    int h;
-    SDL_GetWindowSize(sdl_main_window, NULL, &h);
-    return h;
-}
+    SDL_GetWindowSize(sdl_main_window, &info.window.w, &info.window.h);
 #endif
+    if (context) {
+        glGetIntegerv(GL_VIEWPORT, (GLint *) &info.viewport);
+    }
+    return info;
+}
 
 /* Object id for our shader program */
 GLuint shaderProgram;
@@ -161,29 +155,26 @@ int video_renderer_init(void *unused)
 #endif
 
     /* Create the window, OpenGL context */
-
+    
+#ifdef __EMSCRIPTEN__
+    video_window_info_t video = video_window_info();
+    /* Another SDL cut-through: under Emscripten, this activates unhelpful
+     * code that keeps resetting the canvas size, even if we change that
+     * size externally.
+     */
     sdl_main_window = SDL_CreateWindow(
         "Arculator",
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
-#ifdef __EMSCRIPTEN__
-        get_canvas_width(),
-        get_canvas_height(),
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        video.window.w, video.window.h,
+        SDL_WINDOW_OPENGL);
 #else
+    sdl_main_window = SDL_CreateWindow(
+        "Arculator",
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         1024, 768,
-#endif
         /* HIDPI seems counter-productive, am I missing anything here? */
-        SDL_WINDOW_OPENGL |
-#ifndef __EMSCRIPTEN__
-        /* Another SDL cut-through: under Emscripten, this activates unhelpful 
-         * code that keeps resetting the canvas size, even if we change that
-         * size externally.
-         */
-        SDL_WINDOW_RESIZABLE
-#else
-        0
+        SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 #endif
-    );
 
     if (!sdl_main_window)
 	{
@@ -432,24 +423,24 @@ void video_renderer_present(int src_x, int src_y, int src_w, int src_h, int dbls
     LOG_VIDEO_FRAMES("video_renderer_present: %d,%d + %d,%d\n", src_x, src_y, src_w, src_h);
 
     /* Adjust viewport so we display 4:3 as best we can in the window */
-    SDL_Rect window, viewport;
-    window.w = get_canvas_width();
-    window.h = get_canvas_height();
-    if (window.w == 0 || window.h == 0) {
+    video_window_info_t video = video_window_info();
+    if (video.window.w == 0 || video.window.h == 0) {
         /* This seems to happen for one frame when switching to or from full screen mode in Emscripten */
-        rpclog("window w=%d h=%d, skipping render\n", window.w, window.h);
+        rpclog("window w=%d h=%d, skipping render\n", video.window.w, video.window.h);
         return;
     }
-    viewport = window;
-    float aspect = window.w / window.h;
+    video.viewport.x = video.viewport.y = 0;
+    video.viewport.w = video.window.w;
+    video.viewport.h = video.window.h;
+    float aspect = video.window.w / video.window.h;
     if (aspect > 4.0f/3.0f) {
-        viewport.w = viewport.h * 4.0f / 3.0f;
+        video.viewport.w = video.viewport.h * 4.0f / 3.0f;
     } else if (aspect < 4.0f/3.0f) {
-        viewport.h = viewport.w * 3.0f / 4.0f;
+        video.viewport.h = video.viewport.w * 3.0f / 4.0f;
     }
-    viewport.x = (window.w - viewport.w) / 2;
-    viewport.y = (window.h - viewport.h) / 2;
-    glViewport(viewport.x, viewport.y, viewport.w, viewport.h);
+    video.viewport.x = (video.window.w - video.viewport.w) / 2;
+    video.viewport.y = (video.window.h - video.viewport.h) / 2;
+    glViewport(video.viewport.x, video.viewport.y, video.viewport.w, video.viewport.h);
     CHECK_GL_ERROR;
 
     /* Set the zoom parameters in the fragment shader, 

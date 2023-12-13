@@ -30,8 +30,26 @@ typedef struct {
 extern ScreenGeometry screen_geom;
 
 void update_screen_geometry(uint32_t lb, uint32_t tb, uint32_t sw, uint32_t sh);
-void window_coords_to_os_coords(uint32_t wx, uint32_t wy, short *os_x, short *os_y);
-void os_coords_to_window_coords(short os_x, short os_y, uint32_t *wx, uint32_t *wy);
+
+typedef struct
+{
+    struct { int w, h; } window;
+    struct { int x, y, w, h; } viewport;
+} video_window_info_t;
+
+video_window_info_t video_window_info();
+
+/* Convert window co-ordinates to RISC OS co-ordinates
+ *
+ * - w: window info from video_window_info()
+ * - wx, wy: window coordinates, 
+ * - os_x, os_y: RISC OS screen co-ordinates
+ * 
+ * Returns 0 if the pointer mapped to a point within the VIDC borders, 
+ * or 1 if it was clamped to an edge (either X or Y).
+ */
+int window_coords_to_os_coords(video_window_info_t video, uint32_t wx, uint32_t wy, short *os_x, short *os_y);
+
 
 enum
 {

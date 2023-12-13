@@ -1403,27 +1403,35 @@ void update_screen_geometry(uint32_t lb, uint32_t tb, uint32_t sw, uint32_t sh)
 	}
 }
 
-
-void window_coords_to_os_coords(uint32_t wx, uint32_t wy, short *os_x, short *os_y) 
+int window_coords_to_os_coords(video_window_info_t video, uint32_t wx, uint32_t wy, short *os_x, short *os_y)
 {
-	int x, y;
-	/*
+    int clamped = 0;
 
-	 vs = 0 // 1/2x
-	 vs = 1 // 1x
-	 vs = 2 // 1.5x
-	 vs = 3 // 2x
-	*/
-	wx = (wx / (video_scale + 1)) * 2;
-	wy = (wy / (video_scale + 1)) * 2;
-	x = (wx < screen_geom.left_border) ? 0 : wx - screen_geom.left_border;
-	y = (wy < screen_geom.top_border) ? 0 : wy - screen_geom.top_border;
-	y = screen_geom.screen_height - y;
-	x *= 2; // FIXME: not all modes use this scale factor
-	y *= 2;
-	
-	*os_x = (short)x;
-	*os_y = (short)y;
+    // If we're within the window but not the viewport, clamp to the viewport and continue.
+    if (wx < video.viewport.x) { clamped = 1; wx = video.viewport.x; }
+    else if (wx >= video.viewport.x + video.viewport.w) { clamped = 1; wx = video.viewport.x + video.viewport.w - 1; }
+    if (wy < video.viewport.y) { clamped = 1; wy = video.viewport.y; }
+    else if (wy >= video.viewport.y + video.viewport.h) { clamped = 1; wy = video.viewport.y + video.viewport.h - 1; }
+
+    // The "full" number of pixels presented by the VIDC, including the borders
+    int fullwidth = screen_geom.screen_width + (screen_geom.left_border*2);
+    int fullheight = screen_geom.screen_height + (screen_geom.top_border*2);
+
+    // Now x and y are in OS co-ordinates, but might be in the border area
+    int x = (wx - video.viewport.x) * fullwidth / video.viewport.w;
+    int y = (wy - video.viewport.y) * fullheight / video.viewport.h;
+    // Clamp again to the inside of the border
+    if (x < screen_geom.left_border) { clamped = 1; x = screen_geom.left_border; }
+    else if (x >= screen_geom.left_border + screen_geom.screen_width) { clamped = 1; x = screen_geom.left_border + screen_geom.screen_width - 1; }  
+    if (y < screen_geom.top_border) { clamped = 1; y = screen_geom.top_border; }
+    else if (y >= screen_geom.top_border + screen_geom.screen_height) { clamped = 1; y = screen_geom.top_border + screen_geom.screen_height - 1; }
+    // RISC OS co-ordinates are:
+    //   1) like OpenGL, Y goes up not down, so we need to invert
+    //   2) multiplied by 2 because of something to do with eigenvalues? We're not really
+    //      dealing with this so FIXME, I suspect this will break in unusual VIDC modes.
+    *os_x = ((2*x) - (screen_geom.left_border*2));
+    *os_y = (screen_geom.screen_height*2) - (2 * (y - screen_geom.top_border));
+    return clamped;
 }
 
 void os_coords_to_window_coords(short os_x, short os_y, uint32_t *wx, uint32_t *wy)
