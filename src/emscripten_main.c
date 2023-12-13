@@ -156,7 +156,8 @@ static int arc_main_thread()
                 fatal("Video renderer init failed");
         }
         input_init();
-        sdl_enable_mouse_capture();
+        //sdl_enable_mouse_capture();
+
 
         // if fixed_fps is 0, emscripten will use requestAnimationFrame
 #ifdef __EMSCRIPTEN__
