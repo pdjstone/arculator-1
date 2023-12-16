@@ -192,5 +192,5 @@ arc.cfg:
 ######################################################################
 roms/arcrom_ext: roms/riscos311/ros311
 roms/riscos311/ros311:
-	curl -s http://b-em.bbcmicro.com/arculator/Arculator_V2.1_Linux.tar.gz | tar xz roms
+	curl -Ls https://b-em.bbcmicro.com/arculator/Arculator_V2.2_Linux.tar.gz | tar xz roms
 
