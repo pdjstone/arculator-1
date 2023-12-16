@@ -155,26 +155,18 @@ int video_renderer_init(void *unused)
 #endif
 
     /* Create the window, OpenGL context */
-    
+
+    int w=1024, h=768;
 #ifdef __EMSCRIPTEN__
     video_window_info_t video = video_window_info();
-    /* Another SDL cut-through: under Emscripten, this activates unhelpful
-     * code that keeps resetting the canvas size, even if we change that
-     * size externally.
-     */
-    sdl_main_window = SDL_CreateWindow(
-        "Arculator",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        video.window.w, video.window.h,
-        SDL_WINDOW_OPENGL);
-#else
-    sdl_main_window = SDL_CreateWindow(
-        "Arculator",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        1024, 768,
-        /* HIDPI seems counter-productive, am I missing anything here? */
-        SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+    w = video.window.w; h = video.window.h;
 #endif
+    sdl_main_window = SDL_CreateWindow(
+        "Arculator",
+        SDL_WINDOWPOS_CENTERED, 
+        SDL_WINDOWPOS_CENTERED,
+        w, h,
+        SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 
     if (!sdl_main_window)
 	{
