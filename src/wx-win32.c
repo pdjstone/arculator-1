@@ -1,8 +1,6 @@
 /*Arculator 2.2 by Sarah Walker
   Win32-specific main window handling*/
-#define BITMAP __win_bitmap
 #include <windows.h>
-#undef BITMAP
 #include <process.h>
 #include <stdio.h>
 #include <stdlib.h>

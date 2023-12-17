@@ -139,6 +139,7 @@ int loadrom()
 	}
 
 #ifdef WIN32
+    int finished=0;
 	find_file = _findfirst("*.*", &finddata);
 	if (find_file == -1)
 	{

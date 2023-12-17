@@ -27,12 +27,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 
-#if WIN32
-#define BITMAP __win_bitmap
-#include <windows.h>
-#undef BITMAP
-#endif
-
 #include <stdio.h>
 #include <string.h>
 #include "arc.h"
@@ -306,7 +300,7 @@ void video_renderer_close()
 }
 
 /*Update display texture from memory bitmap src.*/
-void video_renderer_update(BITMAP *src, int src_x, int src_y, int dest_x, int dest_y, int w, int h)
+void video_renderer_update(vidc_bitmap_t *src, int src_x, int src_y, int dest_x, int dest_y, int w, int h)
 {
     if (skip_video_render) {
         return;

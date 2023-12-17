@@ -60,9 +60,9 @@ static struct
 
 	uint32_t pal[16];
 
-	BITMAP *lc_buffer;
+    vidc_bitmap_t *lc_buffer;
 
-	int has_updated;
+    int has_updated;
 	emu_timer_t blank_timer;
 } lc;
 
