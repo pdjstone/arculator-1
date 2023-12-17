@@ -24,6 +24,11 @@
  */
 
 #define GL_GLEXT_PROTOTYPES
+
+#ifndef __EMSCRIPTEN__
+#  include "gl.h"
+#endif
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 
