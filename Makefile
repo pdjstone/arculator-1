@@ -1,12 +1,9 @@
+# Linux-hosted Makefile for Arculator
+
 ######################################################################
 
 SERVE_IP   ?= localhost
 SERVE_PORT ?= 3020
-
-# Only "LINUX" tested for now
-INCLUDE_LINUX := 1
-#INCLUDE_MACOS := 1
-#INCLUDE_WIN32 := 1
 
 # Enable if you like, will fix this so dependencies are more automatic
 #BUILD_PODULES := ultimatecdrom common_sound common_cdrom common_eeprom common_scsi
@@ -20,14 +17,17 @@ SHELL     := bash
 BUILD_TAG := $(shell echo `git rev-parse --short HEAD`-`[[ -n $$(git status -s) ]] && echo 'dirty' || echo 'clean'` on `date --rfc-3339=seconds`)
 
 CC             ?= gcc
+W64CC          := x86_64-w64-mingw32-gcc
 CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}" -Isrc -Ibuild/generated-src
 CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2 -Ibuild/generated-src
 LINKFLAGS      := -lz -lSDL2 -lm -lGL -lGLU
-LINKFLAGS_WASM := -sUSE_SDL=2 -sALLOW_MEMORY_GROWTH=1 -sTOTAL_MEMORY=32768000 -sFORCE_FILESYSTEM -sUSE_WEBGL2=1 -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js -lz
+LINKFLAGS_W64  := -Wl,-Bstatic -lz -Wl,-Bdynamic -lSDL2 -lm -lopengl32 -lglu32
+LINKFLAGS_WASM := -sUSE_SDL=2 -sALLOW_MEMORY_GROWTH=1 -sTOTAL_MEMORY=32768000 -sFORCE_FILESYSTEM -sUSE_WEBGL2=1 -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js
 DATA           := ddnoise
 ifdef DEBUG
   CFLAGS += -D_DEBUG -DDEBUG_LOG -O0 -g3
   LINKFLAGS_WASM += -gsource-map
+  LINKFLAGS_W64 += -mconsole
   BUILD_TAG +=  (DEBUG)
   $(info ❗BUILD_TAG="${BUILD_TAG}")
   FULL_FAT = 1
@@ -59,14 +59,6 @@ OBJS := 82c711 82c711_fdc \
 	wx-sdl2-joystick \
     emscripten_main emscripten-console emscripten_podule_config podules-static
 
-ifdef INCLUDE_LINUX
-  OBJS += hostfs-unix
-else ifdef INCLUDE_MACOS
-  OBJS += hostfs-unix
-else ifdef INCLUDE_WIN32
-  OBJS += hostfs-win32
-endif
-
 PODULE_COMMON_INCLUDES = $(addprefix -I, $(sort $(dir $(wildcard podules/common/*/*.h))))
 PODULE_DEFINES = $(addprefix -DPODULE_, $(filter-out common_%, $(BUILD_PODULES)))
 
@@ -74,14 +66,16 @@ PODULE_DEFINES = $(addprefix -DPODULE_, $(filter-out common_%, $(BUILD_PODULES))
 
 OBJS_DOT_O := $(addsuffix .o,${OBJS})
 
-OBJS_WASM   := $(addprefix build/wasm/,${OBJS_DOT_O}) build/wasm/hostfs_emscripten.o
-OBJS_NATIVE := $(addprefix build/native/,${OBJS_DOT_O})
+OBJS_WASM   := $(addprefix build/wasm/,${OBJS_DOT_O}) build/wasm/hostfs-unix.o build/wasm/hostfs_emscripten.o
+OBJS_NATIVE := $(addprefix build/native/,${OBJS_DOT_O}) build/native/hostfs-unix.o build/native/gl.o
+OBJS_WIN64  := $(addprefix build/win64/,${OBJS_DOT_O}) build/win64/hostfs-win.o build/win64/gl.o
 
 OBJS_WASM   += $(addsuffix .a, $(addprefix build/wasm/podules/,${BUILD_PODULES}))
 OBJS_NATIVE += $(addsuffix .a, $(addprefix build/native/podules/,${BUILD_PODULES}))
+OBJS_WIN64  += $(addsuffix .a, $(addprefix build/win64/podules/,${BUILD_PODULES}))
 
 ######################################################################
-all:	native wasm
+all:	native wasm win64
 
 clean:
 	rm -rf build
@@ -93,6 +87,7 @@ serve: wasm web/serve.js
 
 build/native/video_sdl2gl.o: build/generated-src/video.vert.c build/generated-src/video.frag.c
 build/wasm/video_sdl2gl.o: build/generated-src/video.vert.c build/generated-src/video.frag.c
+build/win64/video_sdl2gl.o: build/generated-src/video.vert.c build/generated-src/video.frag.c
 
 build/generated-src/%.c: src/%.glsl
 	@mkdir -p $(@D)
@@ -111,22 +106,10 @@ build/native/%.o: src/%.c
 
 #### Rules for podules ###############################################
 
-ifdef INCLUDE_LINUX
-  CDROM_BACKEND := linux
-  SOUND_BACKEND := sound_out_sdl2 
-  #sound_alsain
-else ifdef INCLUDE_MACOS
-  CDROM_BACKEND := macos
-  SOUND_BACKEND := sound_out_sdl2 sound_null
-else ifdef INCLUDE_WIN32
-  CDROM_BACKEND := win32
-  SOUND_BACKEND := sound_out_sdl2 sound_wavein
-endif
-
-build/native/podules/common_cdrom.a: build/native/podules/common/cdrom/cdrom-${CDROM_BACKEND}-ioctl.o
+build/native/podules/common_cdrom.a: build/native/podules/common/cdrom/cdrom-linux-ioctl.o
 	ar -rs $@ $^
 
-build/native/podules/common_sound.a: $(addsuffix .o, $(addprefix build/native/podules/common/sound/, ${SOUND_BACKEND}))
+build/native/podules/common_sound.a: $(addsuffix .o, $(addprefix build/native/podules/common/sound/, sound_out_sdl2))
 	ar -rs $@ $^
 build/native/podules/common_eeprom.a: build/native/podules/common/eeprom/93c06.o
 	ar -rs $@ $^
@@ -143,6 +126,56 @@ build/native/podules/ultimatecdrom.a: $(addsuffix .o, $(addprefix build/native/p
 build/native/podules/ultimatecdrom/%.o: podules/ultimatecdrom/src/%.c
 	@mkdir -p $(@D)
 	${CC} -o $@ -c ${CFLAGS} ${PODULE_COMMON_INCLUDES} \
+	  -Dpodule_probe=$(*F)_podule_probe \
+	  -Dpodule_path=$(*F)_podule_path \
+	  $<
+
+######################################################################
+
+win64:	build/win64/arculator.exe build/win64/SDL2.dll
+
+build/win64/arculator.exe: ${OBJS_WIN64}
+	${W64CC} ${OBJS_WIN64} -o $@ ${LINKFLAGS_W64} `./SDL2/x86_64-w64-mingw32/bin/sdl2-config --libs`
+
+build/win64/%.o: src/%.c SDL2
+	@mkdir -p $(@D)
+	${W64CC} `./SDL2/x86_64-w64-mingw32/bin/sdl2-config --cflags` -c ${CFLAGS} ${PODULE_DEFINES} $< -o $@
+
+#### Get SDL externally ##############################################
+
+SDL_VERSION=2.28.5
+SDL2:
+	@mkdir -p $(@D)
+	curl -L https://github.com/libsdl-org/SDL/releases/download/release-${SDL_VERSION}/SDL2-devel-${SDL_VERSION}-mingw.tar.gz | tar xz
+	ln -fs . SDL2-${SDL_VERSION}/x86_64-w64-mingw32/include/SDL2/SDL2
+	cp SDL2/x86_64-w64-mingw32/bin/SDL2.dll build/win64/SDL2.dll
+
+build/win64/SDL2.dll:	SDL2
+	@mkdir -p $(@D)
+	cp SDL2/x86_64-w64-mingw32/bin/SDL2.dll build/win64/SDL2.dll
+
+#### Rules for podules ###############################################
+
+build/win64/podules/common_cdrom.a: build/win64/podules/common/cdrom/cdrom-linux-ioctl.o
+	ar -rs $@ $^
+
+build/win64/podules/common_sound.a: $(addsuffix .o, $(addprefix build/win64/podules/common/sound/, sound_out_sdl2))
+	ar -rs $@ $^
+build/win64/podules/common_eeprom.a: build/win64/podules/common/eeprom/93c06.o
+	ar -rs $@ $^
+build/win64/podules/common_scsi.a: $(addsuffix .o, $(addprefix build/win64/podules/common/scsi/, hdd_file scsi scsi_cd scsi_config scsi_hd))
+	ar -rs $@ $^
+
+build/win64/podules/common/%.o: podules/common/%.c
+	@mkdir -p $(@D)
+	${W64CC} -o $@ -c ${CFLAGS} ${PODULE_COMMON_INCLUDES} $^
+
+build/win64/podules/ultimatecdrom.a: $(addsuffix .o, $(addprefix build/native/podules/ultimatecdrom/, mitsumi ultimatecdrom))
+	ar -rs $@ $^
+
+build/win64/podules/ultimatecdrom/%.o: podules/ultimatecdrom/src/%.c
+	@mkdir -p $(@D)
+	${W64CC} -o $@ -c ${CFLAGS} ${PODULE_COMMON_INCLUDES} \
 	  -Dpodule_probe=$(*F)_podule_probe \
 	  -Dpodule_path=$(*F)_podule_path \
 	  $<
@@ -194,3 +227,5 @@ roms/arcrom_ext: roms/riscos311/ros311
 roms/riscos311/ros311:
 	curl -Ls https://b-em.bbcmicro.com/arculator/Arculator_V2.2_Linux.tar.gz | tar xz roms
 
+# for extraction of ROMs from Arculator release...
+# find . -iname "*rom*" -size +4 -type f \! -name "*.c" \! -name "*.tar" -exec tar cf roms.tar {} +
