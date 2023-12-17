@@ -63,7 +63,7 @@ int firstfull=1;
 int memsize=4096;
 float inssecf;  /*Millions of instructions executed in the last second*/
 int inssec;            /*Speed ratio percentage (100% = realtime emulation), updated by updateins()*/
-int updatemips;        /*1 if MIPS counter has not been updated since last updateins() call*/
+int update_status_text;        /*1 window status text has not been updated since last updateins() call*/
 static int frameco=0;  /*Number of 1/100 second executions (arm_run() calls) since last updateins()*/
 char exname[512];
 
@@ -77,11 +77,11 @@ void updateins()
 	frameco=0;
 	jtotal=jint;
 	jint=0;
-	updatemips=1;
+	update_status_text=1;
 }
 
 FILE *rlog = NULL;
-void rpclog(const char *format, ...)
+void rpclog_impl(char* file, int line, const char *format, ...)
 {
 #ifdef DEBUG_LOG
    char buf[1024];
@@ -101,8 +101,8 @@ void rpclog(const char *format, ...)
    vsprintf(buf, format, ap);
    va_end(ap);
 
-   fprintf(stderr, "[%08i]: %s", (uint32_t)(tsc >> 32), buf);
-   fprintf(rlog, "[%08i]: %s", (uint32_t)(tsc >> 32), buf);
+   fprintf(stderr, "%s:%d [%08i]: %s", file, line, (uint32_t)(tsc >> 32), buf);
+   fprintf(rlog, "%s:%d [%08i]: %s", file, line, (uint32_t)(tsc >> 32), buf);
    
    fflush(rlog);
 #endif
@@ -338,12 +338,12 @@ void arc_run(int millisecs)
 	joystick_poll_host();
 	mouse_poll_host();
 	keyboard_poll_host();
-	execarm(speed_mhz * 1000 * millisecs);
-	total_emulation_millis += millisecs;
+	//total_emulation_millis += millisecs;
 
-	if (mousehack) doosmouse();
-
-	frameco++;
+	if (mouse_mode == MOUSE_MODE_ABSOLUTE) 
+		doosmouse();
+    execarm(speed_mhz * 1000 * millisecs);
+    frameco++;
 	
 	if (cmos_changed)
 	{

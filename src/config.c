@@ -704,7 +704,7 @@ void loadconfig()
 		machine[0] = 0;
 	machine_type = get_machine_type(machine);
 	soundena = config_get_int(CFG_GLOBAL, NULL, "sound_enable", 1);
-	display_mode = config_get_int(CFG_MACHINE, NULL, "display_mode", DISPLAY_MODE_NO_BORDERS);
+    display_mode = config_get_int(CFG_MACHINE, NULL, "display_mode", DISPLAY_MODE_NATIVE_BORDERS);
 	arm_cpu_type = config_get_int(CFG_MACHINE, NULL, "cpu_type", 0);
 	memc_type = config_get_int(CFG_MACHINE, NULL, "memc_type", 0);
 	fpaena = config_get_int(CFG_MACHINE, NULL, "fpa", 0);

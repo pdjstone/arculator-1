@@ -1,7 +1,7 @@
 ######################################################################
 
 SERVE_IP   ?= localhost
-SERVE_PORT ?= 3010
+SERVE_PORT ?= 3020
 
 # Only "LINUX" tested for now
 INCLUDE_LINUX := 1
@@ -11,28 +11,35 @@ INCLUDE_LINUX := 1
 # Enable if you like, will fix this so dependencies are more automatic
 #BUILD_PODULES := ultimatecdrom common_sound common_cdrom common_eeprom common_scsi
 
+# Enable if you want to build a "full fat" version that includes ROMs, config and CMOS
+# FULL_FAT := 1
+
 ######################################################################
 
 SHELL     := bash
 BUILD_TAG := $(shell echo `git rev-parse --short HEAD`-`[[ -n $$(git status -s) ]] && echo 'dirty' || echo 'clean'` on `date --rfc-3339=seconds`)
 
 CC             ?= gcc
-CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}" -Isrc
-CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2
-LINKFLAGS      := -lz -lSDL2 -lm
-LINKFLAGS_WASM := -sUSE_SDL=2 -sALLOW_MEMORY_GROWTH=1 -sFORCE_FILESYSTEM -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js
-DATA           := ddnoise 
+CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}" -Isrc -Ibuild/generated-src
+CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2 -Ibuild/generated-src
+LINKFLAGS      := -lz -lSDL2 -lm -lGL -lGLU
+LINKFLAGS_WASM := -sUSE_SDL=2 -sALLOW_MEMORY_GROWTH=1 -sTOTAL_MEMORY=32768000 -sFORCE_FILESYSTEM -sUSE_WEBGL2=1 -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js -lz
+DATA           := ddnoise
 ifdef DEBUG
   CFLAGS += -D_DEBUG -DDEBUG_LOG -O0 -g3
   LINKFLAGS_WASM += -gsource-map
   BUILD_TAG +=  (DEBUG)
   $(info ❗BUILD_TAG="${BUILD_TAG}")
-  DATA += roms/riscos311/ros311 roms/arcrom_ext cmos arc.cfg
+  FULL_FAT = 1
 else
   CFLAGS += -O3 -flto
   LINKFLAGS += -flto
   $(info ❗BUILD_TAG="${BUILD_TAG}")
   $(info ❗Re-run make with DEBUG=1 if you want a debug build)
+endif
+
+ifdef FULL_FAT
+  DATA += roms/riscos311/ros311 roms/arcrom_ext cmos arc.cfg
 endif
 
 ######################################################################
@@ -48,7 +55,7 @@ OBJS := 82c711 82c711_fdc \
 	input_sdl2 ioc ioeb joystick keyboard \
 	lc main mem memc podules printer \
 	riscdev_hdfc romload sound sound_sdl2 \
-	st506 st506_akd52 timer vidc video_sdl2 wd1770 \
+	st506 st506_akd52 timer vidc video_sdl2gl wd1770 \
 	wx-sdl2-joystick \
     emscripten_main emscripten-console emscripten_podule_config podules-static
 
@@ -79,9 +86,17 @@ all:	native wasm
 clean:
 	rm -rf build
 
-serve: build/wasm/arculator.html
-	@echo "Now open >> http://${SERVE_IP}:${SERVE_PORT}/build/wasm/arculator.html << in your browser"
-	@python3 -mhttp.server -b ${SERVE_IP} ${SERVE_PORT}
+serve: wasm web/serve.js
+	node web/serve.js ${SERVE_IP} ${SERVE_PORT}
+
+######################################################################
+
+build/native/video_sdl2gl.o: build/generated-src/video.vert.c build/generated-src/video.frag.c
+build/wasm/video_sdl2gl.o: build/generated-src/video.vert.c build/generated-src/video.frag.c
+
+build/generated-src/%.c: src/%.glsl
+	@mkdir -p $(@D)
+	xxd -i $< $@
 
 ######################################################################
 
@@ -136,9 +151,8 @@ build/native/podules/ultimatecdrom/%.o: podules/ultimatecdrom/src/%.c
 wasm:	$(addprefix build/wasm/arculator.,html js wasm data data.js)
 
 build/wasm/arculator.wasm build/wasm/arculator.js: build/wasm/arculator.html
-build/wasm/arculator.html: ${OBJS_WASM}
-	emcc ${LINKFLAGS_WASM} ${OBJS_WASM} -o $@
-	sed -e "s/<script async/<script async type=\"text\/javascript\" src=\"arculator.data.js\"><\/script>&/" build/wasm/arculator.html >build/wasm/arculator_fix.html && mv build/wasm/arculator_fix.html build/wasm/arculator.html
+build/wasm/arculator.html: ${OBJS_WASM} web/shell.html
+	emcc ${LINKFLAGS_WASM} ${OBJS_WASM} --shell-file web/shell.html -o $@
 
 build/wasm/arculator.data.js: build/wasm/arculator.data
 build/wasm/arculator.data: ${DATA}
@@ -178,5 +192,5 @@ arc.cfg:
 ######################################################################
 roms/arcrom_ext: roms/riscos311/ros311
 roms/riscos311/ros311:
-	curl -s http://b-em.bbcmicro.com/arculator/Arculator_V2.1_Linux.tar.gz | tar xz roms
+	curl -Ls https://b-em.bbcmicro.com/arculator/Arculator_V2.2_Linux.tar.gz | tar xz roms
 

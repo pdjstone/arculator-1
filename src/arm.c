@@ -2536,18 +2536,18 @@ static void opSWI(uint32_t opcode)
 	if (debugon)
 		debug_trap(DEBUG_TRAP_SWI, opcode);
 
-	if (mousehack)
+	if ((opcode&0x1FFFF)==7 && armregs[0]==0x15 && (readmemb(armregs[1])==1))
 	{
-		// SWI 7 == OS_Word
-		if ((opcode&0x1FFFF)==7 && armregs[0]==0x15 && (readmemb(armregs[1])==1))
-		{
-			// OS_Word 21,1 - Define mouse coordinate bounding box
-			setmouseparams(armregs[1]);
-		}
-		else if ((opcode&0x1FFFF)==7 && armregs[0]==0x15 && (readmemb(armregs[1])==4))
+		setmousebounds(armregs[1]);
+	}
+
+	if (mouse_mode == MOUSE_MODE_ABSOLUTE)
+	{
+		
+		if ((opcode&0x1FFFF)==7 && armregs[0]==0x15 && (readmemb(armregs[1])==4))
 		{
 			// OS_Word 21,4 - Read unbuffered mouse position
-			getunbufmouse(armregs[1]);
+			//getunbufmouse(armregs[1]);
 		}
 		else if ((opcode&0x1FFFF)==7 && armregs[0]==0x15 && (readmemb(armregs[1])==3))
 		{
@@ -2558,6 +2558,9 @@ static void opSWI(uint32_t opcode)
 		{
 			// OS_Word 21,5 - Set pointer position
 			setmousepos(armregs[1]);
+		} else if ((opcode&0x1FFFF)==6 && armregs[0]==106) {
+			// OS_Byte 106 - Select pointer/activate mouse
+			setmousecursor(armregs[1]);
 		}
 	}
 
@@ -2571,11 +2574,11 @@ static void opSWI(uint32_t opcode)
 		hostfs(&state);
 		memmode = templ;
 	}
-	else if ((opcode&0xFFFF)==0x1C && mousehack)
+	/*else if ((opcode&0xFFFF)==0x1C && mouse_mode == MOUSE_MODE_ABSOLUTE)
 	{
 		getosmouse();
 		armregs[15]&=~VFLAG;
-	}
+	}*/
 	else
 		EXCEPTION_SWI();
 }

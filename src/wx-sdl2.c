@@ -21,6 +21,20 @@ static int win_dofullscreen = 0;
 static int win_dosetresize = 0;
 static int win_renderer_reset = 0;
 
+const char* get_mouse_ui_status_string() 
+{
+	if (mouse_mode == MOUSE_MODE_RELATIVE) {
+		if (mousecapture == 0) {
+			return "Click to capture mouse";
+		} else {
+			return "Press CTRL-END to release mouse";
+		}
+	} else if (mouse_mode == MOUSE_MODE_ABSOLUTE) {
+		return "Integrated mouse mode";
+	} 
+	return "";
+}
+
 void updatewindowsize(int x, int y)
 {
 	winsizex = (x*(video_scale + 1)) / 2;
@@ -33,7 +47,7 @@ static void sdl_enable_mouse_capture()
 	mouse_capture_enable();
 	SDL_SetWindowGrab(sdl_main_window, SDL_TRUE);
 	mousecapture = 1;
-	updatemips = 1;
+	update_status_text = 1;
 }
 
 static void sdl_disable_mouse_capture()
@@ -41,7 +55,7 @@ static void sdl_disable_mouse_capture()
 	SDL_SetWindowGrab(sdl_main_window, SDL_FALSE);
 	mouse_capture_disable();
 	mousecapture = 0;
-	updatemips = 1;
+	update_status_text = 1;
 }
 
 static volatile int quited = 0;
@@ -92,18 +106,19 @@ static int arc_main_thread(void *p)
 //                                quited = 1;
 				arc_stop_emulation();
 			}
-			if (e.type == SDL_MOUSEBUTTONUP)
+			if (e.type == SDL_MOUSEBUTTONDOWN && !mousecapture)
 			{
-				if (e.button.button == SDL_BUTTON_LEFT && !mousecapture)
+				if (e.button.button == SDL_BUTTON_LEFT && mouse_mode == MOUSE_MODE_RELATIVE)
 				{
 					rpclog("Mouse click -- enabling mouse capture\n");
 					sdl_enable_mouse_capture();
 				}
-				else if (e.button.button == SDL_BUTTON_RIGHT && !mousecapture)
-				{
-					arc_popup_menu();
-				}
 			}
+			if (e.button.button == SDL_BUTTON_RIGHT && (mouse_mode == MOUSE_MODE_RELATIVE || key[KEY_LCONTROL] || key[KEY_RCONTROL]))
+			{
+				arc_popup_menu();
+			}
+			
 			if (e.type == SDL_WINDOWEVENT)
 			{
 				switch (e.window.event)
@@ -204,15 +219,14 @@ static int arc_main_thread(void *p)
 			SDL_Delay(timer_offset);
 		}
 
-		if (updatemips)
+		if (update_status_text)
 		{
 			char s[80];
-
-			sprintf(s, "Arculator %s - %i%% - %s", VERSION_STRING, inssec, mousecapture ? "Press CTRL-END to release mouse" : "Click to capture mouse");
+			sprintf(s, "Arculator %s - %i%% - %s", VERSION_STRING, inssec, get_mouse_ui_status_string());
 			vidc_framecount = 0;
 			if (!fullscreen)
 				SDL_SetWindowTitle(sdl_main_window, s);
-			updatemips=0;
+			update_status_text=0;
 		}
 	}
 	rpclog("SHUTTING DOWN\n");

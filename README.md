@@ -14,17 +14,16 @@ What works:
 
 Not working or tested:
 
-* Podules
+* Podules (WIP, can be compiled statically)
 * Hard drives
 
 To build and test the Emscripten version:
 
 * Install [Emscripten](https://emscripten.org/docs/getting_started/downloads.html) which contains all the tools to build the WebAssembly version.
 * Activate Emscripten with e.g. `EMSDK_QUIET=1 source ~/emsdk/emsdk_env.sh`
-* Run `make -j8 serve`
-* (or `make -j8 serve DEBUG=1` if you want a slower debug build)
-* Open [http://localhost:8000/build/wasm/arculator.html](http://localhost:8000/build/arculator.html) to see the default Emscripten front-end which should boot RISC OS 3.
+* Run `make -j8 FULL_FAT=1 serve` (or `make -j8 DEBUG=1 serve` for a slower debug build)
+* Open [http://localhost:3020/](http://localhost:3020/) to see the default Emscripten front-end which should boot RISC OS 3.
 
-You can also build a native equivalent by running `make -j8 native DEBUG=1`.
+You can also build a native equivalent by running `make -j8 DEBUG=1 native`.
 
 We're working on a better front-end at the [Archimedes Live](https://github.com/pdjstone/archimedes-live) project. Join us!

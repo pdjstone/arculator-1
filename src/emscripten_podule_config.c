@@ -1,7 +1,7 @@
 #include "podules.h"
 #include <stddef.h>
 
-extern void rpclog(const char *format, ...);
+#include "arc.h"
 
 void *podule_config_get_current(void *window_p, int id)
 {

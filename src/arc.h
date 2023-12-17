@@ -13,7 +13,8 @@
 #include "debugger.h"
 
 /*Misc*/
-extern void rpclog(const char *format, ...);
+#define rpclog(...) rpclog_impl(__FILE__, __LINE__, __VA_ARGS__)
+extern void rpclog_impl(char *file, int line, const char *format, ...);
 extern void error(const char *format, ...);
 extern void fatal(const char *format, ...);
 void arc_print_error(const char *format, ...);
@@ -80,8 +81,7 @@ void arc_print_error(const char *format, ...);
 extern void arc_set_cpu(int cpu, int memc);
 extern void updatewindowsize(int x, int y);
 
-extern int updatemips,inssec;
-extern float inssecf;
+extern int update_status_text,inssec;
 
 /*ARM*/
 extern uint32_t armregs[16];
@@ -192,8 +192,13 @@ extern int fdctype;
 extern int readflash[4];
 
 
-/*Causes a databort during RISC OS 3.11 startup*/
-#define mousehack 0
+/* normal mouse input using relative movements send via keyboard controller */
+#define MOUSE_MODE_RELATIVE 1
+
+/* absolute mouse coordinates poked directly into OS memory, and mouse SWIs intercepted */
+#define MOUSE_MODE_ABSOLUTE 2
+
+extern int mouse_mode;
 
 extern char exname[512];
 
