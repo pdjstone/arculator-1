@@ -1,0 +1,15 @@
+# Build environment for arculator
+#
+# Build with: docker build -t arculator-build .
+# Run with: docker run -u $(id -u):$(id -g) -it --rm -v $(pwd):/src arculator-build
+FROM debian:bookworm
+
+VOLUME /src
+
+RUN apt update && apt -yy install xz-utils git gcc xxd make libsdl2-dev libz-dev libglu1-mesa-dev mingw-w64 mingw-w64-x86-64-dev 
+RUN apt -yy install libz-mingw-w64-dev
+RUN git clone https://github.com/emscripten-core/emsdk.git /emsdk
+RUN cd /emsdk && ./emsdk install latest && ./emsdk activate latest
+ENV EMSDK=/emsdk
+ENV PATH=/emsdk:/emsdk/upstream/emscripten:$PATH
+WORKDIR /src
