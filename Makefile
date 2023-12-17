@@ -147,7 +147,7 @@ SDL_VERSION=2.28.5
 SDL2:
 	@mkdir -p $(@D)
 	curl -L https://github.com/libsdl-org/SDL/releases/download/release-${SDL_VERSION}/SDL2-devel-${SDL_VERSION}-mingw.tar.gz | tar xz
-	ln -s   SDL2-${SDL_VERSION}/x86_64-w64-mingw32 SDL2
+	ln -s   SDL2-${SDL_VERSION} SDL2
 	ln -s . SDL2-${SDL_VERSION}/x86_64-w64-mingw32/include/SDL2/SDL2
 	cp SDL2/x86_64-w64-mingw32/bin/SDL2.dll build/win64/SDL2.dll
 
