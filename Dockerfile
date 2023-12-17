@@ -11,5 +11,6 @@ RUN apt -yy install libz-mingw-w64-dev
 RUN git clone https://github.com/emscripten-core/emsdk.git /emsdk
 RUN cd /emsdk && ./emsdk install latest && ./emsdk activate latest
 ENV EMSDK=/emsdk
+ENV EM_CACHE=/tmp/emcache
 ENV PATH=/emsdk:/emsdk/upstream/emscripten:$PATH
 WORKDIR /src
