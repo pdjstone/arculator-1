@@ -1,22 +1,15 @@
 /*Arculator 2.2 by Sarah Walker
-  'Flexible' ROM loader*/
-#ifdef WIN32
-#include <io.h>
-#else
-#include <dirent.h>
-#endif
+  ROM loader*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include "arc.h"
 #include "config.h"
 #include "mem.h"
+#include "embed.h"
 
-char romfns[17][256];
-int firstromload=1;
-char olddir[512];
-
+/* re-enable this code when we can support it in the front-end */
+#if 0
 int loadertictac()
 {
 	int c,d;
@@ -30,7 +23,7 @@ int loadertictac()
 		{
 			sprintf(s,"%02i",(c|d)+1);
 //                        rpclog("Opening %s\n",s);
-			f[d]=fopen(s,"rb");
+			f[d]=embed_fopen(s,"rb");
 			if (!f[d])
 			{
 //                                rpclog("File missing!\n");
@@ -70,7 +63,7 @@ int loadpoizone()
 		{
 			sprintf(s,"p_son%02i.bin",(c|d)+1);
 //                        rpclog("Opening %s\n",s);
-			f[d]=fopen(s,"rb");
+			f[d]=embed_fopen(s,"rb");
 			if (!f[d])
 			{
 //                                rpclog("File missing!\n");
@@ -90,154 +83,47 @@ int loadpoizone()
 	ignore_result(chdir(olddir));
 	return 0;
 }
+#endif
 
-int ucase(char c)
-{
-	if (c>='a' && c<='z') c-=32;
-	return c;
-}
-
+static int romAllocated=0;
 int loadrom()
 {
-	FILE *f;
-	//int finished=0;
-	int file=0;
-	int c,d,e;
-	int len,pos=0;
-#ifdef WIN32
-	intptr_t find_file;
-#endif
-//        char s[256];
-	char fn[512];
-	char s[512];
-	char *ext;
-#ifdef WIN32
-	struct _finddata_t finddata;
-#else
-	DIR *dirp;
-	struct dirent *dp;
-#endif
-	uint8_t *romb = (uint8_t *)rom;
-//        rpclog("Loading ROM set %i\n",romset);
-	if (firstromload)
-	{
-		ignore_result(getcwd(olddir,511));
-		firstromload=0;
-	}
-	else
-	{
-		ignore_result(chdir(olddir));
-	}
-	snprintf(s, sizeof(s), "roms/%s", config_get_romset_name(romset));
-	append_filename(fn, exname, s, sizeof(fn));
+    char name[256];    
+    sprintf(name, "roms/%s.rom", config_get_romset_name(romset));
 
-	rpclog("Loading ROM set %d from %s\n",romset, fn);
-	if (chdir(fn) != 0)
-	{
-		perror(fn);
-		return -1;
-	}
+    if (romAllocated)
+    {
+        free(rom);
+        romAllocated = 0;
+        mem_setrom(NULL);
+    }
 
-#ifdef WIN32
-    int finished=0;
-	find_file = _findfirst("*.*", &finddata);
-	if (find_file == -1)
-	{
-		chdir(olddir);
-//                rpclog("No files found!\n");
-		return -1;
-	}
-	while (!finished && file<16)
-	{
-		ext = (char *)get_extension(finddata.name);
-		if (stricmp(ext,"txt") && strcmp(finddata.name, ".") && strcmp(finddata.name, ".."))
-		{
-//                        rpclog("Found %s\n",ff.name);
-			strcpy(romfns[file],finddata.name);
-			file++;
-		}
-//                else
-//                   rpclog("Skipping %s\n",ff.name);
-		finished = _findnext(find_file, &finddata);
-	}
-	_findclose(find_file);
-#else
-	dirp = opendir(".");
-	if (!dirp)
-	{
-		perror("opendir: ");
-#ifndef RELEASE_BUILD
-		fatal("Can't open rom dir %s\n", fn);
-#endif
-	}
-	else
-	{
-		while (((dp = readdir(dirp)) != NULL) && file<16)
-		{
-			if (dp->d_type != DT_REG && dp->d_type != DT_LNK)
-				continue;
-			if (dp->d_name[0] != '.')
-			{
-				ext=get_extension(dp->d_name);
-				if (strcasecmp(ext,"txt"))
-				{
-					rpclog("Found %s\n", dp->d_name);
-					strcpy(romfns[file], dp->d_name);
-					file++;
-				}
-			}
-//                        else
-//                                rpclog("Skipping %s\n",ff.name);
-		}
-		(void)closedir(dirp);
-	}
-#endif
-	if (file==0)
-	{
-		ignore_result(chdir(olddir));
-//                rpclog("No files found!\n");
-		return -1;
-	}
-	for (c=0;c<file;c++)
-	{
-		for (d=0;d<file;d++)
-		{
-			if (c>d)
-			{
-				e=0;
-				while (ucase(romfns[c][e])==ucase(romfns[d][e]) && romfns[c][e])
-				      e++;
-				if (ucase(romfns[c][e])<ucase(romfns[d][e]))
-				{
-					memcpy(romfns[16],romfns[c],256);
-					memcpy(romfns[c],romfns[d],256);
-					memcpy(romfns[d],romfns[16],256);
-				}
-			}
-		}
-	}
-	for (c=0;c<file;c++)
-	{
-		f=fopen(romfns[c],"rb");
-		if (!f) {
-			perror(romfns[c]);
-			return -1;
-		}
-		fseek(f,-1,SEEK_END);
-		len=ftell(f)+1;
-		fseek(f,0,SEEK_SET);
-//                rpclog("Loading %s %08X %08X\n",romfns[c],len,pos);
-		if ((pos + len) > 0x200000)
-			len = 0x200000 - pos;
-		if (len > 0)
-			ignore_result(fread(&romb[pos],len,1,f));
-		fclose(f);
-		pos+=len;
-		if (pos >= 0x200000)
-			break;
-	}
-	ignore_result(chdir(olddir));
-//        rpclog("Successfully loaded!\n");
+    char* embeddedRom = embed_data(name, NULL);
+    if (embeddedRom) {
+        rpclog("Found ROM embedded: %s\n", name);
+        mem_setrom((uint32_t*) embeddedRom);
+        return 0;
+    }
+
+    FILE *f = fopen(name, "rb");
+    if (!f) {
+        perror(name);
+        return -1;
+    }
+
+    mem_setrom(malloc(0x200000));
+    if (!rom)
+        abort();
+
+    rpclog("Loading ROM: %s\n", name);
+
+    if (fread(rom, 0x200000, 1, f) != 1) {
+        free(rom);
+        mem_setrom(NULL);
+        perror(name);
+        return -1;
+    }
+
 	return 0;
 }
 
@@ -246,20 +132,13 @@ int romset_available_mask = 0;
 /*Establish which ROMs are available*/
 int rom_establish_availability()
 {
-	int old_romset = romset;
-
-	rom = malloc(4 * 1024 * 1024);
-
-	for (romset = 0; romset < ROM_MAX; romset++)
+	for (int s = 0; s < ROM_MAX; s++)
 	{
-		if (!loadrom())
-			romset_available_mask |= (1 << romset);
+        char name[256];
+        sprintf(name, "roms/%s.rom", config_get_romset_name(romset));
+        if (embed_data(name, NULL) != NULL)
+            romset_available_mask |= (1 << romset);
 	}
-
-	free(rom);
-	rom = NULL;
-
-	romset = old_romset;
 
 	return (!romset_available_mask);
 }
@@ -270,6 +149,9 @@ void rom_load_5th_column(void)
 	char fn[512];
 
 	rpclog("rom_load_5th_column: machine_type=%i\n", machine_type);
+    if (rom_5th_column == NULL) {
+        rom_5th_column = malloc(0x20000);
+    }
 	memset(rom_5th_column, 0xff, 0x20000);
 
 	strcpy(fn, _5th_column_fn);
@@ -279,10 +161,20 @@ void rom_load_5th_column(void)
 		append_filename(fn, exname, "roms/A4 5th Column.rom", sizeof(fn));
 
 	rpclog("  %s\n", fn);
-	f = fopen(fn, "rb");
+    char* embeddedRom = embed_data("roms/A4 5th Column.rom", NULL);
+    if (embeddedRom) {
+        rpclog("Found 5th column ROM embedded: %s\n", fn);
+        free(rom_5th_column);
+        rom_5th_column = (uint8_t*)embeddedRom;
+        return;
+    }
+
+	f = embed_fopen(fn, "rb");
 	if (f)
 	{
-		ignore_result(fread(rom_5th_column, 0x20000, 1, f));
+		if (fread(rom_5th_column, 0x20000, 1, f) != 1) {
+            perror(fn);
+        }
 		fclose(f);
 	}
 	else
@@ -294,8 +186,15 @@ void rom_load_arc_support_extrom(void)
 	char fn[512];
 	FILE *f;
 
+    char *embeddedRom = embed_data("roms/arcrom_ext", NULL);
+    if (embeddedRom) {
+        rpclog("Found ARC support ROM embedded: %s\n", fn);
+        rom_arcrom = (uint8_t *)embeddedRom;
+        return;
+    }
+
 	append_filename(fn, exname, "roms/arcrom_ext", 511);
-	f = fopen(fn, "rb");
+	f = embed_fopen(fn, "rb");
 	if (!f) {
 		perror("roms/arcrom_ext");
 		return;

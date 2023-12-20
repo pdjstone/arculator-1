@@ -88,7 +88,7 @@ void rpclog_impl(char* file, int line, const char *format, ...)
 
    if (!rlog)
    {
-	   rlog=fopen("arclog.txt","wt");
+	   rlog=real_fopen("arclog.txt","wt");
 	   if (!rlog)
 	   {
 		   perror("fopen");

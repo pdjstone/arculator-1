@@ -20,3 +20,7 @@ emscripten_assets/
 emscripten_out/
 SDL2
 SDL2*
+*rom
+*.ROM
+*.BIN
+

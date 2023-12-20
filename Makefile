@@ -18,12 +18,13 @@ BUILD_TAG := $(shell echo `git rev-parse --short HEAD`-`[[ -n $$(git status -s) 
 
 CC             ?= gcc
 W64CC          := x86_64-w64-mingw32-gcc
-CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}" -Isrc -Ibuild/generated-src
+CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}" -Isrc -Ibuild/generated-src -include embed.h
 CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2 -Ibuild/generated-src
 LINKFLAGS      := -lz -lSDL2 -lm -lGL -lGLU
 LINKFLAGS_W64  := -Wl,-Bstatic -lz -Wl,-Bdynamic -lSDL2 -lm -lopengl32 -lglu32
 LINKFLAGS_WASM := -sUSE_SDL=2 -sALLOW_MEMORY_GROWTH=1 -sTOTAL_MEMORY=32768000 -sFORCE_FILESYSTEM -sUSE_WEBGL2=1 -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js
-DATA           := ddnoise
+DATA           := ddnoise src/video.vert.glsl src/video.frag.glsl
+
 ifdef DEBUG
   CFLAGS += -D_DEBUG -DDEBUG_LOG -O0 -g3
   LINKFLAGS_WASM += -gsource-map
@@ -39,7 +40,7 @@ else
 endif
 
 ifdef FULL_FAT
-  DATA += roms/riscos311/ros311 roms/arcrom_ext cmos arc.cfg
+  DATA += roms/riscos311.rom roms/arcrom_ext cmos arc.cfg
 endif
 
 ######################################################################
@@ -57,7 +58,8 @@ OBJS := 82c711 82c711_fdc \
 	riscdev_hdfc romload sound sound_sdl2 \
 	st506 st506_akd52 timer vidc video_sdl2gl wd1770 \
 	wx-sdl2-joystick \
-    emscripten_main emscripten-console emscripten_podule_config podules-static
+    emscripten_main emscripten-console emscripten_podule_config podules-static \
+	embed c-embed
 
 PODULE_COMMON_INCLUDES = $(addprefix -I, $(sort $(dir $(wildcard podules/common/*/*.h))))
 PODULE_DEFINES = $(addprefix -DPODULE_, $(filter-out common_%, $(BUILD_PODULES)))
@@ -85,13 +87,9 @@ serve: wasm web/serve.js
 
 ######################################################################
 
-build/native/video_sdl2gl.o: build/generated-src/video.vert.c build/generated-src/video.frag.c
-build/wasm/video_sdl2gl.o: build/generated-src/video.vert.c build/generated-src/video.frag.c
-build/win64/video_sdl2gl.o: build/generated-src/video.vert.c build/generated-src/video.frag.c
-
-build/generated-src/%.c: src/%.glsl
+build/generated-src/c-embed.c: build/native/c-embed-build ${DATA} ${ROMS}
 	@mkdir -p $(@D)
-	xxd -i $< $@
+	./build/native/c-embed-build ${DATA} > $@
 
 ######################################################################
 
@@ -99,6 +97,13 @@ native:	build/native/arculator
 
 build/native/arculator: ${OBJS_NATIVE}
 	${CC} ${OBJS_NATIVE} -o $@ ${LINKFLAGS}
+
+build/native/c-embed-build: src/c-embed-build.c
+	@mkdir -p $(@D)
+	${CC} -Wall -o $@ $<
+
+build/native/c-embed.o: build/generated-src/c-embed.c
+	${CC} -c ${CFLAGS} $< -o $@
 
 build/native/%.o: src/%.c
 	@mkdir -p $(@D)
@@ -136,6 +141,9 @@ win64:	build/win64/arculator.exe build/win64/SDL2.dll
 
 build/win64/arculator.exe: ${OBJS_WIN64}
 	${W64CC} ${OBJS_WIN64} -o $@ ${LINKFLAGS_W64} `./SDL2/x86_64-w64-mingw32/bin/sdl2-config --libs`
+
+build/win64/c-embed.o: build/generated-src/c-embed.c
+	${W64CC} -c ${CFLAGS} $< -o $@
 
 build/win64/%.o: src/%.c SDL2
 	@mkdir -p $(@D)
@@ -189,7 +197,10 @@ build/wasm/arculator.html: ${OBJS_WASM} web/shell.html
 
 build/wasm/arculator.data.js: build/wasm/arculator.data
 build/wasm/arculator.data: ${DATA}
-	${EMSDK}/upstream/emscripten/tools/file_packager $@ --js-output=$@.js --preload $^
+	${EMSDK}/upstream/emscripten/tools/file_packager $@ --js-output=$@.js --preload $^	
+
+build/wasm/c-embed.o: build/generated-src/c-embed.c
+	emcc -c ${CFLAGS} $< -o $@
 
 build/wasm/%.o: src/%.c
 	@mkdir -p $(@D)
@@ -223,9 +234,18 @@ arc.cfg:
 	touch arc.cfg
 
 ######################################################################
-roms/arcrom_ext: roms/riscos311/ros311
-roms/riscos311/ros311:
-	curl -Ls https://b-em.bbcmicro.com/arculator/Arculator_V2.2_Linux.tar.gz | tar xz roms
 
-# for extraction of ROMs from Arculator release...
-# find . -iname "*rom*" -size +4 -type f \! -name "*.c" \! -name "*.tar" -exec tar cf roms.tar {} +
+build/src-generated/c-embed.c: ${DATA}
+	@mkdir -p $(@D)
+	./build/native/c-embed-build ${DATA} > $@.tmp && mv $@.tmp $@
+
+# Upstream Arculator releases allow the user to put unpredictably-named ROMs 
+# inside predictably-named directories. We can cut a lot of code complexity
+# by just renaming those randomly-named ROMs to match those of the directories
+# (there's only ever one ROM per folder). So here's how we do that.
+#
+# There is also arcrom_ext and "A4 5th Column.rom" which can stay as-is.
+#
+roms/arcrom_ext roms/riscos311.rom:
+	curl -Ls https://b-em.bbcmicro.com/arculator/Arculator_V2.2_Linux.tar.gz | tar xz roms
+	find roms roms/podules -mindepth 2 -maxdepth 2 -size +4 -type f -printf "%p\0%h.rom\0" | xargs -L2 -0 mv -n -v
