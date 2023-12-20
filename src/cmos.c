@@ -119,6 +119,11 @@ void cmos_save()
 
 	LOG_CMOS("Writing %s\n", fn);
 	cmosf = fopen(fn, "wb");
+    if (!cmosf)
+    {
+        rpclog("Couldn't write CMOS file %s\n", fn);
+        return;
+    }
 	fwrite(cmos.ram, 256, 1, cmosf);
 	fclose(cmosf);
 }
