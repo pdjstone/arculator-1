@@ -103,6 +103,7 @@ build/native/c-embed-build: src/c-embed-build.c
 	${CC} -Wall -o $@ $<
 
 build/native/c-embed.o: build/generated-src/c-embed.c
+	@mkdir -p $(@D)
 	${CC} -c ${CFLAGS} $< -o $@
 
 build/native/%.o: src/%.c
@@ -143,6 +144,7 @@ build/win64/arculator.exe: ${OBJS_WIN64}
 	${W64CC} ${OBJS_WIN64} -o $@ ${LINKFLAGS_W64} `./SDL2/x86_64-w64-mingw32/bin/sdl2-config --libs`
 
 build/win64/c-embed.o: build/generated-src/c-embed.c
+	@mkdir -p $(@D)
 	${W64CC} -c ${CFLAGS} $< -o $@
 
 build/win64/%.o: src/%.c SDL2
@@ -200,6 +202,7 @@ build/wasm/arculator.data: ${DATA}
 	${EMSDK}/upstream/emscripten/tools/file_packager $@ --js-output=$@.js --preload $^	
 
 build/wasm/c-embed.o: build/generated-src/c-embed.c
+	@mkdir -p $(@D)
 	emcc -c ${CFLAGS} $< -o $@
 
 build/wasm/%.o: src/%.c
