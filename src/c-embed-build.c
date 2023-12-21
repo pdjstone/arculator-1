@@ -21,8 +21,6 @@ FILE* out = NULL;
 u_int32_t pos = 0;  // Current Position
 
 void cembed(char* filename){
-  char *base = filename+strlen(filename)-1;
-
   file = fopen(filename, "rb");  // Open the Embed Target File
   if(file == NULL){
     printf("Failed to open file %s.", filename);
@@ -33,7 +31,7 @@ void cembed(char* filename){
   EMAP map = {hash(filename), pos, (u_int32_t)ftell(file)};
   rewind (file);
 
-  fprintf(stderr, "mapping %s and %s\n", filename, base);
+  fprintf(stderr, "embedding %s\n", filename);
 
   char* buf = malloc(map.size);
   if(buf == NULL){
