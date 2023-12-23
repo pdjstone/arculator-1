@@ -58,6 +58,13 @@ static void mem_recalc_mem_spd_multi(void)
 	mem_spd_multi_32 = 32 * mem_spd_multi;
 }
 
+void mem_setrom(uint32_t* ptr) {
+    rom = ptr;
+    for (int c = 0x3800; c < 0x4000; c++)
+        mempoint[c] = rom ? ((uint8_t *)&rom[(c & 0x1FF) << 10]) - (c << 12) : NULL;
+    mempoint[0] = (uint8_t *)rom;
+}
+
 void initmem(int memsize)
 {
 	int c;
@@ -65,21 +72,19 @@ void initmem(int memsize)
 	rpclog("initmem %i\n", memsize);
 	realmemsize=memsize;
 	ram=(uint32_t *)malloc(memsize*1024);
-	rom=(uint32_t *)malloc(0x200000);
-	rom_arcrom = malloc(0x10000);
-	rom_5th_column = (uint8_t *)malloc(0x20000);
+    // memory will be allocated in romload.c if necessary, then set with mem_setrom
+    rom = NULL;
+    rom_arcrom = NULL;
+    rom_5th_column = NULL;
 	for (c=0;c<0x4000;c++) memstat[c]=0;
 	resetpagesize(0);
 	for (c = 0x3800; c < 0x3fc0; c++)
 		memstat[c] = 5;
-	for (c = 0x3800; c < 0x4000; c++)
-		mempoint[c] = ((uint8_t *)&rom[(c & 0x1FF) << 10]) - (c << 12);
 	for (c = 0x3fc0; c < 0x4000; c++) /*Map support ROM at end of address space*/
 		memstat[c] = support_rom_enabled ? 0 : 5;
 
 	memset(ram,0,memsize*1024);
 	memstat[0]=1;
-	mempoint[0] = (uint8_t *)rom;
 	realmemsize=memsize;
 
 

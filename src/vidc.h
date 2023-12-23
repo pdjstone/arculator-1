@@ -1,6 +1,8 @@
 #ifndef _VIDC_H_
 #define _VIDC_H_
 
+#include <stdint.h>
+
 extern int vidc_displayon;
 
 extern void vidc_redovideotiming();
@@ -27,18 +29,17 @@ int vidc_cursor_visible();
 
 void vidc_debug_print(char *s);
 
-
 typedef struct
 {
 	int w, h;
 	uint8_t *dat;
 	uint8_t *line[0];
-} BITMAP;
+} vidc_bitmap_t;
 
-extern BITMAP *screen;
+extern vidc_bitmap_t *screen;
 
-BITMAP *create_bitmap(int w, int h);
-void destroy_bitmap(BITMAP *b);
+vidc_bitmap_t *create_bitmap(int w, int h);
+void destroy_bitmap(vidc_bitmap_t *b);
 
 typedef struct
 {
@@ -50,6 +51,6 @@ typedef RGB PALETTE[256];
 #define makecol(r, g, b)    ((b) | ((g) << 8) | ((r) << 16))
 #define makecol32(r, g, b)  ((b) | ((g) << 8) | ((r) << 16))
 
-void clear(BITMAP *b);
+void clear(vidc_bitmap_t *b);
 
 #endif /* _VIDC_H_ */

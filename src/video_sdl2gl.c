@@ -24,14 +24,13 @@
  */
 
 #define GL_GLEXT_PROTOTYPES
+
+#ifndef __EMSCRIPTEN__
+#  include "gl.h"
+#endif
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
-
-#if WIN32
-#define BITMAP __win_bitmap
-#include <windows.h>
-#undef BITMAP
-#endif
 
 #include <stdio.h>
 #include <string.h>
@@ -183,22 +182,25 @@ int video_renderer_init(void *unused)
     }
     CHECK_GL_ERROR;
 
+    struct { GLchar const* src; GLint len; } vert = {
+        embed_data("src/video.vert.glsl", NULL),
+        embed_data_size("src/video.vert.glsl")
+    };
+    struct { GLchar const* src; GLint len; } frag = {
+        embed_data("src/video.frag.glsl", NULL),
+        embed_data_size("src/video.frag.glsl")
+    };
+
     /* Compile the vertex and fragment shaders */
 
-#include "video.vert.c"
-#include "video.frag.c"
-
-    GLchar const *sources[] = {(const GLchar *)&src_video_vert_glsl, (const GLchar *) &src_video_frag_glsl};
-    GLint lengths[] = {src_video_vert_glsl_len, src_video_frag_glsl_len};
-
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER); CHECK_GL_ERROR;
-    glShaderSource(vertexShader, 1, sources, lengths);
+    glShaderSource(vertexShader, 1, &vert.src, &vert.len);
     CHECK_GL_ERROR;
     glCompileShader(vertexShader); 
     CHECK_GL_COMPILE_ERROR(glGetShaderiv, vertexShader, GL_COMPILE_STATUS);
 
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER); CHECK_GL_ERROR;
-    glShaderSource(fragmentShader, 1, sources+1, lengths+1);
+    glShaderSource(fragmentShader, 1, &frag.src, &frag.len);
     CHECK_GL_ERROR;
     glCompileShader(fragmentShader); CHECK_GL_ERROR;
     CHECK_GL_COMPILE_ERROR(glGetShaderiv, fragmentShader, GL_COMPILE_STATUS);
@@ -306,7 +308,7 @@ void video_renderer_close()
 }
 
 /*Update display texture from memory bitmap src.*/
-void video_renderer_update(BITMAP *src, int src_x, int src_y, int dest_x, int dest_y, int w, int h)
+void video_renderer_update(vidc_bitmap_t *src, int src_x, int src_y, int dest_x, int dest_y, int w, int h)
 {
     if (skip_video_render) {
         return;
