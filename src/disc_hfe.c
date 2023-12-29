@@ -115,18 +115,11 @@ void hfe_init()
 	memset(hfe, 0, sizeof(hfe));
 }
 
-void hfe_load(int drive, char *fn)
+void hfe_load(int drive, FILE *f, int fwriteprot)
 {
-	writeprot[drive] = 0;
+	writeprot[drive] = fwriteprot;
 	memset(&hfe[drive], 0, sizeof(hfe_t));
-	hfe[drive].f = fopen(fn, "rb+");
-	if (!hfe[drive].f)
-	{
-		hfe[drive].f = fopen(fn, "rb");
-		if (!hfe[drive].f)
-			return;
-		writeprot[drive] = 1;
-	}
+	hfe[drive].f = f;
 	hfe_load_header(&hfe[drive], drive);
 	hfe[drive].mfm.write_protected = writeprot[drive];
 	hfe[drive].mfm.writeback = hfe_writeback;

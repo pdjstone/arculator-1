@@ -35,12 +35,10 @@ void fdi_init()
 	fdi[0].f = fdi[1].f = fdi[2].f = fdi[3].f = 0;
 }
 
-void fdi_load(int drive, char *fn)
+void fdi_load(int drive, FILE *f, int fwriteprot)
 {
-	writeprot[drive] = 1;
-	fdi[drive].f = fopen(fn, "rb");
-	if (!fdi[drive].f)
-		return;
+	writeprot[drive] = fwriteprot;
+	fdi[drive].f = f;
 	fdi[drive].h = fdi2raw_header(fdi[drive].f);
 //        if (!fdih[drive]) printf("Failed to load!\n");
 	fdi[drive].lasttrack = fdi2raw_get_last_track(fdi[drive].h);

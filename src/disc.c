@@ -2,6 +2,8 @@
   Disc support*/
 #include <stdio.h>
 #include <string.h>
+#include "zip.h"
+
 #include "arc.h"
 #include "config.h"
 
@@ -54,13 +56,15 @@ emu_timer_t *fdc_timer;
 int fdc_overridden;
 int fdc_ready;
 
-static struct
+typedef struct
 {
 	char *ext;
-	void (*load)(int drive, char *fn);
+	void (*load)(int drive, FILE *f, int fwriteprot);
 	int size;
 }
-loaders[]=
+disc_loader_t;
+
+static disc_loader_t loaders[]=
 {
 	{"SSD", ssd_load,         80*10* 256},
 	{"DSD", dsd_load,       2*80*10* 256},
@@ -78,87 +82,165 @@ loaders[]=
 	{0,0,0}
 };
 
-static int driveloaders[4];
+static disc_loader_t* disc_loader_for(char *filename, int size)
+{
+    char *ext = get_extension(filename);
+    if (!ext)
+        return NULL;
+
+    for (int c=0; loaders[c].ext; c++)
+    {
+        if (!strcasecmp(ext, loaders[c].ext) && (size <= loaders[c].size || loaders[c].size == -1))
+        {
+            rpclog("Loading as %s\n", ext);
+            return &loaders[c];
+        }
+    }
+    return NULL;
+    //        printf("Couldn't load %s %s\n",fn,p);
+}
 
 void disc_load(int drive, char *fn)
 {
-	int c = 0, size;
-	char *p;
-	FILE *f;
+    disc_loader_t *loader = NULL;
+	long long size;
+	FILE *f, *fz;
+    char sig[4];
+    int fwriteprot = 0;
+
 	rpclog("disc_load %i %s\n", drive, fn);
 //        setejecttext(drive, "");
 	if (!fn) return;
-	p = get_extension(fn);
-	if (!p) return;
 //        setejecttext(drive, fn);
-	rpclog("Loading :%i %s %s\n", drive, fn,p);
-	f = fopen(fn, "rb");
-	if (!f) return;
-	fseek(f, -1, SEEK_END);
+	rpclog("Loading :%i %s\n", drive, fn);
+
+	f = fopen(fn, "r+");
+	if (!f) {
+        f = fopen(fn, "r");
+        if (!f) {
+            rpclog("Couldn't open %s\n", fn);
+            return;
+        }
+        fwriteprot = 1;
+    }
+    if (fread(sig, 1, 4, f) < 4 || fseek(f, -1, SEEK_END) < 0)
+    {
+        rpclog("Couldn't read/seek %s\n", fn);
+        fclose(f);
+        return;
+    }
 	size = ftell(f) + 1;
-	fclose(f);
-	while (loaders[c].ext)
-	{
-		if (!strcasecmp(p, loaders[c].ext) && (size <= loaders[c].size || loaders[c].size == -1))
-		{
-			rpclog("Loading as %s\n", p);
-			driveloaders[drive] = c;
-			loaders[c].load(drive, fn);
-			return;
-		}
-		c++;
-	}
-//        printf("Couldn't load %s %s\n",fn,p);
-	/*No extension match, so guess based on image size*/
-	rpclog("Size %i\n", size);
+
+    if (memcmp(sig, "PK\3\4", 4) == 0)
+    {
+        struct zip_t* zip = zip_open(fn, 0, 'r');
+        
+        if (!zip) {
+            rpclog("Couldn't open %s as zip\n", fn);
+            return;
+        }
+        int entries = zip_entries_total(zip);
+        for (int i = 0; i < entries && !loader; i++)
+        {
+            if (zip_entry_openbyindex(zip, i) < 0) {
+                rpclog("Couldn't open %s as zip entry %i\n", fn, i);
+                zip_close(zip);
+                fclose(f);
+                return;
+            }
+            if (zip_entry_isdir(zip) == 0) {
+                const char *name2 = zip_entry_name(zip);
+                unsigned long long size2 = zip_entry_size(zip);
+                loader = disc_loader_for((char*) name2, size2);
+
+                if (size2 > 10000000) {
+                    rpclog("Skipping %s - too big to be a floppy\n", name2);
+                    loader = NULL;
+                }
+            }
+            zip_entry_close(zip);
+        }
+
+
+        if (loader) 
+        {
+            void *buf;
+            size_t bufsize;
+            rpclog("Found loader %s for %s\n", loader->ext, fn);
+            zip_entry_read(zip, &buf, &bufsize);
+            zip_close(zip);
+            fclose(f);
+            fz = fmemopen(buf, bufsize, "r");
+            if (!fz) {
+                rpclog("fmemopen failed?\n");
+                return;
+            }
+        } 
+        else 
+        {
+            rpclog("No loader found for any files in zip\n", fn);
+            zip_close(zip);
+            fclose(f);
+            return;
+        }
+    }
+    else
+    {
+        loader = disc_loader_for(fn, size);
+        fz = f;
+    }
+
+    if (loader) {
+        rpclog("Loading as %s\n", loader->ext);
+        loader->load(drive, fz, fwriteprot);
+        return;
+    }
+
+    /*No extension match, so guess based on image size*/
+    rpclog("Size %i\n", size);
 	if (size == (1680*1024)) /*1680k DOS - 80*2*21*512*/
 	{
-		driveloaders[drive] = 3;
-		adf_loadex(drive, fn, 21, 512, 1, 0, 2, 1);
+		adf_loadex(drive, fz, fwriteprot, 21, 512, 1, 0, 2, 1);
 		return;
 	}
 	if (size == (1440*1024)) /*1440k DOS - 80*2*18*512*/
 	{
-		driveloaders[drive] = 3;
-		adf_loadex(drive, fn, 18, 512, 1, 0, 2, 1);
-		return;
+        adf_loadex(drive, fz, fwriteprot, 18, 512, 1, 0, 2, 1);
+        return;
 	}
 	if (size == (800*1024)) /*800k ADFS/DOS - 80*2*5*1024*/
 	{
-		driveloaders[drive] = 2;
-		loaders[2].load(drive, fn);
+		loaders[2].load(drive, fz, fwriteprot);
 		return;
 	}
 	if (size == (640*1024)) /*640k ADFS/DOS - 80*2*16*256*/
 	{
-		driveloaders[drive] = 3;
-		loaders[3].load(drive, fn);
-		return;
+        loaders[3].load(drive, fz, fwriteprot);
+        return;
 	}
 	if (size == (720*1024)) /*720k DOS - 80*2*9*512*/
 	{
-		driveloaders[drive] = 3;
-		adf_loadex(drive, fn, 9, 512, 1, 0, 1, 1);
-		return;
+        adf_loadex(drive, fz, fwriteprot, 9, 512, 1, 0, 1, 1);
+        return;
 	}
 	if (size == (360*1024)) /*360k DOS - 40*2*9*512*/
 	{
-		driveloaders[drive] = 3;
-		adf_loadex(drive, fn, 9, 512, 1, 1, 1, 1);
-		return;
+        adf_loadex(drive, fz, fwriteprot, 9, 512, 1, 1, 1, 1);
+        return;
 	}
 	if (size <= (200 * 1024)) /*200k DFS - 80*1*10*256*/
 	{
-		driveloaders[drive] = 0;
-		loaders[0].load(drive, fn);
-		return;
+        loaders[0].load(drive, fz, fwriteprot);
+        return;
 	}
 	if (size <= (400 * 1024)) /*400k DFS - 80*2*10*256*/
 	{
-		driveloaders[drive] = 1;
-		loaders[1].load(drive, fn);
-		return;
+        loaders[1].load(drive, fz, fwriteprot);
+        return;
 	}
+    rpclog("Can't automatically decide for disc size %d, giving up", size);
+    fclose(f);
+    return;
 }
 
 void disc_new(int drive, char *fn)

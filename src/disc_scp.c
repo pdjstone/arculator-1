@@ -74,16 +74,14 @@ void scp_init(void)
 	memset(scp, 0, sizeof(scp));
 }
 
-void scp_load(int drive, char *fn)
+void scp_load(int drive, FILE *f, int fwriteprot)
 {
-	scp[drive].f = fopen(fn, "rb");
-	if (!scp[drive].f)
-		return;
-	writeprot[drive] = 1;
+	scp[drive].f = f;
+	writeprot[drive] = fwriteprot;
 
 	ignore_result(fread(&scp[drive].header, 16, 1, scp[drive].f));
 
-	rpclog("SCP file %s:\n", fn);
+	rpclog("SCP file %p:\n", f);
 	rpclog(" ID=%c%c%c\n", scp[drive].header.id[0], scp[drive].header.id[1], scp[drive].header.id[2]);
 	rpclog(" Disk type=%02x\n", scp[drive].header.disk_type);
 	rpclog(" Number of revolutions=%02x\n", scp[drive].header.nr_revolutions);

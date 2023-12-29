@@ -39,16 +39,11 @@ void adf_init()
 	adf_notfound = 0;
 }
 
-void adf_loadex(int drive, char *fn, int sectors, int size, int sides, int dblstep, int density, int sector_offset)
+void adf_loadex(int drive, FILE *f, int fwriteprot, int sectors, int size, int sides, int dblstep, int density, int sector_offset)
 {
 	writeprot[drive] = 0;
-	adf[drive].f = fopen(fn, "rb+");
-	if (!adf[drive].f)
-	{
-		adf[drive].f = fopen(fn, "rb");
-		if (!adf[drive].f) return;
-		writeprot[drive] = 1;
-	}
+	adf[drive].f = f;
+    writeprot[drive] = fwriteprot;
 	fseek(adf[drive].f, -1, SEEK_END);
 	drive_funcs[drive] = &adf_disc_funcs;
 	adf[drive].sectors = sectors;
@@ -62,35 +57,35 @@ void adf_loadex(int drive, char *fn, int sectors, int size, int sides, int dblst
 	adf_seek(drive, disc_get_current_track(drive));
 }
 
-void adf_load(int drive, char *fn)
+void adf_load(int drive, FILE *f, int fwriteprot)
 {
-	adf_loadex(drive, fn, 16, 256, 0, 0, 1, 0);
+	adf_loadex(drive, f, fwriteprot, 16, 256, 0, 0, 1, 0);
 }
 
-void adf_arcdd_load(int drive, char *fn)
+void adf_arcdd_load(int drive, FILE *f, int fwriteprot)
 {
-	adf_loadex(drive, fn, 5, 1024, 1, 0, 1, 0);
+	adf_loadex(drive, f, fwriteprot, 5, 1024, 1, 0, 1, 0);
 }
 
-void adf_archd_load(int drive, char *fn)
+void adf_archd_load(int drive, FILE *f, int fwriteprot)
 {
 	rpclog("HDload\n");
-	adf_loadex(drive, fn, 10, 1024, 1, 0, 2, 0);
+	adf_loadex(drive, f, fwriteprot, 10, 1024, 1, 0, 2, 0);
 }
 
-void adl_load(int drive, char *fn)
+void adl_load(int drive, FILE *f, int fwriteprot)
 {
-	adf_loadex(drive, fn, 16, 256, 1, 0, 1, 0);
+	adf_loadex(drive, f, fwriteprot, 16, 256, 1, 0, 1, 0);
 }
 
-void ssd_load(int drive, char *fn)
+void ssd_load(int drive, FILE *f, int fwriteprot)
 {
-	adf_loadex(drive, fn, 10, 256, 0, 0, 0, 0);
+	adf_loadex(drive, f, fwriteprot, 10, 256, 0, 0, 0, 0);
 }
 
-void dsd_load(int drive, char *fn)
+void dsd_load(int drive, FILE *f, int fwriteprot)
 {
-	adf_loadex(drive, fn, 10, 256, 1, 0, 0, 0);
+	adf_loadex(drive, f, fwriteprot, 10, 256, 1, 0, 0, 0);
 }
 
 static void adf_close(int drive)

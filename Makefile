@@ -47,7 +47,7 @@ endif
 OBJS := 82c711 82c711_fdc \
 	arm bmu cmos colourcard config cp15 \
 	debugger debugger_swis ddnoise \
-	disc disc_adf disc_apd disc_fdi disc_mfm_common \
+	disc disc_adf disc_apd disc_fdi zip disc_mfm_common \
         disc_hfe disc_jfd disc_scp ds2401 eterna fdi2raw \
         fpa g16 g332 \
 	hostfs ide ide_a3in ide_config ide_idea \
