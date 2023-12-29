@@ -130,7 +130,6 @@ void disc_load(int drive, char *fn)
         return;
     }
 	size = ftell(f) + 1;
-	fclose(f);
 
     if (memcmp(sig, "PK\3\4", 4) == 0)
     {
@@ -146,6 +145,7 @@ void disc_load(int drive, char *fn)
             if (zip_entry_openbyindex(zip, i) < 0) {
                 rpclog("Couldn't open %s as zip entry %i\n", fn, i);
                 zip_close(zip);
+                fclose(f);
                 return;
             }
             if (zip_entry_isdir(zip) == 0) {
@@ -169,10 +169,12 @@ void disc_load(int drive, char *fn)
             rpclog("Found loader %s for %s\n", loader->ext, fn);
             zip_entry_read(zip, &buf, &bufsize);
             zip_close(zip);
+            fclose(f);
             fz = fmemopen(buf, bufsize, "r");
             if (!fz) {
                 rpclog("fmemopen failed?\n");
                 zip_close(zip);
+                fclose(f);
                 return;
             }
         } 
@@ -180,6 +182,7 @@ void disc_load(int drive, char *fn)
         {
             rpclog("No loader found for any files in zip\n", fn);
             zip_close(zip);
+            fclose(f);
             return;
         }
     }
@@ -237,6 +240,9 @@ void disc_load(int drive, char *fn)
         loaders[1].load(drive, fz, fwriteprot);
         return;
 	}
+    rpclog("Can't automatically decide for disc size %d, giving up", size);
+    fclose(f);
+    return;
 }
 
 void disc_new(int drive, char *fn)
