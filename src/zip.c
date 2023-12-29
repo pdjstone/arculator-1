@@ -36,6 +36,7 @@
 #include <unistd.h>
 #endif
 
+#define _LARGEFILE64_SOURCE 1
 #include "miniz.h"
 #include "zip.h"
 
