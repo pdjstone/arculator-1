@@ -1,2 +1,4 @@
+#include <stdio.h>
+
 void scp_init(void);
-void scp_load(int drive, char *fn);
+void scp_load(int drive, FILE *f, int writeprot);

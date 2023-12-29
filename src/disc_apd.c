@@ -50,15 +50,15 @@ void apd_init()
 	apd[0].f = apd[1].f = apd[2].f = apd[3].f = 0;
 }
 
-void apd_load(int drive, char *fn)
+void apd_load(int drive, FILE *f, int fwriteprot)
 {
 	int c;
 	int pos = 8 + (166 * 12);
 
 	rpclog("apd_load\n");
 
-	writeprot[drive] = 1;
-	apd[drive].f = gzopen(fn, "rb");
+	writeprot[drive] = fwriteprot;
+	apd[drive].f = gzdopen(fileno(f), "rb");
 	if (!apd[drive].f)
 		return;
 
