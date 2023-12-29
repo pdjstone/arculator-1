@@ -173,8 +173,6 @@ void disc_load(int drive, char *fn)
             fz = fmemopen(buf, bufsize, "r");
             if (!fz) {
                 rpclog("fmemopen failed?\n");
-                zip_close(zip);
-                fclose(f);
                 return;
             }
         } 
