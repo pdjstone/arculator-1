@@ -1,4 +1,4 @@
-# Linux-hosted Makefile for Arculator
+# Linux or Mac-hosted Makefile for Arculator
 
 ######################################################################
 
@@ -14,13 +14,18 @@ SERVE_PORT ?= 3020
 ######################################################################
 
 SHELL     := bash
-BUILD_TAG := $(shell echo `git rev-parse --short HEAD`-`[[ -n $$(git status -s) ]] && echo 'dirty' || echo 'clean'` on `date --rfc-3339=seconds`)
+BUILD_TAG := $(shell echo `git rev-parse --short HEAD`-`[[ -n $$(git status -s) ]] && echo 'dirty' || echo 'clean'` on `date -u +"%Y-%m-%dT%H:%M:%SZ"`)
 
 CC             ?= gcc
 W64CC          := x86_64-w64-mingw32-gcc
 CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}" -Isrc -Ibuild/generated-src -include embed.h
+# for the Mac
+CFLAGS += -F/Volumes/SDL2 -DGL_SILENCE_DEPRECATION
 CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2 -Ibuild/generated-src
-LINKFLAGS      := -lz -lSDL2 -lm -lGL -lGLU
+LINKFLAGS      := -lz -lm
+# for the Mac
+LINKFLAGS += -F/Volumes/SDL2 -F/System/Library/Frameworks -framework SDL2 -framework OpenGL -rpath /Volumes/SDL2
+#-rpath @executable_path/
 LINKFLAGS_W64  := -Wl,-Bstatic -lz -Wl,-Bdynamic -lSDL2 -lm -lopengl32 -lglu32
 LINKFLAGS_WASM := -sUSE_SDL=2 -sALLOW_MEMORY_GROWTH=1 -sTOTAL_MEMORY=32768000 -sFORCE_FILESYSTEM -sUSE_WEBGL2=1 -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js
 DATA           := ddnoise src/video.vert.glsl src/video.frag.glsl

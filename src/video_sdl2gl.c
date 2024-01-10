@@ -77,7 +77,7 @@ void EMSCRIPTEN_KEEPALIVE arc_capture_video(int record) {
 #ifdef __EMSCRIPTEN__
 #  define GL_ERROR_REPORT rpclog("GL general error @ %s:%d: code %d\n", __FILE__, __LINE__, err)
 #else
-#  include <GL/glu.h>
+#  include <OpenGL/glu.h>
 #  define GL_ERROR_REPORT rpclog("GL general error @ %s:%d: %s\n", __FILE__, __LINE__, gluErrorString(err))
 #endif
 
