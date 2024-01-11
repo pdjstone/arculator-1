@@ -13,18 +13,24 @@ SERVE_PORT ?= 3020
 
 ######################################################################
 
+UNAME     := $(shell uname)
+
 SHELL     := bash
 BUILD_TAG := $(shell echo `git rev-parse --short HEAD`-`[[ -n $$(git status -s) ]] && echo 'dirty' || echo 'clean'` on `date -u +"%Y-%m-%dT%H:%M:%SZ"`)
 
 CC             ?= gcc
 W64CC          := x86_64-w64-mingw32-gcc
 CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}" -Isrc -Ibuild/generated-src -include embed.h
-# for the Mac
-CFLAGS += -F/Volumes/SDL2 -DGL_SILENCE_DEPRECATION
+ifeq ($(UNAME),Darwin)
+  CFLAGS += -F/Volumes/SDL2 -DGL_SILENCE_DEPRECATION
+endif
 CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2 -Ibuild/generated-src
 LINKFLAGS      := -lz -lm
-# for the Mac
-LINKFLAGS += -F/Volumes/SDL2 -F/System/Library/Frameworks -framework SDL2 -framework OpenGL -rpath /Volumes/SDL2
+ifeq ($(UNAME),Darwin)
+  LINKFLAGS += -F/Volumes/SDL2 -F/System/Library/Frameworks -framework SDL2 -framework OpenGL -rpath /Volumes/SDL2
+else
+  LINKFLAGS += -lSDL2 -lGL -lGLU
+endif
 #-rpath @executable_path/
 LINKFLAGS_W64  := -Wl,-Bstatic -lz -Wl,-Bdynamic -lSDL2 -lm -lopengl32 -lglu32
 LINKFLAGS_WASM := -sUSE_SDL=2 -sALLOW_MEMORY_GROWTH=1 -sTOTAL_MEMORY=32768000 -sFORCE_FILESYSTEM -sUSE_WEBGL2=1 -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js

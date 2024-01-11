@@ -77,7 +77,11 @@ void EMSCRIPTEN_KEEPALIVE arc_capture_video(int record) {
 #ifdef __EMSCRIPTEN__
 #  define GL_ERROR_REPORT rpclog("GL general error @ %s:%d: code %d\n", __FILE__, __LINE__, err)
 #else
-#  include <OpenGL/glu.h>
+#  ifdef __APPLE__
+#    include <OpenGL/glu.h>
+#  else
+#    include <GL/glu.h>
+#  endif
 #  define GL_ERROR_REPORT rpclog("GL general error @ %s:%d: %s\n", __FILE__, __LINE__, gluErrorString(err))
 #endif
 
@@ -131,6 +135,21 @@ GLuint monitorZoomLoc;
 /* Vertex array object listing virtual monitor coordinates */
 GLuint monitorVao;
 
+void glShaderSourceWrap(GLuint shader, const GLchar *string, const GLint length)
+{
+    /* WebGL only supports "300 es", which would also be fine for Windows
+     * & Linux but not Mac OS. So we use "330" but override it for Emscripten.
+     */
+#ifdef __EMSCRIPTEN__
+    const GLchar esHeader[] = "#version 300 es\n// ";
+    const GLchar *esStrings[] = {esHeader, string};
+    const GLint esLengths[] = {sizeof(esHeader), length};
+    glShaderSource(shader, 2, esStrings, esLengths);
+#else
+    glShaderSource(shader, 1, &(const GLchar *){string}, &(int){length});
+#endif
+}
+
 /* This is probably too large and needs breaking up to cope with rebuilding the GL context in case it's lost (?) */
 int video_renderer_init(void *unused)
 {
@@ -182,25 +201,16 @@ int video_renderer_init(void *unused)
     }
     CHECK_GL_ERROR;
 
-    struct { GLchar const* src; GLint len; } vert = {
-        embed_data("src/video.vert.glsl", NULL),
-        embed_data_size("src/video.vert.glsl")
-    };
-    struct { GLchar const* src; GLint len; } frag = {
-        embed_data("src/video.frag.glsl", NULL),
-        embed_data_size("src/video.frag.glsl")
-    };
-
     /* Compile the vertex and fragment shaders */
 
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER); CHECK_GL_ERROR;
-    glShaderSource(vertexShader, 1, &vert.src, &vert.len);
+    glShaderSourceWrap(vertexShader, embed_data("src/video.vert.glsl", NULL), embed_data_size("src/video.vert.glsl"));
     CHECK_GL_ERROR;
     glCompileShader(vertexShader); 
     CHECK_GL_COMPILE_ERROR(glGetShaderiv, vertexShader, GL_COMPILE_STATUS);
 
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER); CHECK_GL_ERROR;
-    glShaderSource(fragmentShader, 1, &frag.src, &frag.len);
+    glShaderSourceWrap(fragmentShader, embed_data("src/video.frag.glsl", NULL), embed_data_size("src/video.frag.glsl"));
     CHECK_GL_ERROR;
     glCompileShader(fragmentShader); CHECK_GL_ERROR;
     CHECK_GL_COMPILE_ERROR(glGetShaderiv, fragmentShader, GL_COMPILE_STATUS);
