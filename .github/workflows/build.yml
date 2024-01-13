@@ -6,10 +6,17 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  wasm:
+  linux:
     name: "make all"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Build
         run: ./make-docker -j8 DEBUG=1 all
+  mac:
+    name: "make macbundle"
+    runs-on: macos-13
+    steps:
+      - uses: actions/checkout@v3
+      - name: Builld
+        run: make macbundle
