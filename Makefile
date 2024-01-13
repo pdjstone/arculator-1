@@ -22,16 +22,15 @@ CC             ?= gcc
 W64CC          := x86_64-w64-mingw32-gcc
 CFLAGS         := -D_REENTRANT -DARCWEB -Wall -Werror -DBUILD_TAG="${BUILD_TAG}" -Isrc -Ibuild/generated-src -include embed.h
 ifeq ($(UNAME),Darwin)
-  CFLAGS += -F/Volumes/SDL2 -DGL_SILENCE_DEPRECATION
+  CFLAGS += -Fbuild/SDL2-mac -DGL_SILENCE_DEPRECATION
 endif
 CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2 -Ibuild/generated-src
 LINKFLAGS      := -lz -lm
 ifeq ($(UNAME),Darwin)
-  LINKFLAGS += -F/Volumes/SDL2 -F/System/Library/Frameworks -framework SDL2 -framework OpenGL -rpath /Volumes/SDL2
+  LINKFLAGS += -Fbuild/SDL2-mac -F/System/Library/Frameworks -framework SDL2 -framework OpenGL -rpath build/SDL2-mac -rpath @executable_path/../Resources/
 else
   LINKFLAGS += -lSDL2 -lGL -lGLU
 endif
-#-rpath @executable_path/
 LINKFLAGS_W64  := -Wl,-Bstatic -lz -Wl,-Bdynamic -lSDL2 -lm -lopengl32 -lglu32
 LINKFLAGS_WASM := -sUSE_SDL=2 -sALLOW_MEMORY_GROWTH=1 -sTOTAL_MEMORY=32768000 -sFORCE_FILESYSTEM -sUSE_WEBGL2=1 -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js
 DATA           := ddnoise src/video.vert.glsl src/video.frag.glsl
@@ -95,7 +94,7 @@ else
 all:	native wasm win64
 endif
 
-macbundle: build/Arculator.app build/Arculator.app/Contents/Resources/Arculator.icns build/Arculator.app/Contents/Info.plist
+macbundle: build/Arculator.app
 
 clean:
 	rm -rf build
@@ -111,11 +110,15 @@ serve: wasm web/serve.js
 #
 # to get the Finder to show an updated icon
 
-build/Arculator.app: native build/
-	@mkdir -p build/Arculator.app/Contents/{MacOS,Resources}
-	cp build/native/arculator build/Arculator.app/Contents/MacOS
+APPC=build/Arculator.app/Contents
 
-build/Arculator.app/Contents/Resources/Arculator.icns: build/Arculator.iconset
+build/Arculator.app: native ${APPC}/Resources/Arculator.icns ${APPC}/Resources/Arculator.icns ${APPC}/Info.plist
+	@mkdir -p ${APPC}/{MacOS,Resources}
+	cp build/native/arculator ${APPC}/MacOS/arculator
+	cp -a build/SDL2-mac/SDL2.framework ${APPC}/Resources/SDL2.framework
+	codesign -s `security find-identity -v -p codesigning | head -n1 | cut -f4 -d' '` $@
+
+${APPC}/Resources/Arculator.icns: build/Arculator.iconset
 	mkdir -p $(@D)
 	iconutil -c icns --output $@ $<
 
@@ -136,7 +139,8 @@ build/Archimedes.svg.png: Archimedes.svg
 	qlmanage -t -s 2000 -o build $<
 	sips --cropOffset 1 1 -c 616 588 $@
 
-build/Arculator.app/Contents/Info.plist:
+${APPC}/Info.plist:
+	@mkdir -p $(@D)
 	./mac/generate-Info.plist "${BUILD_TAG}" >$@
 
 ######################################################################
@@ -160,7 +164,11 @@ build/native/c-embed.o: build/generated-src/c-embed.c
 	@mkdir -p $(@D)
 	${CC} -c ${CFLAGS} $< -o $@
 
-build/native/%.o: src/%.c
+ifeq ($(UNAME),Darwin)
+  SDL2_MAC = build/SDL2-mac
+endif
+
+build/native/%.o: src/%.c $(SDL2_MAC)
 	@mkdir -p $(@D)
 	${CC} -c ${CFLAGS} ${PODULE_DEFINES} $< -o $@
 
@@ -213,6 +221,16 @@ SDL2:
 	curl -L https://github.com/libsdl-org/SDL/releases/download/release-${SDL_VERSION}/SDL2-devel-${SDL_VERSION}-mingw.tar.gz | tar xz
 	ln -s   SDL2-${SDL_VERSION} SDL2
 	ln -s . SDL2-${SDL_VERSION}/x86_64-w64-mingw32/include/SDL2/SDL2
+
+build/SDL2.dmg:
+	@mkdir -p $(@D)
+	curl -L https://github.com/libsdl-org/SDL/releases/download/release-${SDL_VERSION}/SDL2-${SDL_VERSION}.dmg >$@
+
+build/SDL2-mac: build/SDL2.dmg
+	@mkdir -p $@ $@.mnt
+	hdiutil attach -mountpoint $@.mnt $<
+	tar c -C $@.mnt . | tar x -C $@
+	hdiutil detach $@.mnt
 
 build/win64/SDL2.dll:	SDL2
 	@mkdir -p $(@D)
