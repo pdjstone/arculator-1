@@ -116,6 +116,10 @@ build/Arculator.app: native ${APPC}/Resources/Arculator.icns ${APPC}/Resources/A
 	@mkdir -p ${APPC}/{MacOS,Resources}
 	cp build/native/arculator ${APPC}/MacOS/arculator
 	cp -a build/SDL2-mac/SDL2.framework ${APPC}/Resources/SDL2.framework
+
+# Separated because it only works on the console at the moment, not sure
+# what a sensible default should be.
+sign-macbundle:
 	codesign -s `security find-identity -v -p codesigning | head -n1 | cut -f4 -d' '` $@
 
 ${APPC}/Resources/Arculator.icns: build/Arculator.iconset
