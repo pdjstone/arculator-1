@@ -88,13 +88,50 @@ OBJS_NATIVE += $(addsuffix .a, $(addprefix build/native/podules/,${BUILD_PODULES
 OBJS_WIN64  += $(addsuffix .a, $(addprefix build/win64/podules/,${BUILD_PODULES}))
 
 ######################################################################
+
+ifeq ($(UNAME),Darwin)
+all:	native wasm macbundle
+else
 all:	native wasm win64
+endif
+
+macbundle: build/Arculator.app build/Arculator.app/Contents/Resources/Arculator.icns build/Arculator.app/Contents/Info.plist
 
 clean:
 	rm -rf build
 
 serve: wasm web/serve.js
 	node web/serve.js ${SERVE_IP} ${SERVE_PORT}
+
+######################################################################
+
+build/Arculator.app: native build/
+	@mkdir -p build/Arculator.app/Contents/{MacOS,Resources}
+	cp build/native/arculator build/Arculator.app/Contents/MacOS
+
+build/Arculator.app/Contents/Resources/Arculator.icns: build/Arculator.iconset
+	mkdir -p $(@D)
+	iconutil -c icns --output $@ $<
+
+build/Arculator.iconset: build/Archimedes.svg.png
+	mkdir -p $@
+	sips -z 16 16     $< --out $@/icon_16x16.png
+	sips -z 32 32     $< --out $@/icon_16x16@2x.png
+	sips -z 32 32     $< --out $@/icon_32x32.png
+	sips -z 64 64     $< --out $@/icon_32x32@2x.png
+	sips -z 128 128   $< --out $@/icon_128x128.png
+	sips -z 256 256   $< --out $@/icon_128x128@2x.png
+	sips -z 256 256   $< --out $@/icon_256x256.png
+	sips -z 512 512   $< --out $@/icon_256x256@2x.png
+	sips -z 512 512   $< --out $@/icon_512x512.png
+	sips -z 1024 1024 $< --out $@/icon_512x512@2x.png
+
+build/Archimedes.svg.png: Archimedes.svg
+	qlmanage -t -s 2000 -o build $<
+	sips --cropOffset 1 1 -c 616 588 $@
+
+build/Arculator.app/Contents/Info.plist:
+	./mac/generate-Info.plist "${BUILD_TAG}" >$@
 
 ######################################################################
 
