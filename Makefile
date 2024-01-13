@@ -105,6 +105,12 @@ serve: wasm web/serve.js
 
 ######################################################################
 
+# if you're playing around here, you might need to do this:
+#
+#     /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f build/Arculator.app 
+#
+# to get the Finder to show an updated icon
+
 build/Arculator.app: native build/
 	@mkdir -p build/Arculator.app/Contents/{MacOS,Resources}
 	cp build/native/arculator build/Arculator.app/Contents/MacOS
