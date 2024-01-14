@@ -80,7 +80,7 @@ OBJS_DOT_O := $(addsuffix .o,${OBJS})
 
 OBJS_WASM   := $(addprefix build/wasm/,${OBJS_DOT_O}) build/wasm/hostfs-unix.o build/wasm/hostfs_emscripten.o
 OBJS_NATIVE := $(addprefix build/native/,${OBJS_DOT_O}) build/native/hostfs-unix.o build/native/gl.o
-OBJS_WIN64  := $(addprefix build/win64/,${OBJS_DOT_O}) build/win64/hostfs-win.o build/win64/gl.o
+OBJS_WIN64  := $(addprefix build/win64/,${OBJS_DOT_O}) build/win64/hostfs-win.o build/win64/gl.o build/win64/icon.o
 
 OBJS_WASM   += $(addsuffix .a, $(addprefix build/wasm/podules/,${BUILD_PODULES}))
 OBJS_NATIVE += $(addsuffix .a, $(addprefix build/native/podules/,${BUILD_PODULES}))
@@ -216,6 +216,18 @@ build/win64/c-embed.o: build/generated-src/c-embed.c
 build/win64/%.o: src/%.c SDL2
 	@mkdir -p $(@D)
 	${W64CC} `./SDL2/x86_64-w64-mingw32/bin/sdl2-config --cflags` -c ${CFLAGS} ${PODULE_DEFINES} $< -o $@
+
+build/win64/icon.o: build/win64/icon.rc
+	@mkdir -p $(@D)
+	x86_64-w64-mingw32-windres $< -O coff -o $@
+
+build/win64/icon.rc: build/win64/icon.ico
+	@mkdir -p $(@D)
+	echo 'id ICON $<' > $@
+
+build/win64/icon.ico: Archimedes.svg
+	@mkdir -p $(@D)
+	convert $< -crop 220x256 -define icon:auto-resize="256,128,96,64,48,32,16" $@
 
 #### Get SDL externally ##############################################
 
