@@ -31,9 +31,9 @@ typedef struct g332_t
 	uint32_t cursor_palette[4];
 	uint16_t cursor_store[512];
 
-	BITMAP *buffer;
+    vidc_bitmap_t *buffer;
 
-	void (*irq_callback)(void *p, int state);
+    void (*irq_callback)(void *p, int state);
 	void *callback_p;
 } g332_t;
 

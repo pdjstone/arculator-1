@@ -3,11 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#if WIN32
-#define BITMAP __win_BITMAP
-#include <windows.h>
-#undef BITMAP
-#endif
+#include "vidc.h"
 #include "arc.h"
 #include "arm.h"
 #include "config.h"
@@ -63,16 +59,15 @@ int fullscreen;
 int fullborders,noborders;
 int dblscan;
 
-
-void clear(BITMAP *b)
+void clear(vidc_bitmap_t *b)
 {
 	memset(b->dat, 0, b->w * b->h * 4);
 }
 
-BITMAP *create_bitmap(int x, int y)
+vidc_bitmap_t *create_bitmap(int x, int y)
 {
-	BITMAP *b = (BITMAP *)malloc(sizeof(BITMAP) + (y * sizeof(uint8_t *)));
-	int c;
+    vidc_bitmap_t *b = (vidc_bitmap_t *)malloc(sizeof(vidc_bitmap_t) + (y * sizeof(uint8_t *)));
+    int c;
 	b->dat = (uint8_t *)malloc(x * y * 4);
 	for (c = 0; c < y; c++)
 	{
@@ -84,7 +79,7 @@ BITMAP *create_bitmap(int x, int y)
 	return b;
 }
 
-void destroy_bitmap(BITMAP *b)
+void destroy_bitmap(vidc_bitmap_t *b)
 {
 	free(b->dat);
 	free(b);
@@ -96,7 +91,7 @@ int vidc_framecount = 0;
 int vidc_displayon = 0;
 int blitcount=0;
 /*b - memory buffer*/
-BITMAP *buffer;
+vidc_bitmap_t *buffer;
 
 int flyback;
 int deskdepth;

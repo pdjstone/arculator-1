@@ -1,0 +1,30 @@
+#!/bin/bash
+
+cat <<-END
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>NSHumanReadableCopyright</key>
+  <string>© Sarah Walker etc., distributed under the GNU Public Licence</string>
+  <key>CFBundleExecutable</key>
+  <string>arculator</string>
+  <key>CFBundleIdentifier</key>
+  <string>software.blackandwhite.arculator</string>
+  <key>CFBundleName</key>
+  <string>Arculator</string>
+  <key>CFBundleIconFile</key>
+  <string>Arculator.icns</string>
+  <key>CFBundleShortVersionString</key>
+  <string>$1</string>
+  <key>CFBundleInfoDictionaryVersion</key>
+  <string>6.0</string>
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+  <key>IFMajorVersion</key>
+  <integer>0</integer>
+  <key>IFMinorVersion</key>
+  <integer>1</integer>
+</dict>
+</plist>
+END

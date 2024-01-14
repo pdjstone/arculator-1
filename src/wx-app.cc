@@ -5,14 +5,12 @@
 #include <SDL2/SDL.h>
 
 #ifdef _WIN32
-#define BITMAP WINDOWS_BITMAP
 #include "wx-app.h"
 #include <wx/xrc/xmlres.h>
 #include <wx/event.h>
 
 #include <windows.h>
 #include <windowsx.h>
-#undef BITMAP
 #else
 #include "wx-app.h"
 #include <wx/xrc/xmlres.h>

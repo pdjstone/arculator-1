@@ -1,5 +1,7 @@
 extern uint64_t mem_speed[16384][2];
 
+void mem_setrom(uint32_t *ptr);
+
 void mem_setromspeed(int n, int s);
 void mem_updatetimings();
 

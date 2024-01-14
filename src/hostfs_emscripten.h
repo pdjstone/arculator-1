@@ -17,6 +17,9 @@ int stat_hostfs_emscripten(const char *pathname, struct stat *statbuf);
 int utime_hostfs_emscripten(const char *filename, const struct utimbuf *times);
 int mkdir_hostfs_emscripten(const char *pathname, mode_t mode);
 
+// Previously overriden by embed.h which is included by build process
+#undef fopen
+
 // Redefine file funtions used in hostfs.c and hostfs-unix.c 
 // to use the conversion functions above. This is a bit hacky
 // but lets us fix HostFS running on Emscripten MemFS with minimal

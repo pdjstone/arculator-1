@@ -88,11 +88,15 @@ void rpclog_impl(char* file, int line, const char *format, ...)
 
    if (!rlog)
    {
-	   rlog=fopen("arclog.txt","wt");
+	   rlog=real_fopen("arclog.txt","wt");
 	   if (!rlog)
 	   {
-		   perror("fopen");
-		   exit(-1);
+           rlog=real_fopen("~/arclog.txt","wt");
+           if (!rlog) 
+           {
+               fprintf(stderr, "Couldn't open arclog.txt on disk, sorry\n");
+               rlog = stderr;
+           }
 	   }
    }
 
@@ -102,9 +106,11 @@ void rpclog_impl(char* file, int line, const char *format, ...)
    va_end(ap);
 
    fprintf(stderr, "%s:%d [%08i]: %s", file, line, (uint32_t)(tsc >> 32), buf);
-   fprintf(rlog, "%s:%d [%08i]: %s", file, line, (uint32_t)(tsc >> 32), buf);
+   if (rlog != stderr) {
+      fprintf(rlog, "%s:%d [%08i]: %s", file, line, (uint32_t)(tsc >> 32), buf);
    
-   fflush(rlog);
+      fflush(rlog);
+   }
 #endif
 }
 
