@@ -6,7 +6,7 @@ FROM debian:bookworm
 
 VOLUME /src
 
-RUN apt update && apt -yy install curl xz-utils git gcc make libsdl2-dev libz-dev libglu1-mesa-dev mingw-w64 mingw-w64-x86-64-dev 
+RUN apt update && apt -yy install curl xz-utils imagemagick git gcc make libsdl2-dev libz-dev libglu1-mesa-dev mingw-w64 mingw-w64-x86-64-dev 
 RUN apt -yy install libz-mingw-w64-dev
 RUN git clone https://github.com/emscripten-core/emsdk.git /emsdk
 RUN cd /emsdk && ./emsdk install latest && ./emsdk activate latest
