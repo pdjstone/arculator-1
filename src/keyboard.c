@@ -219,7 +219,7 @@ static void keyboard_standard_write(uint8_t val)
 			case KEYBOARD_SACK: 
 			case KEYBOARD_MACK: 
 			case KEYBOARD_SMAK: 
-			rpclog("mouseena=%d keyen=%d\n");
+			//rpclog("mouseena=%d keyen=%d\n");
 			mouseena = (val & 2) ? 1 : 0;
 			keyena = (val & 1) ? 1 : 0;
 			keystat = KEYBOARD_IDLE;

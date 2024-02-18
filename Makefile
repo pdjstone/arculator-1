@@ -7,7 +7,8 @@ CC             := gcc
 CFLAGS         := -D_REENTRANT -Wall -Werror -DBUILD_TAG="${BUILD_TAG}"
 CFLAGS_WASM    := -sUSE_ZLIB=1 -sUSE_SDL=2
 LINKFLAGS      := -lz -lSDL2 -sUSE_SDL=2 -lm -ldl
-LINKFLAGS_WASM := -sALLOW_MEMORY_GROWTH=1 -sFORCE_FILESYSTEM -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js --js-library src/browser_keys.js
+LINKFLAGS_WASM := -sALLOW_MEMORY_GROWTH=1 -sFORCE_FILESYSTEM -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -lidbfs.js 
+LINKFLAGS_WASM += --pre-js js/emu_input.js --js-library js/browser_keys.js
 DATA           := ddnoise
 ifdef DEBUG
   CFLAGS += -D_DEBUG -DDEBUG_LOG -O3
@@ -65,7 +66,7 @@ build/native/%.o: src/%.c
 wasm:	$(addprefix build/wasm/arculator.,html js wasm data data.js)
 
 build/wasm/arculator.wasm build/wasm/arculator.js: build/wasm/arculator.html
-build/wasm/arculator.html: ${OBJS_WASM}
+build/wasm/arculator.html: ${OBJS_WASM} js/browser_keys.js js/emu_input.js
 	emcc ${LINKFLAGS} ${LINKFLAGS_WASM} ${OBJS_WASM} -o $@
 	sed -e "s/<script async/<script async type=\"text\/javascript\" src=\"arculator.data.js\"><\/script>&/" build/wasm/arculator.html >build/wasm/arculator_fix.html && mv build/wasm/arculator_fix.html build/wasm/arculator.html
 
