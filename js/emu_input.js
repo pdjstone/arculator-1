@@ -324,7 +324,7 @@ class EmulatorInput
         HEAP32[this.mouseModePtr] = 2;
         HEAP32[this.mxPtr] = x;
         // invert Y mouse coord
-        HEAP32[this.myPtr] = this.captureElement.height - y;
+        HEAP32[this.myPtr] = y;
         this.cursorX = x;
         this.cursorY = y;
     }

@@ -9,6 +9,7 @@
 #include "keytable.h"
 #include "timer.h"
 #include "vidc.h"
+#include "video.h"
 
 
 static emu_timer_t keyboard_timer;
@@ -349,6 +350,12 @@ void set_mouse_lock_needed(int needed)
 	} else if (!needed && mouse_lock_needed) {
 		rpclog("mouse lock no longer needed\n");
 		notify_mouse_lock_required(needed);
+		mouse_mode = MOUSE_MODE_ABSOLUTE;
+		mouse_capture_disable();
+		mousecapture=0;
+		// TODO: when we release the mouse/show the host mouse, SDL sets it to 
+		// be in the centre of the window. Should we set it to be somewhere else,
+		// e.g. where guest mouse is?
 	}
 	mouse_lock_needed = needed;
 }
@@ -486,12 +493,12 @@ void doosmouse()
 	LOG_KB_MOUSE("doosmouse\n");
 	mouse_get_abs(&mx, &my, &b);
 
-	ypos=(my-offsety)<<1;
+	window_coords_to_os_coords(mx, my, &xpos, &ypos);
+ 
 	if (ypos<mt) ypos=mt;
 	if (ypos>mb) ypos=mb;
 	writememl(0x5B8,ypos);
 
-	xpos=(mx-offsetx)<<1;
 	if (xpos>mr) xpos=mr;
 	if (xpos<ml) xpos=ml;
 	writememl(0x5B4,xpos);
