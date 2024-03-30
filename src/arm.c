@@ -2549,7 +2549,7 @@ static void opSWI(uint32_t opcode)
 		if ((opcode&0x1FFFF)==7 && armregs[0]==0x15 && (readmemb(armregs[1])==4))
 		{
 			// OS_Word 21,4 - Read unbuffered mouse position
-			getunbufmouse(armregs[1]);
+			//getunbufmouse(armregs[1]);
 		}
 		else if ((opcode&0x1FFFF)==7 && armregs[0]==0x15 && (readmemb(armregs[1])==3))
 		{
@@ -2576,11 +2576,11 @@ static void opSWI(uint32_t opcode)
 		hostfs(&state);
 		memmode = templ;
 	}
-	else if ((opcode&0xFFFF)==0x1C && mouse_mode == MOUSE_MODE_ABSOLUTE)
+	/*else if ((opcode&0xFFFF)==0x1C && mouse_mode == MOUSE_MODE_ABSOLUTE)
 	{
-		getosmouse();
-		armregs[15] &= ~VFLAG;
-	}
+		//getosmouse();
+		//armregs[15] &= ~VFLAG;
+	}*/
 	else
 		EXCEPTION_SWI();
 }
