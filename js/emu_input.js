@@ -214,7 +214,7 @@ class EmulatorInput
         // we listen to mouse up on whole document to avoid buttons getting stuck down
         // if they are released outside canvas
         document.addEventListener('mouseup', (evt) => obj.handleMouseButtonEvent(evt));
-
+        document.addEventListener('blur', (evt) => obj.handleFocusLost(evt));
         this.captureElement.addEventListener('mousemove', (evt) => obj.handleMouseMoveEvent(evt));
         this.captureElement.addEventListener('mouseleave', (evt) => obj.handleMouseLeaveEvent(evt));
     }
@@ -318,6 +318,16 @@ class EmulatorInput
         if (y < this.CANVAS_SNAP_BORDER) y = 0;
         if (y > canvas.height - this.CANVAS_SNAP_BORDER) y = canvas.height;
         this.sendAbsMouse(x, y);
+    }
+
+    handleFocusLost(evt) {
+        // Clear the keyboard buffer when browser loses focus, otherwise the emulator
+        // never receives the "key up" events, and keys will get stuck down
+        // In particular, if you Alt-Tab away, the Alt key will get stuck until pressed again
+        for (let keyId=1; keyId < NUM_ARC_KEYS; keyId++) {
+            HEAP32[this.arcKeyStatePtr+keyId] = 0;
+        }
+
     }
 
     sendAbsMouse(x, y) {
