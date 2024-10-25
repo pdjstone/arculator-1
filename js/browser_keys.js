@@ -21,10 +21,9 @@ function notify_mouse_lock_required(needed) {
     if (document.pointerLockElement) {
         if (!needed)
             document.exitPointerLock();
-    } else {     
-        console.log('toggle rel-mouse-needed', needed);
-        document.body.classList.toggle('rel-mouse-needed', needed);
-    }
+    }   
+    console.log('toggle rel-mouse-needed', needed);
+    document.body.classList.toggle('rel-mouse-needed', needed);
 }
 
 mergeInto(LibraryManager.library, {
