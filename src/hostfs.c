@@ -55,10 +55,12 @@
 # define mkdir(name, mode) _mkdir(name)
 #endif
 
+#ifndef __EMSCRIPTEN__
 typedef int bool;
 
 #define true  ((bool) 1)
 #define false ((bool) 0)
+#endif
 
 /** Registration states of HostFS module with backend code */
 typedef enum {
