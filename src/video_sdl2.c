@@ -136,9 +136,14 @@ int video_renderer_init(void *main_window)
 
 	rpclog("create SDL window\n");
 	if (main_window == NULL)
-	{
+	{	
+		#ifdef __EMSCRIPTEN__
+		const char* title = NULL;
+		#else
+		const char* title = "Arculator";
+		#endif
 		sdl_main_window = SDL_CreateWindow(
-			"Arculator",
+			title,
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
 			768,
