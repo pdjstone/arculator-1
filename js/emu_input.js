@@ -133,6 +133,11 @@ PrintScreen:
 
 */
 
+/* normal mouse input using relative movements send via keyboard controller */
+const MOUSE_MODE_RELATIVE = 1
+
+/* absolute mouse coordinates poked directly into OS memory, and mouse SWIs intercepted */
+const MOUSE_MODE_ABSOLUTE = 2
 
 /**
  * Input handling for Arculator WASM. 
@@ -277,7 +282,7 @@ class EmulatorInput
         if (document.pointerLockElement || this.mouseCaptureNeeded) {
             HEAP32[this.mxPtr] += evt.movementX;
             HEAP32[this.myPtr] += evt.movementY;
-            HEAP32[this.mouseModePtr] = 1;
+            HEAP32[this.mouseModePtr] = MOUSE_MODE_RELATIVE;
         } else if (!this.mouseCaptureNeeded) {
             let canvas = this.captureElement;
             // The canvas element has padding to allow the pointer 
@@ -331,7 +336,7 @@ class EmulatorInput
     }
 
     sendAbsMouse(x, y) {
-        HEAP32[this.mouseModePtr] = 2;
+        HEAP32[this.mouseModePtr] = MOUSE_MODE_ABSOLUTE;
         HEAP32[this.mxPtr] = x;
         // invert Y mouse coord
         HEAP32[this.myPtr] = y;
