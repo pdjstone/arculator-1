@@ -133,11 +133,15 @@ PrintScreen:
 
 */
 
-/* normal mouse input using relative movements send via keyboard controller */
+// Mouse mode constants match those in arc.h
+// These track whether we are sending absolute mouse coordinates 
+// or relative mouse movement to the emulator
 const MOUSE_MODE_RELATIVE = 1
-
-/* absolute mouse coordinates poked directly into OS memory, and mouse SWIs intercepted */
 const MOUSE_MODE_ABSOLUTE = 2
+
+const MOUSE_CAPTURE_AUTO = 1  // Use heuristics to decide when to capture and release the mouse
+const MOUSE_CAPTURE_FORCE = 2 // Always capture the mouse. Do not send mouse movement unless it is captured. 
+const MOUSE_CAPTURE_NEVER = 3 // Never capture the mouse, but still use heuristics to decide when to send absolute or relative mouse input
 
 /**
  * Input handling for Arculator WASM. 
@@ -166,7 +170,7 @@ class EmulatorInput
         this.buttons = 0; // last state of mouse buttons
 
         this.mouseCaptureNeeded = 0;
-        this.allowMouseCapture = true;
+        this.mouseCaptureMode = MOUSE_CAPTURE_AUTO;
         this.cursorX = 0;
         this.cursorY = 0;
 
@@ -174,6 +178,9 @@ class EmulatorInput
         this.installEventHandlers();
     }
 
+    /**
+     * This is called from browser_init_keys
+     */
     setupArculatorKeyboard(keyStatePtr, keyLayoutPtr) {
         this.arcKeyStatePtr = keyStatePtr >> 2; // ptr to int so HEAP32
         this.arcKeyLayoutPtr = keyLayoutPtr >> 2; // ptr to int so HEAP32
@@ -188,6 +195,9 @@ class EmulatorInput
         }
     }
 
+    /**
+     * Called from browser_init_mouse
+     */
     setupArculatorMouse(buttonsPtr, mxPtr, myPtr, mouseModePtr) {
         this.buttonsPtr =  buttonsPtr >> 2;  // ptr to int so HEAP32
         this.mxPtr = mxPtr >> 2;
@@ -246,11 +256,20 @@ class EmulatorInput
             // bitwise-and with buttons pressed in canvas to
             // avoid buttons pressed-but-not-released outside
             // canvas being sent to canvas
-            this.buttons = this.buttons & evt.buttons;
+            //this.buttons = this.buttons & evt.buttons;
         } else {
-            this.buttons = evt.buttons;
-            if (this.mouseCaptureNeeded && !document.pointerLockElement && this.allowMouseCapture)
+            //this.buttons = evt.buttons;
+            if (!document.pointerLockElement && (
+                    (this.mouseCaptureMode == MOUSE_CAPTURE_AUTO && this.mouseCaptureNeeded) ||
+                    this.mouseCaptureMode == MOUSE_CAPTURE_FORCE
+                )) {
                 tryCapture(evt);
+
+                // Don't send mouse click to emulator if we're force-capturing mouse
+                if (this.mouseCaptureMode == MOUSE_CAPTURE_FORCE) {
+                    return;
+                }
+            }
         }
 
         if (this.buttonsPtr)
@@ -273,17 +292,40 @@ class EmulatorInput
         }, delayMs);
     }
 
-    setAllowMouseCapture(allow) {
-        console.log("allow mouse capture", allow);
-        this.allowMouseCapture = allow;
+    setCaptureMode(mode) {
+        console.log("setCaptureMode", {1:'AUTO', 2:'FORCE', 3:'NEVER'}[mode]);
+        this.mouseCaptureMode = mode;
+        this.updateDocClasses();
+    }
+
+    // this is called by notify_mouse_lock_required in browser_keys.js
+    setMouseCaptureNeeded(needed) {
+        this.mouseCaptureNeeded = needed;
+        if (!needed && document.pointerLockElement) {
+                document.exitPointerLock();
+        }   
+        this.updateDocClasses();
+    }
+
+    updateDocClasses() {
+        document.body.classList.toggle('rel-mouse-needed', 
+            (this.mouseCaptureNeeded && this.mouseCaptureMode != MOUSE_CAPTURE_NEVER) || 
+             this.mouseCaptureMode == MOUSE_CAPTURE_FORCE);
+        // when force capture is enabled, we don't hide the host OS pointer over the canvas
+        document.body.classList.toggle('force-mouse-capture', 
+            this.mouseCaptureMode == MOUSE_CAPTURE_FORCE);
     }
 
     handleMouseMoveEvent(evt) {
-        if (document.pointerLockElement || this.mouseCaptureNeeded) {
+        if (document.pointerLockElement || 
+            (this.mouseCaptureNeeded && 
+                (this.mouseCaptureMode == MOUSE_CAPTURE_AUTO || 
+                 this.mouseCaptureMode == MOUSE_CAPTURE_NEVER) 
+            )) {
             HEAP32[this.mxPtr] += evt.movementX;
             HEAP32[this.myPtr] += evt.movementY;
             HEAP32[this.mouseModePtr] = MOUSE_MODE_RELATIVE;
-        } else if (!this.mouseCaptureNeeded) {
+        } else if (!this.mouseCaptureNeeded && this.mouseCaptureMode != MOUSE_CAPTURE_FORCE) {
             let canvas = this.captureElement;
             // The canvas element has padding to allow the pointer 
             // to be easily moved to/along the edge of the screen.
@@ -332,7 +374,6 @@ class EmulatorInput
         for (let keyId=1; keyId < NUM_ARC_KEYS; keyId++) {
             HEAP32[this.arcKeyStatePtr+keyId] = 0;
         }
-
     }
 
     sendAbsMouse(x, y) {
@@ -343,7 +384,6 @@ class EmulatorInput
         this.cursorX = x;
         this.cursorY = y;
     }
-
 }
 
 function getEmuInput() {

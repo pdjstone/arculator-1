@@ -16,14 +16,7 @@ function browser_init_mouse(mxPtr, myPtr, buttonsPtr, mouseModePtr) {
 
 function notify_mouse_lock_required(needed) {
     console.log('notify_mouse_lock_required', needed);
-    
-    getEmuInput().mouseCaptureNeeded = needed;
-    if (document.pointerLockElement) {
-        if (!needed)
-            document.exitPointerLock();
-    }   
-    console.log('toggle rel-mouse-needed', needed);
-    document.body.classList.toggle('rel-mouse-needed', needed);
+    getEmuInput().setMouseCaptureNeeded(needed);
 }
 
 mergeInto(LibraryManager.library, {
