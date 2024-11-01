@@ -317,7 +317,7 @@ void Frame::OnMenuCommand(wxCommandEvent &event)
 	}
 	else if (event.GetId() == XRCID("IDM_SOUND_ENABLE"))
 	{
-		soundena ^= 1;
+		sound_enable(soundena ^ 1);
 
 		wxMenuItem *item = ((wxMenu*)menu)->FindItem(event.GetId());
 		item->Check(soundena);

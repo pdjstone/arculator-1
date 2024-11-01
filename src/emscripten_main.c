@@ -96,13 +96,13 @@ void arcloop()
         int run_ms = 0;
         if (fast_forward_to_time_ms != 0 && total_emulation_millis < fast_forward_to_time_ms) {
                 run_ms = MAX_TICKS_PER_FRAME;
-                soundena = 0;
+                sound_enable(0);
                 //rpclog("fast forward to %d %d\n", fast_forward_to_time_ms, total_emulation_millis);
         } else {
                 if (fast_forward_to_time_ms != 0) {
                         rpclog("finished fast forward - re-enabling sound and video\n");
                         fast_forward_to_time_ms = 0;
-                        soundena = 1;
+                        sound_enable(1);
                         skip_video_render = 0;
                         win_doresize = 1;
                 }
@@ -277,7 +277,7 @@ void EMSCRIPTEN_KEEPALIVE arc_enter_fullscreen()
 
 void EMSCRIPTEN_KEEPALIVE arc_enable_sound(int enable) 
 {
-        soundena = enable;
+        sound_enable(enable);
 }
 
 int EMSCRIPTEN_KEEPALIVE main(int argc, char** argv)

@@ -268,6 +268,17 @@ static signed short convbyte(uint8_t v)
 	return sign ? - temp : temp;
 }
 
+void sound_enable(int enable) {
+	soundena = enable;
+	if (enable) { 
+		// prevent sometimes getting glitchy audio when re-enabling sound
+		sound_first_poll = 1;
+		samp_rp = 0xff000000;
+		samp_wp = 0;
+		samp_fp = 0;
+	}
+}
+
 void sound_init(void)
 {
 	int c;
