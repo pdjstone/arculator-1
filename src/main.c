@@ -337,11 +337,12 @@ void arc_run(int millisecs)
 	joystick_poll_host();
 	mouse_poll_host();
 	keyboard_poll_host();
+	if (mouse_mode == MOUSE_MODE_ABSOLUTE) 
+		doosmouse();
+
 	execarm(speed_mhz * 1000 * millisecs);
 	total_emulation_millis += millisecs;
 
-	if (mouse_mode == MOUSE_MODE_ABSOLUTE) 
-		doosmouse();
 
 	frameco++;
 	
