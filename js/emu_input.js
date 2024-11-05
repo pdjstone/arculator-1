@@ -301,8 +301,8 @@ class EmulatorInput
     // this is called by notify_mouse_lock_required in browser_keys.js
     setMouseCaptureNeeded(needed) {
         this.mouseCaptureNeeded = needed;
-        if (!needed && document.pointerLockElement) {
-                document.exitPointerLock();
+        if (!needed && document.pointerLockElement && !document.fullscreenElement) {
+            document.exitPointerLock();
         }   
         this.updateDocClasses();
     }
