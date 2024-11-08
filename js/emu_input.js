@@ -159,13 +159,6 @@ class EmulatorInput
         this.canvasPaddingX = (canvas.clientWidth - canvas.width)/2;
         this.canvasPaddingY = (canvas.clientHeight - canvas.height)/2;
         this.CANVAS_SNAP_BORDER = 50;
-
-        // Map from KeyboardEvent.keyCode to key ID
-        // Key ID is the index of the keys in ARC_KEY_LAYOUT
-        // e.g. ArcF1 is 0, ArcF2 is 1 etc..
-        // this gets initialised as keys are pressed for the first time
-        // because we don't know ahead of time what keyCodes a browser uses
-        this.keyCodeToKeyId = new Int8Array(256);
     
         this.buttons = 0; // last state of mouse buttons
 
@@ -206,10 +199,6 @@ class EmulatorInput
     }
 
     initBrowserKeys() {
-        for (let i=0; i < this.keyCodeToKeyId.length; i++) {
-            this.keyCodeToKeyId[i] = -1;
-        }
-
         // Map from KeyboardEvent.code to key ID
         this.keyIds = {};
         for (const [browserKey, arcKey] of Object.entries(this.browserKeyMap)) {
@@ -235,20 +224,18 @@ class EmulatorInput
     }
 
     handleKeyDownEvent(evt) {
-        let keyId = this.keyCodeToKeyId[evt.keyCode];
-        if (keyId == -1 && evt.code in this.browserKeyMap) {
-            keyId = this.keyIds[evt.code];
-            //console.log(`map key ${evt.code} => ${evt.keyCode} => ${keyId}`);
-            this.keyCodeToKeyId[evt.keyCode] = keyId;
-        }
-        HEAP32[this.arcKeyStatePtr + keyId] = 1;
+        let keyId = this.keyIds[evt.code];
+        //console.log(`map key ${evt.code} => ${keyId}`);
         evt.preventDefault();
+        if (keyId !== undefined)
+            HEAP32[this.arcKeyStatePtr + keyId] = 1;
     }
 
     handleKeyUpEvent(evt) {
-        let keyId = this.keyCodeToKeyId[evt.keyCode];
-        HEAP32[this.arcKeyStatePtr + keyId] = 0;
+        let keyId = this.keyIds[evt.code];
         evt.preventDefault();
+        if (keyId !== undefined)    
+            HEAP32[this.arcKeyStatePtr + keyId] = 0;
     }
 
     handleMouseButtonEvent(evt) {
@@ -302,6 +289,7 @@ class EmulatorInput
     setMouseCaptureNeeded(needed) {
         this.mouseCaptureNeeded = needed;
         if (!needed && document.pointerLockElement && !document.fullscreenElement) {
+            console.log('setMouseCaptureNeeded - releasing pointer lock');
             document.exitPointerLock();
         }   
         this.updateDocClasses();
