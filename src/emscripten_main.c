@@ -25,8 +25,6 @@
 
 static int winsizex = 0, winsizey = 0;
 static int win_doresize = 0;
-static int win_dofullscreen = 0;
-static int win_dosetresize = 0;
 static int win_renderer_reset = 0;
 
 #define MAX_TICKS_PER_FRAME 500
@@ -39,28 +37,11 @@ void updatewindowsize(int x, int y)
         win_doresize = 1;
 }
 
-void EMSCRIPTEN_KEEPALIVE sdl_enable_mouse_capture()
-{
-        mouse_capture_enable();
-        SDL_SetWindowGrab(sdl_main_window, SDL_TRUE);
-        mousecapture = 1;
-        updatemips = 1;
-}
-
-void EMSCRIPTEN_KEEPALIVE sdl_disable_mouse_capture()
-{
-        SDL_SetWindowGrab(sdl_main_window, SDL_FALSE);
-        mouse_capture_disable();
-        mousecapture = 0;
-        updatemips = 1;
-}
-
-static volatile int quited = 0;
 static volatile int pause_main_thread = 0;
 
 static SDL_mutex *main_thread_mutex = NULL;
 
-static time_t last_seconds = 0;
+
 void arcloop()
 {
         /*Resize window to match screen mode*/
@@ -123,7 +104,6 @@ static int arc_main_thread()
 {
         rpclog("Arculator startup\n");
 
-        last_seconds = 0;
         arc_init();
 
         if (!video_renderer_init(NULL))
@@ -131,16 +111,10 @@ static int arc_main_thread()
                 fatal("Video renderer init failed");
         }
         input_init();
-        //sdl_enable_mouse_capture();
 
-        #ifdef __EMSCRIPTEN__
         // if fixed_fps is 0, emscripten will use requestAnimationFrame
         emscripten_set_main_loop(arcloop, fixed_fps, 1);
-        #else
-        while(!quited) {
-                arcloop();
-        }
-        #endif
+      
         return 0;
 }
 
@@ -221,7 +195,6 @@ void EMSCRIPTEN_KEEPALIVE arc_fast_forward(int time_ms)
 
 void arc_stop_main_thread()
 {
-        quited = 1;
         //SDL_WaitThread(main_thread, NULL);
         SDL_DestroyMutex(main_thread_mutex);
         main_thread_mutex = NULL;
@@ -263,16 +236,6 @@ void EMSCRIPTEN_KEEPALIVE arc_set_sound_filter(int filter)
         }
         SDL_UnlockMutex(main_thread_mutex);
 
-}
-
-void arc_set_resizeable()
-{
-        win_dosetresize = 1;
-}
-
-void EMSCRIPTEN_KEEPALIVE arc_enter_fullscreen()
-{
-        win_dofullscreen = 1;
 }
 
 void EMSCRIPTEN_KEEPALIVE arc_enable_sound(int enable) 
