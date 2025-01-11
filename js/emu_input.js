@@ -239,6 +239,13 @@ class EmulatorInput
     }
 
     handleMouseButtonEvent(evt) {
+        let buttons = evt.buttons;
+
+        // Support devices with no easy way to middle click
+        // translate cmd+click (for Macs) or alt+click (for Windows/Linux) into middle mouse click
+        if ((evt.altKey || evt.metaKey) && buttons == 1)
+            buttons = 4;
+
         if (evt.type == 'mouseup') {
             // bitwise-and with buttons pressed in canvas to
             // avoid buttons pressed-but-not-released outside
@@ -260,10 +267,10 @@ class EmulatorInput
         }
 
         if (this.buttonsPtr)
-            HEAP32[this.buttonsPtr] = evt.buttons;
-        HEAP32[this.arcKeyStatePtr + this.mouseLeftKeyId] = evt.buttons & 1;
-        HEAP32[this.arcKeyStatePtr + this.mouseMiddleKeyId] = evt.buttons & 4;
-        HEAP32[this.arcKeyStatePtr + this.mouseRightKeyId] = evt.buttons & 2;
+            HEAP32[this.buttonsPtr] = buttons;
+        HEAP32[this.arcKeyStatePtr + this.mouseLeftKeyId] = buttons & 1;
+        HEAP32[this.arcKeyStatePtr + this.mouseMiddleKeyId] = buttons & 4;
+        HEAP32[this.arcKeyStatePtr + this.mouseRightKeyId] = buttons & 2;
     }
 
     getKeyId(arcKeyName) {
