@@ -248,6 +248,9 @@ class EmulatorInput
             buttons = 4;
 
         if (evt.type == 'mouseup') {
+            // Windows 11 touchpad 3-finger tap sends mouseup and mousedown at the same time
+            // which prevents Arculator from seeing the mousedown
+            // this delays the mouseup event so it gets seen properly
             let diff = Math.floor(evt.timeStamp-this.lastMouseDown);
             if (evt.buttons == 0 && diff < 10) {
                 evt.stopImmediatePropagation();
@@ -255,7 +258,7 @@ class EmulatorInput
                   evt.target.dispatchEvent(new MouseEvent('mouseup', {buttons:0}));
                 }, 40); 
                return;
-             }
+            }
             // bitwise-and with buttons pressed in canvas to
             // avoid buttons pressed-but-not-released outside
             // canvas being sent to canvas
