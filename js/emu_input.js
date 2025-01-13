@@ -164,6 +164,7 @@ class EmulatorInput
 
         this.mouseCaptureNeeded = 0;
         this.mouseCaptureMode = MOUSE_CAPTURE_AUTO;
+        this.lastMouseDown = 0;
         this.cursorX = 0;
         this.cursorY = 0;
 
@@ -247,11 +248,20 @@ class EmulatorInput
             buttons = 4;
 
         if (evt.type == 'mouseup') {
+            let diff = Math.floor(evt.timeStamp-this.lastMouseDown);
+            if (evt.buttons == 0 && diff < 10) {
+                evt.stopImmediatePropagation();
+                setTimeout(() => { 
+                  evt.target.dispatchEvent(new MouseEvent('mouseup', {buttons:0}));
+                }, 40); 
+               return;
+             }
             // bitwise-and with buttons pressed in canvas to
             // avoid buttons pressed-but-not-released outside
             // canvas being sent to canvas
             //this.buttons = this.buttons & evt.buttons;
         } else {
+            this.lastMouseDown = evt.timeStamp;
             //this.buttons = evt.buttons;
             if (!document.pointerLockElement && (
                     (this.mouseCaptureMode == MOUSE_CAPTURE_AUTO && this.mouseCaptureNeeded) ||
